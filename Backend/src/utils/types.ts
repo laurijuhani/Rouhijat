@@ -1,0 +1,9 @@
+import { Request } from "express";
+
+export interface CustomRequest extends Request {
+  token?: string;
+  user?: {
+    id: number;
+    username: string;
+  };
+};

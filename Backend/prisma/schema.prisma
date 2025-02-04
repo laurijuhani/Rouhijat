@@ -1,0 +1,42 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  posts     BlogPost[]
+  @@map("users")
+  }
+
+model InvitedEmail {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  @@map("invited_emails")
+}
+
+model BlogPost {
+  id        Int      @id @default(autoincrement())
+  title     String
+  createdAt DateTime @default(now()) @map("created_at")
+  content   String
+  authorId  Int     @map("author_id")
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  @@map("blog_posts")
+}
+
+model Game {
+  id        Int      @id @default(autoincrement())
+  homeTeam  String @map("home_team")
+  awayTeam  String @map("away_team")
+  homeScore Int? @map("home_score")
+  awayScore Int? @map("away_score")
+  gameDate  DateTime @map("game_date")
+  @@map("games")
+}
