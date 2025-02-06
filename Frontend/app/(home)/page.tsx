@@ -1,7 +1,7 @@
 import Games from "@/components/home/Games";
 import Image from "next/image";
 import { Suspense } from "react";
-import Loading from "./loading";
+import Loading from "../loading";
 
 export default function Home() {
   return (

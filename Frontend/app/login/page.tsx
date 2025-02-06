@@ -1,22 +1,16 @@
+import Signin from "@/components/signin/Signin"
+import SessionProviderWrapper from "@/components/utils/SessionProviderWrapper"
 
-const page = () => {
+const Page = () => {
+  
+
   return (
     <div>
-      Create
-
-      <form action='submit'>
-        <label htmlFor='title'>Title</label>
-        <input type='text' id='title' name='title' />
-
-        <label htmlFor='content'>Content</label>
-        <textarea id='content' name='content' />
-
-        <button type='submit'>Create</button>
-
-
-      </form>
+      <SessionProviderWrapper>
+        <Signin />
+      </SessionProviderWrapper>
     </div>
   )
 }
 
-export default page
+export default Page
