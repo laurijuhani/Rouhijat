@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useState } from "react";
+import "../../css/navbar.css";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { name: "Koti", path: "/" },
@@ -15,32 +18,62 @@ const Navbar = () => {
     { name: "Blogi", path: "/blog" },
   ];
 
+  const toggleMenu = () => { 
+    setIsOpen(!isOpen);
+  }; 
+
   return (
-    <div className="fixed top-0 w-full h-22 bg-gray-800 text-white flex items-center justify-between px-4">
-      <div className="flex items-center">
-        <Link href="/">
-        <Image 
-          src="/logo_ink.svg"
-          alt="logo"
-          width={70}
-          height={70}
-        />
-        </Link>
+    <>
+      <div className="navbar fixed top-0 w-full h-22 bg-gray-800 text-white flex items-center justify-between px-4 z-10">
+        <div className="flex items-center">
+          <Link href="/">
+            <Image 
+              src="/logo_ink.svg"
+              alt="logo"
+              width={70}
+              height={70}
+            />
+          </Link>
+        </div>
+        <div className="hidden md:flex items-center">
+          {navItems.map((item) => (
+            <Link key={item.path} href={item.path}>
+              <div
+                className={`mx-4 ${
+                  pathname === item.path ? "text-yellow-500" : "text-white"
+                } hover:text-yellow-300`}
+              >
+                {item.name}
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className="md:hidden flex items-center">
+          <button onClick={toggleMenu} className={`hamb ${isOpen ? "active" : ""}`} aria-label="Open Menu">
+            <span className="sr-only">Open Menu</span>
+            <svg className="ham" viewBox="0 0 100 100">
+              <path className="line top" d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"></path>
+              <path className="line middle" d="m 30,50 h 40"></path>
+              <path className="line bottom" d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"></path>
+            </svg>
+          </button>
+        </div>
       </div>
-      <div className="flex items-center">
+      <div className={`dropdown-menu ${isOpen ? "open" : ""}`}>
         {navItems.map((item) => (
           <Link key={item.path} href={item.path}>
             <div
-              className={`mx-4 ${
+              className={`py-2 ${
                 pathname === item.path ? "text-yellow-500" : "text-white"
               } hover:text-yellow-300`}
+              onClick={() => setIsOpen(false)}
             >
               {item.name}
             </div>
           </Link>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
