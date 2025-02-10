@@ -8,12 +8,14 @@ export default function Home() {
     <div className="text-center items-center justify-center content-center">
       <Image
         className="logo mx-auto"
-        src="/logo_ink.svg"
+        src="/logo.svg"
         alt="logo"
         width={400}
         height={400}
         priority
       />
+
+  
 
       <Suspense fallback={<Loading />}>
         <Games />

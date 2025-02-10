@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../css/navbar.css";
 
 const Navbar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [scrollDown, setScrollDown] = useState(false);
 
   const navItems = [
     { name: "Koti", path: "/" },
@@ -22,13 +23,26 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   }; 
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50 && !isOpen) {
+        setScrollDown(true);
+      } else {
+        setScrollDown(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollDown, isOpen]); 
+
   return (
     <>
-      <div className="navbar fixed top-0 w-full h-22 bg-gray-800 text-white flex items-center justify-between px-4 z-10">
+      <div className={`navbar fixed top-0 w-full h-22 bg-gray-800 text-white flex items-center justify-between px-4 z-10 ${scrollDown ? "hidden-navbar" : ""}`}>
         <div className="flex items-center">
           <Link href="/">
             <Image 
-              src="/logo_ink.svg"
+              src="/logo.svg"
               alt="logo"
               width={70}
               height={70}

@@ -67,15 +67,26 @@ button{
 
 .navbar {
   z-index: 10; /* Ensure the navbar is on top */
+  transition: transform 0.5s ease-in-out;
 }
 
+.hidden-navbar {
+  transform: translateY(-100%); /* Hide the navbar */
+}
+
+
+@media (min-width: 768px) {
+  .hidden-navbar {
+    transform: none; /* Ensure the navbar is visible on larger screens */
+  }
+}
 
 .dropdown-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  top: 5.5rem;
+  position: fixed;
+  top: 4rem;
   left: 0;
   width: 100%;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
