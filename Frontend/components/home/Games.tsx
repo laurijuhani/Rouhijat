@@ -51,13 +51,13 @@ const Games = async () => {
     <div className="w-3/4 mx-auto">
       <Carousel
       opts={{
-        align: "start",
+        align: "center",
       }}
       className="w-full max-w-screen-lg mx-auto"
       >
           <CarouselContent>
             {dummy_data.map((game, index) => (
-              <CarouselItem key={index} className="md:basis-1/3 sm:basis-1 lg:basis-1/4">
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4 flex justify-center">
                 <GameCard date={game.date} homeTeam={game.homeTeam} awayTeam={game.awayTeam} score={null} />
               </CarouselItem>
             ))}

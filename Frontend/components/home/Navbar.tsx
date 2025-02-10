@@ -38,14 +38,14 @@ const Navbar = () => {
 
   return (
     <>
-      <div className={`navbar fixed top-0 w-full h-22 bg-gray-800 text-white flex items-center justify-between px-4 z-10 ${scrollDown ? "hidden-navbar" : ""}`}>
+      <div className={`navbar fixed top-0 w-full bg-gray-800 text-white flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
         <div className="flex items-center">
           <Link href="/">
             <Image 
               src="/logo.svg"
               alt="logo"
-              width={70}
-              height={70}
+              width={50}
+              height={50}
             />
           </Link>
         </div>
