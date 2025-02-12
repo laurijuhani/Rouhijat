@@ -11,7 +11,7 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String
-  image     String?
+  role      String   @default("user")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   posts     BlogPost[]
@@ -41,5 +41,25 @@ model Game {
   homeScore Int? @map("home_score")
   awayScore Int? @map("away_score")
   gameDate  DateTime @map("game_date")
+  points    Point[]
   @@map("games")
+}
+
+model Player {
+  id       Int     @id @default(autoincrement())
+  name     String
+  nickname String?
+  points   Point[]
+  @@map("players")
+}
+
+model Point {
+  playerId Int
+  gameId   Int
+  goals    Int
+  assists  Int
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  game     Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  @@id([playerId, gameId])
+  @@map("points")
 }

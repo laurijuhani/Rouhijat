@@ -2,6 +2,9 @@ CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE
+  role VARCHAR(10) NOT NULL DEFAULT 'user',
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 ); 
 
 CREATE TABLE IF NOT EXISTS invited_emails (
@@ -25,4 +28,20 @@ CREATE TABLE IF NOT EXISTS games (
   home_score INT,
   away_score INT,
   game_date TIMESTAMPTZ NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS players (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  nickname VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS points (
+  player_id INT NOT NULL,
+  game_id INT NOT NULL,
+  goals INT NOT NULL,
+  assists INT NOT NULL,
+  FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE,
+  FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE,
+  PRIMARY KEY (player_id, game_id)
 );

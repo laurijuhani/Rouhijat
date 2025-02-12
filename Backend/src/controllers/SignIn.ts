@@ -4,7 +4,7 @@ import prisma from "../utils/client";
 const signInRouter = Router();
 
 signInRouter.post('/', async (req, res): Promise<any> => {
-  const { email, name, image } = req.body as { email: string, name: string, image: string | null };
+  const { email, name } = req.body as { email: string, name: string  };
   
   const user = await prisma.user.findUnique({ where: { email } });
   if (user) return res.status(200).json({ allowed: true });
@@ -18,7 +18,6 @@ signInRouter.post('/', async (req, res): Promise<any> => {
           data: { 
             email,
             name,
-            image,
           },
         }),
         prisma.invitedEmail.delete({ where: { email } }),
