@@ -1,7 +1,7 @@
 import { Router } from "express";
 import gameService from "../services/gameService";
 import { authenticateToken } from "../utils/middleware";
-import { GameRequest } from "../utils/types";
+import { GameRequest, CustomRequest } from "../utils/types";
 
 const gamesRouter = Router();
 
@@ -46,7 +46,7 @@ gamesRouter.post('/', authenticateToken, async (req, res): Promise<any> => {
 });
 
 
-gamesRouter.put('/:id', authenticateToken, async (req, res): Promise<any> => {
+gamesRouter.put('/:id', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
   const { id, homeTeam, awayTeam, homeScore, awayScore, gameDate } = req.body as GameRequest;
 
   if (!homeTeam || !awayTeam || !gameDate || !id) {

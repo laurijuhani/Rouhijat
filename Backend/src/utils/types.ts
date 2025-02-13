@@ -2,7 +2,7 @@ import { Request } from "express";
 
 export interface CustomRequest extends Request {
   token?: string;
-  user?: DecodedToken; 
+  userData?: DecodedToken; 
 };
 
 
@@ -10,6 +10,7 @@ export interface DecodedToken {
   id: number; 
   email: string; 
   name: string;
+  picture: string;
   iat: number;
   exp: number;
   role: 'admin' | 'user';
@@ -23,3 +24,9 @@ export interface GameRequest {
   awayScore?: number;
   gameDate: string; // Date object as string
 };
+
+export interface SignIn {
+  email: string;
+  name: string;
+  picture: string;
+}

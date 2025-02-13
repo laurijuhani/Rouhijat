@@ -12,7 +12,7 @@ invitesRouter.get('/', authenticateToken, async (_req, res): Promise<any> => {
 });
 
 invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
-  const user = req.user; 
+  const user = req.userData; 
 
   if (!user || user.role !== 'admin') {
     return res.status(403).json({ error: 'Unauthorized' });
@@ -35,7 +35,7 @@ invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res): Prom
 
 
 invitesRouter.delete('/:id', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
-  const user = req.user; 
+  const user = req.userData; 
 
   if (!user || user.role !== 'admin') {
     return res.status(403).json({ error: 'Unauthorized' });

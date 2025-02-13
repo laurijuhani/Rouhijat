@@ -9,6 +9,7 @@ import gamesRouter from './controllers/games';
 import signInRouter from './controllers/SignIn';
 import invitesRouter from './controllers/invites';
 import usersRouter from './controllers/users';
+import authenticateRouter from './controllers/authenticate';
 
 const app = express();
 
@@ -22,6 +23,7 @@ apiRouter.use('/games', gamesRouter);
 apiRouter.use('/signIn', signInRouter);
 apiRouter.use('/invites', invitesRouter);
 apiRouter.use('/users', usersRouter);
+apiRouter.use('/auth', authenticateRouter);
 
 app.use('/api/v1', apiRouter);
 

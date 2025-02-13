@@ -3,6 +3,7 @@ require('dotenv').config();
 import jwt from 'jsonwebtoken';
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { CustomRequest, DecodedToken } from "./types";
+import { verifyToken } from "./token";
 
 const unknownEndpoint = (_req: Request, res: Response): void => {
   res.status(404).send({ error: "unknown endpoint" });
@@ -47,25 +48,23 @@ const userExtractor = (request: CustomRequest, _response: Response, next: NextFu
 }; 
 
 
-const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction) => {
+const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction): void => {
   const authorization = req.get('authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     const token = authorization.substring(7);
-    jwt.verify(token, process.env.NEXTAUTH_SECRET as string, (err, decoded) => {
-      if (err) {
-        if (err instanceof TokenExpiredError) {
-          return res.status(401).json({ error: 'Token expired' });
-        } else if (err instanceof JsonWebTokenError) {
-          return res.status(401).json({ error: 'Token invalid' });
-        } else {
-          return res.status(401).json({ error: 'Token verification failed' });
-        }
-      }
-      console.log(decoded);
-      
-      req.user = decoded as DecodedToken;
+    
+    if (!token) {
+      res.status(401).json({ error: 'Token missing' });
+      return; 
+    }
+
+    try {
+      const user = verifyToken(token);
+      req.userData = user;
       next();
-    });
+    } catch (error) {
+      res.status(401).json({ error: 'Token missing or invalid' });
+    }
   } else {
     res.status(401).json({ error: 'Token missing or invalid' });
   }
