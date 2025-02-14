@@ -1,27 +1,32 @@
 "use client"
-import { useSession, signIn, signOut } from "next-auth/react"
-
+import useSession from "@/hooks/useSession";
 
 const Signin = () => {
-  const { data: session } = useSession();
+  const { user } = useSession();
 
-
-  if (session) {
+  if (user) {
+    console.log(user);
+    
     return (
       <div>
-        <p>Welcome, {session.user?.name} </p>
-        <button onClick={() => signOut()}>Sign out</button>
+        <p>Welcome, {user.name} </p>
+        <button onClick={() => {
+          localStorage.removeItem('token');
+          window.location.reload();
+        }}>Sign out</button>
       </div>
     )
   }
 
-
   return (
     <div>
       <p>You are not signed in</p>
-      <button onClick={() => signIn("google")}>Sign in with google</button>
+      <button onClick={() => {
+        // Redirect to your backend authentication endpoint
+        window.location.href = process.env.NEXT_PUBLIC_BACKEND_URL + '/auth/google';
+      }}>Sign in with Google</button>
     </div>
   )
 }
 
-export default Signin
+export default Signin;

@@ -50,7 +50,7 @@ authenticateRouter.get('/google', passport.authenticate('google', { scope: ['pro
 
 authenticateRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login', session: false }), (req, res) => {
   const token = generateToken(req.user);
-  res.redirect(`${process.env.FRONTEND_URL}/?token=${token}`);
+  res.redirect(`${process.env.FRONTEND_URL}/authorized/?token=${token}`);
 });
 
 
