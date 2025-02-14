@@ -28,5 +28,5 @@ export interface GameRequest {
 export interface SignIn {
   email: string;
   name: string;
-  picture: string;
+  picture?: string;
 }

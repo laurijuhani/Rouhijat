@@ -2,6 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { generateToken } from "../utils/token";
+import authenticationService from "../services/authenticationService";
 
 const authenticateRouter = Router();
 
@@ -12,9 +13,30 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       callbackURL: process.env.BACKEND_URL + '/auth/google/callback',
     },
-    (accessToken, _refreshToken, profile, done) => {
+    async (accessToken, _refreshToken, profile, done) => {
+      // TODO: make this better
+    
+      if (!profile.emails) {
+        done(null, false);
+        return;
+      }
 
-      // add here the logic to save the user to the databases
+      const user = await authenticationService.logIn(profile.emails[0].value);
+      if (user) {
+        done(null, profile);
+        return;
+      }
+
+      const signUp = await authenticationService.signUp({
+        email: profile.emails[0].value,
+        name: profile.displayName,
+        picture: profile.photos![0].value,
+      });
+
+      if (!signUp) {
+        done(null, false);
+        return
+      }
       
       console.log('accessToken', accessToken);
       console.log('profile', profile);

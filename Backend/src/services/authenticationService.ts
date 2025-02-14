@@ -15,7 +15,7 @@ const signUp = async (details: SignIn): Promise<boolean> => {
           data: { 
             email: details.email,
             name: details.name,
-            picture: details.picture,
+            picture: details.picture || '',
             role: 'user',
           },
         }),

@@ -6,7 +6,6 @@ import { unknownEndpoint, errorHandler } from './utils/middleware';
 
 import blogsRouter from './controllers/blogs';
 import gamesRouter from './controllers/games';
-import signInRouter from './controllers/SignIn';
 import invitesRouter from './controllers/invites';
 import usersRouter from './controllers/users';
 import authenticateRouter from './controllers/authenticate';
@@ -20,7 +19,6 @@ const apiRouter = express.Router();
 
 apiRouter.use('/blogs', blogsRouter);
 apiRouter.use('/games', gamesRouter);
-apiRouter.use('/signIn', signInRouter);
 apiRouter.use('/invites', invitesRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/auth', authenticateRouter);
