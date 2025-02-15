@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-interface User {
+export interface User {
   id: string;
   email: string;
   name: string;
@@ -24,7 +24,8 @@ const useSession = (): Session => {
         }).join(''));
 
         const decodedToken = JSON.parse(jsonPayload);
-        return decodedToken;
+        
+        return decodedToken.item;
       }
     }
     return null;

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import "../../css/navbar.css";
+import UserPic from "../auth/UserPic";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -49,7 +50,9 @@ const Navbar = () => {
             />
           </Link>
         </div>
-        <div className="hidden md:flex items-center">
+        <div className="items-center flex">
+          <UserPic />
+        <div className="hidden md:flex">
           {navItems.map((item) => (
             <Link key={item.path} href={item.path}>
               <div
@@ -62,7 +65,7 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden flex">
           <button onClick={toggleMenu} className={`hamb ${isOpen ? "active" : ""}`} aria-label="Open Menu">
             <span className="sr-only">Open Menu</span>
             <svg className="ham" viewBox="0 0 100 100">
@@ -71,6 +74,7 @@ const Navbar = () => {
               <path className="line bottom" d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"></path>
             </svg>
           </button>
+        </div>
         </div>
       </div>
       <div className={`dropdown-menu ${isOpen ? "open" : ""}`}>
