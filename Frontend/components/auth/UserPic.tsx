@@ -18,8 +18,8 @@ const UserPic = () => {
 
   if (!user) return null; 
 
-  //console.log(user);
-  
+  console.log(new Date(user.iat).toLocaleString());
+
   return (
     <>  
       <DropdownMenu>

@@ -11,6 +11,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const navItems = [
     { name: "Koti", path: "/" },
@@ -26,16 +27,20 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50 && !isOpen) {
-        setScrollDown(true);
-      } else {
-        setScrollDown(false);
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastScrollY) > 50) {
+        if (currentScrollY > lastScrollY && !isOpen) {
+          setScrollDown(true);
+        } else {
+          setScrollDown(false);
+        }
+        setLastScrollY(currentScrollY);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrollDown, isOpen]); 
+  }, [scrollDown, isOpen, lastScrollY]); 
 
   return (
     <>
@@ -79,16 +84,19 @@ const Navbar = () => {
       </div>
       <div className={`dropdown-menu ${isOpen ? "open" : ""}`}>
         {navItems.map((item) => (
-          <Link key={item.path} href={item.path}>
-            <div
-              className={`py-2 ${
-                pathname === item.path ? "text-yellow-500" : "text-white"
-              } hover:text-yellow-300`}
-              onClick={() => setIsOpen(false)}
-            >
-              {item.name}
-            </div>
-          </Link>
+          <div key={item.path} className="w-full flex-col text-center">
+            <hr className="border-gray-600 w-full" />
+            <Link href={item.path}>
+              <div
+                className={`py-2 ${
+                  pathname === item.path ? "text-yellow-500" : "text-white"
+                } hover:text-yellow-300`}
+                onClick={() => setIsOpen(false)}
+              >
+                {item.name}
+              </div>
+            </Link>
+          </div>
         ))}
       </div>
     </>

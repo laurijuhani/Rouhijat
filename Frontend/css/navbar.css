@@ -87,7 +87,7 @@ button{
   flex-direction: column;
   align-items: center;
   position: fixed;
-  top: 3.5rem;
+  top: 4rem;
   left: 0;
   width: 100%;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
@@ -98,6 +98,8 @@ button{
   transition: opacity 0.5s ease, transform 0.5s ease, visibility 2s;
   border-bottom-left-radius: 1.5rem;
   border-bottom-right-radius: 1.5rem;
+  border-top: solid 0.2rem #2a2a2a;
+
   z-index: 5;
 }
 
