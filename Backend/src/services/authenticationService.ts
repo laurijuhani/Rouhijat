@@ -7,12 +7,13 @@ const logIn = async (email: string) => {
 
 const signUp = async (details: SignIn): Promise<boolean> => {
   const invitation = await prisma.invitedEmail.findUnique({ where: { email: details.email } });
-
+  
   if (invitation) {
     try {
       await prisma.$transaction([
         prisma.user.create({ 
           data: { 
+            id: details.id,
             email: details.email,
             name: details.name,
             picture: details.picture || '',

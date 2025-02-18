@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(cuid())
   email     String   @unique
   name      String
   picture     String
@@ -30,7 +30,7 @@ model BlogPost {
   title     String
   createdAt DateTime @default(now()) @map("created_at")
   content   String
-  authorId  Int     @map("author_id")
+  authorId  String     @map("author_id")
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   @@map("blog_posts")
 }

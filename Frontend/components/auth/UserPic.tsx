@@ -1,5 +1,4 @@
 import useSession from "@/hooks/useSession"
-import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import useSignout from "@/hooks/useSignout";
 import { 
@@ -14,7 +13,6 @@ import {
 const UserPic = () => {
   const { user } = useSession();
   const signout = useSignout();
-  const router = useRouter();
 
   if (!user) return null; 
 
@@ -33,7 +31,7 @@ const UserPic = () => {
           <DropdownMenuLabel>Käyttäjäni</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <button onClick={() => router.push('/profile')}>Profiili</button>
+            <a href="/profile">Profiili</a>
           </DropdownMenuItem>
           <DropdownMenuItem>Hallintapaneeli</DropdownMenuItem>
           <DropdownMenuSeparator />

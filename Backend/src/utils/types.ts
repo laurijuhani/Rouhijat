@@ -3,6 +3,7 @@ import { Request } from "express";
 export interface CustomRequest extends Request {
   token?: string;
   userData?: DecodedToken; 
+  clientIp?: string;
 };
 
 
@@ -13,7 +14,7 @@ export interface DecodedToken {
   picture: string;
   iat: number;
   exp: number;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'owner';
 };
 
 export interface GameRequest {
@@ -26,6 +27,7 @@ export interface GameRequest {
 };
 
 export interface SignIn {
+  id: string;
   email: string;
   name: string;
   picture?: string;

@@ -39,7 +39,7 @@ const userExtractor = (request: CustomRequest, _response: Response, next: NextFu
   try {
       if (request.token) {
           const decodedToken = jwt.verify(request.token, process.env.SECRET || '') as DecodedToken;
-          request.user = decodedToken;       
+          request.userData = decodedToken;       
       }
       next();
   } catch (error) {

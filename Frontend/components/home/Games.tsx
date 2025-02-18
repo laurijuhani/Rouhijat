@@ -37,7 +37,7 @@ const dummy_data: GameData[] = [
 
 
 const Games = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  await new Promise((resolve) => setTimeout(resolve, 20))
 
   if (dummy_data.length === 0) {
     return (

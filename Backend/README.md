@@ -117,6 +117,10 @@
   - 500 Internal Server Error: If something goes wrong on the server.
 
 
+### PUT 
+
+Coming soon...
+
 
 ## /players 
 
