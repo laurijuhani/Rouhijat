@@ -8,6 +8,7 @@ import blogsRouter from './controllers/blogs';
 import gamesRouter from './controllers/games';
 import invitesRouter from './controllers/invites';
 import usersRouter from './controllers/users';
+import playersRouter from './controllers/players';
 import authenticateRouter from './controllers/authenticate';
 import clientIp from './utils/clientIp';
 
@@ -26,6 +27,7 @@ apiRouter.use('/games', gamesRouter);
 apiRouter.use('/invites', invitesRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/auth', loginRateLimiter, authenticateRouter);
+apiRouter.use('/players', playersRouter);
 
 app.use('/api/v1', apiRouter);
 

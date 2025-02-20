@@ -59,7 +59,7 @@ const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction
     }
 
     try {
-      const user = verifyToken(token);
+      const user = verifyToken(token);      
       req.userData = user;
       next();
     } catch (error) {

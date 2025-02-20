@@ -16,8 +16,6 @@ const UserPic = () => {
 
   if (!user) return null; 
 
-  console.log(new Date(user.iat).toLocaleString());
-
   return (
     <>  
       <DropdownMenu>
@@ -33,7 +31,9 @@ const UserPic = () => {
           <DropdownMenuItem>
             <a href="/profile">Profiili</a>
           </DropdownMenuItem>
-          <DropdownMenuItem>Hallintapaneeli</DropdownMenuItem>
+          <DropdownMenuItem>
+            <a href="/dashboard">Hallintapaneeli</a>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <button onClick={signout}>Kirjaudu ulos</button>

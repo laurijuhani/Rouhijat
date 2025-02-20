@@ -8,8 +8,13 @@ const playersRouter = Router();
 
 
 playersRouter.get('/', async (_req, res): Promise<any> => {
-  const players = await playerService.getPlayersAndPoints();
-  res.status(200).json(players);
+  try {
+    const players = await playerService.getPlayersAndPoints();
+    res.status(200).json(players);    
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    console.error(error);
+  }
 });
 
 playersRouter.get('/:id', async (req, res): Promise<any> => {
@@ -33,14 +38,14 @@ playersRouter.get('/:id', async (req, res): Promise<any> => {
 });
 
 playersRouter.post('/', authenticateToken, async (req, res): Promise<any> => {
-  const { name, nickname } = req.body as { name: string, nickname: string };
+  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number };
 
   if (!name || !nickname) {
     return res.status(400).json({ error: 'missing required fields' });
   }
 
   try {
-    const player = await playerService.createPlayer(name, nickname);
+    const player = await playerService.createPlayer(name, nickname, number);
 
     res.status(201).json(player);
   } catch (error) {
@@ -65,7 +70,7 @@ playersRouter.delete('/:id', authenticateToken, async (req, res): Promise<any> =
 });
 
 playersRouter.put('/:id', authenticateToken, async (req, res): Promise<any> => {
-  const { id, name, nickname } = req.body as { id: string, name: string, nickname: string };
+  const { id, name, nickname, number } = req.body as { id: string, name: string, nickname: string, number: number };
 
   if (!name || !nickname || !id) {
     return res.status(400).json({ error: 'missing required fields' });
@@ -77,7 +82,7 @@ playersRouter.put('/:id', authenticateToken, async (req, res): Promise<any> => {
       return res.status(400).json({ error: 'malformatted id' });
     }
 
-    const player = await playerService.updatePlayer(id_number, name, nickname);
+    const player = await playerService.updatePlayer(id_number, name, nickname, number);
 
     res.json(player);
   } catch (error) {

@@ -50,13 +50,14 @@ model Player {
   id       Int     @id @default(autoincrement())
   name     String
   nickname String?
+  number   Int
   points   Point[]
   @@map("players")
 }
 
 model Point {
-  playerId Int
-  gameId   Int
+  playerId Int   @map("player_id")
+  gameId   Int   @map("game_id")
   goals    Int
   assists  Int
   player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)

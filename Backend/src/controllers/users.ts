@@ -43,7 +43,24 @@ usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res
     return res.status(500).json({ error: 'Something went wrong' });
   }
 
-})
+});
+
+
+
+usersRouter.get('/', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
+  const user = req.userData;
+  if (!user) {
+    return res.status(403).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const users = await prisma.user.findMany();
+    return res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+});
 
 
 

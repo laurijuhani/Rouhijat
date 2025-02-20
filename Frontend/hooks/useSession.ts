@@ -7,7 +7,7 @@ export interface User {
   picture: string;
   exp: number;
   iat: number;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'owner';
 }
 
 interface Session {

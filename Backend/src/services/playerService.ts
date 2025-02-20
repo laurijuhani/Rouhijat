@@ -94,17 +94,18 @@ const getPlayerById = async (id: number): Promise<Player | null> => {
   };
 };
 
-const createPlayer = async (name: string, nickname: string) => {
+const createPlayer = async (name: string, nickname: string, number: number) => {
   redisClient.del(cacheKey);
   return await prisma.player.create({
     data: {
       name,
       nickname,
+      number,
     },
   });
 };
 
-const updatePlayer = async (id: number, name: string, nickname: string) => {
+const updatePlayer = async (id: number, name: string, nickname: string, number: number) => {
   redisClient.del(cacheKey);
   return await prisma.player.update({
     where: {
@@ -113,6 +114,7 @@ const updatePlayer = async (id: number, name: string, nickname: string) => {
     data: {
       name,
       nickname,
+      number,
     },
   });
 };
