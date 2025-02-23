@@ -66,7 +66,7 @@ button{
 }
 
 .navbar {
-  z-index: 10; /* Ensure the navbar is on top */
+  z-index: 100; /* Ensure the navbar is on top */
   transition: transform 0.5s ease-in-out;
   height: 4rem;
 }

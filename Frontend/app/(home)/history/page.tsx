@@ -3,7 +3,7 @@ import { TracingBeam } from "@/components/ui/tracing-beam"
 const History = () => {
   return (
     <div>
-      <TracingBeam>
+      <TracingBeam className="px-6">
         <div>
           <h1>History</h1>
           <p>
