@@ -1,6 +1,7 @@
 
 
-export const parseDate = (date: Date): string => {
+export const parseDate = (date: string): string => {
+  const dateObj = new Date(date);
   const months = [
     "Tammikuuta",
     "Helmikuuta",
@@ -16,6 +17,31 @@ export const parseDate = (date: Date): string => {
     "Joulukuuta",
   ];
 
-  return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
+  return `${dateObj.getDate()}. ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
 }
 
+
+export const parseGameTime = (time: string): string => {
+  const date = new Date(time);  
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${date.getDate()}.${date.getMonth() + 1} klo: ${date.getHours()}:${minutes}`;
+}
+
+export const formatDate = (date: Date): string => {
+  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+}
+
+
+export const parseDateString = (date: string): string => {
+  const dateObj = new Date(date);
+  const day = dateObj.getDate().toString().padStart(2, '0');
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+  return `${day}.${month}.${dateObj.getFullYear()}`;
+};
+
+export const parseTime = (date: string): string => {
+  const dateObj = new Date(date);
+  const hours = dateObj.getHours().toString().padStart(2, '0');
+  const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+};

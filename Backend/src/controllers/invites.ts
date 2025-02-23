@@ -8,7 +8,7 @@ const invitesRouter = Router();
 
 invitesRouter.get('/', authenticateToken, async (_req, res): Promise<any> => {
   const invites = await prisma.invitedEmail.findMany();
-  res.json(invites);
+  res.json(invites.map(invite => invite.email));
 });
 
 invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res): Promise<any> => {

@@ -24,9 +24,8 @@ export default function Home() {
         </Suspense>
       </div>
   
-
-      <p className="text-center text-2xl">Welcome to the Rouhijat website!</p> 
     </div>    
 
   );
 }
+

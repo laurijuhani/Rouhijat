@@ -1,10 +1,4 @@
 
-export type GameData = {
-  date: Date,
-  homeTeam: string,
-  awayTeam: string,
-  score: [number, number] | null,
-}
 
 export type DBUser = {
   id: string;
@@ -14,4 +8,13 @@ export type DBUser = {
   exp: number;
   iat: number;
   role: 'user' | 'admin' | 'owner';
+}
+
+export interface Game {
+  id: number; 
+  homeTeam: string;
+  awayTeam: string;
+  homeScore: number | null;
+  awayScore: number | null;
+  gameDate: string;
 }

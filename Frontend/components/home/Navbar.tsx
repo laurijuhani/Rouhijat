@@ -18,7 +18,7 @@ const Navbar = () => {
     { name: "Pelaajat", path: "/players" },
     { name: "Ottelut", path: "/games" },
     { name: "Tilastot", path: "/stats" },
-    { name: "Blogi", path: "/blog" },
+    { name: "Historia", path: "/history" },
   ];
 
   const toggleMenu = () => { 

@@ -1,48 +1,37 @@
 import GameCard from "./GameCard"
 import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel"
-import { GameData } from "@/types/database_types";
+import { Game } from "@/types/database_types";
 
-const dummy_data: GameData[] = [
-  {
-    date: new Date(),
-    homeTeam: "Rouhijat",
-    awayTeam: "Kärpät",
-    score: null,
-  },
-  {
-    date: new Date("2022-01-01"),
-    homeTeam: "Rouhijat",
-    awayTeam: "Kärpät",
-    score: null,
-  },
-  {
-    date: new Date("2022-01-02"),
-    homeTeam: "Rouhijat",
-    awayTeam: "Kärpät",
-    score: null,
-  },
-  {
-    date: new Date("2022-01-03"),
-    homeTeam: "Rouhijat",
-    awayTeam: "Kärpät",
-    score: null,
-  },
-  {
-    date: new Date("2022-01-04"),
-    homeTeam: "Rouhijat",
-    awayTeam: "Kärpät",
-    score: null,
-  },
-]
+
+const fetchGames = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games`, {
+    next: { revalidate: 60 }, // Revalidate every 60 seconds
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch games");
+  }
+  return res.json();
+};
 
 
 const Games = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 20))
+  let games: Game[] = [];
 
-  if (dummy_data.length === 0) {
+  try {
+    games = await fetchGames();
+  } catch (error) {
+    console.error("Error fetching games:", error);
     return (
       <div className="w-3/4 h-3 mx-auto">
-        <p className="text-center text-2xl">Dataa ei saatavilla</p>
+        <p className="text-center text-2xl">Failed to load games</p>
+      </div>
+    );
+  }
+
+  if (games.length === 0) {
+    return (
+      <div className="w-3/4 h-3 mx-auto">
+        <p className="text-center text-2xl">Ei pelejä</p>
       </div>  
     )
   }
@@ -56,9 +45,9 @@ const Games = async () => {
       className="w-full max-w-screen-lg mx-auto"
       >
           <CarouselContent>
-            {dummy_data.map((game, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4 flex justify-center">
-                <GameCard date={game.date} homeTeam={game.homeTeam} awayTeam={game.awayTeam} score={null} />
+            {games.map((game) => (
+              <CarouselItem key={game.id} className="md:basis-1/2 lg:basis-1/4 flex justify-center">
+                <GameCard game={game} />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -66,7 +55,8 @@ const Games = async () => {
           <CarouselNext />
       </Carousel>
     </div>
-  )
-}
+  ); 
+}; 
+
 
 export default Games

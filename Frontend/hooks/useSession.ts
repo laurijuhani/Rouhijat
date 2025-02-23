@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export interface User {
   id: string;
@@ -26,6 +26,10 @@ const useSession = (): Session => {
         }).join(''));
 
         const decodedToken = JSON.parse(jsonPayload);
+        if (decodedToken.item.exp < Date.now()) {
+          localStorage.removeItem('token');
+          return null;
+        }
         
         return decodedToken.item;
       }
@@ -33,10 +37,7 @@ const useSession = (): Session => {
     return null;
   });
 
-  useEffect(() => {
-    // This effect is just to ensure the component re-renders if needed
-    // when the token changes in local storage
-  }, []);
+
 
   return { user };
 }

@@ -8,7 +8,7 @@ const playersRouter = Router();
 
 
 playersRouter.get('/', async (_req, res): Promise<any> => {
-  try {
+  try {    
     const players = await playerService.getPlayersAndPoints();
     res.status(200).json(players);    
   } catch (error) {

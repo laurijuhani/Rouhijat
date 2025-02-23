@@ -49,7 +49,7 @@ const Footer = () => {
                     </svg>
                   </a>
                   <a
-                    href="javascript:void(0)"
+                    href="https://www.youtube.com/watch?v=VZrDxD0Za9I&ab_channel=AbsoluteFool"
                     className="mr-3 flex h-8 w-8 items-center justify-center rounded-full border border-stroke text-dark hover:border-primary hover:bg-primary transition-colors duration-300 hover:text-white dark:border-dark-3 dark:text-white dark:hover:border-primary sm:mr-4 lg:mr-3 xl:mr-4"
                   >
                     <svg

@@ -9,10 +9,10 @@ export const generateToken = (user: any) => {
     name: user.displayName,
     picture: user.photos[0].value,
     iat: Date.now(),
-    exp: Date.now() + 1000 * 60 * 60,
+    exp: Date.now() + 1000 * 60 * 60 * 24, // 24 hours
     role: 'user', // logic added later
   }
-  const token = jwt.sign({ item }, secret, { expiresIn: '1h' });
+  const token = jwt.sign({ item }, secret, { expiresIn: '24h' }); // change to smaller once in production
   return token;
 };
 
