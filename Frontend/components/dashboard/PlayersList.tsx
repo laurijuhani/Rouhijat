@@ -21,6 +21,8 @@ const PlayersList = ({ user }: { user: User }) => {
     fetchPlayers();
   }, [fetchPlayers]);
 
+  // TODO: Can add a player
+
   return (
     <Table>
       <TableCaption>Pelaajat</TableCaption>
@@ -38,7 +40,7 @@ const PlayersList = ({ user }: { user: User }) => {
             <TableCell>{player.nickname || "-"}</TableCell>
             <TableCell>{player.number}</TableCell>
             {user.role === 'user' && (
-              // Change this to !== user once done implementing
+              // TODO: Change this to !== user once done implementing
               <TableCell><EditPlayer player={player}/></TableCell>
             )}
           </TableRow>

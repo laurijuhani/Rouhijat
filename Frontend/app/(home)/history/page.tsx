@@ -1,42 +1,101 @@
-import { TracingBeam } from "@/components/ui/tracing-beam"
+import Image from "next/image";
+import React from "react";
+import { Timeline } from "@/components/ui/timeline";
 
-const History = () => {
-  return (
-    <div>
-      <TracingBeam className="px-6">
+export default function TimelineDemo() {
+  const data = [
+    {
+      title: "Helmikuu 2025",
+      content: (
         <div>
-          <h1>History</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+            Paitojen suunnittelu alkoi. 
           </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+            Paitoja alettiin suunnitelemaan Sepen ja Leksan toimesta. Suunnittelu oli yksi työmaa, jota ei auttanut vaativa johtoryhmä ja aivan paska 
+            softa, jolla suunnittelu tehtiin.
           </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Image
+              src="/history/paita_etu.png"
+              alt="startup template"
+              width={500}
+              height={500}
+              className="rounded-lg object-cover w-full "
+            />
+            <Image
+              src="/history/paita_taka.png"
+              alt="startup template"
+              width={500}
+              height={500}
+              className="rounded-lg object-cover w-full"
+            />
+            <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal">
+              Havainnollistavat kuvat paidoista.
+            </p>
+       
+          </div>
         </div>
-      </TracingBeam>
+      ),
+    },
+    {
+      title: "Tammikuu 2025",
+      content: (
+        <div>
+          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+            Ensimmäiset versiot Rouhijoiden logosta ja väreistä näkivät päivänvalon.
+          </p>
+          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+            Ne eivät ole mitään taidetta, mutta onpa sentään jotain.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Image
+              src="/rouhijat valkone.png"
+              alt="Logo"
+              width={200}
+              height={200}
+              className="rounded-lg object-cover  w-full"
+            />
+            <Image
+              src="/logo.svg"
+              alt="feature template"
+              width={500}
+              height={500}
+              className="rounded-lg object-cover w-full"
+            />
+            <Image
+              src="/history/shredders.svg"
+              alt="bento template"
+              width={500}
+              height={500}
+              className="rounded-lg object-cover w-full"
+            />
+            <p className="col-span-2">Ensimmäinen versio logosta. Tämä on jotain aivan järkyttävää :D</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: "Joulukuu 2024",
+      content: (
+        <div>
+          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-4">
+            Idea Rouhijoiden perustamisesta syntyi Raisiossa sijaitsevassa kodassa.
+          </p>
+          <div className="mb-8">
+            <div className="flex gap-2 items-center text-neutral-700 dark:text-neutral-300 text-xs md:text-sm">
+              Tällöin perustajat päättivät, että heidän on aika tehdä jotain suurempaa.
+              Ensimmäisiä kiinnityksiä joukkueeseen alettin jo tekemään ja juttu lensi.
+            </div>
+          </div>
+          
+        </div>
+      ),
+    },
+  ];
+  return (
+    <div className="w-full">
+      <Timeline data={data} />
     </div>
-  )
+  );
 }
-
-export default History

@@ -20,6 +20,20 @@ export const parseDate = (date: string): string => {
   return `${dateObj.getDate()}. ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
 }
 
+export const getDateAndWeekday = (date: string): string => {
+  const dateObj = new Date(date);
+  const weekdays = [
+    "su",
+    "ma",
+    "ti",
+    "ke",
+    "to",
+    "pe",
+    "la",
+  ];
+  return `${weekdays[dateObj.getDay()]} ${dateObj.getDate()}.${dateObj.getMonth() + 1}.`;
+}
+
 
 export const parseGameTime = (time: string): string => {
   const date = new Date(time);  

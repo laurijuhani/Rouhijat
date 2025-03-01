@@ -78,7 +78,7 @@ const GamesList = () => {
         </TableBody>
       </Table>
       <div className='flex justify-center mt-6'>
-        <AddGame />
+        <AddGame setGames={setGames}/>
       </div>
     </div>
   )

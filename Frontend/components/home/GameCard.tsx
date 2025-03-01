@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { parseDate, parseTime } from "@/utils/dateparser";
 import { Game } from "@/types/database_types";
+import Link from "next/link";
 
 
 const GameCard = ({ game }: { game: Game} ) => {
@@ -14,11 +15,16 @@ const GameCard = ({ game }: { game: Game} ) => {
         <div className="flex flex-col items-center justify-center">
           <div className="text-center">{game.homeTeam}-{game.awayTeam}</div>
           <div className="text-center mt-4">
-            {(Date.now() > (new Date(game.gameDate).getTime()) ) ? 
-            (game.homeScore ? `${game.homeScore} - ${game.awayScore}`: "Tulos puuttuu") 
-            : "Ei pelattu"}
+            {(game.homeScore ? `${game.homeScore} - ${game.awayScore}`: "Tulosta ei saatavilla")}
           </div>
         </div>
+        {game.homeScore && 
+          <div className="flex justify-end text-sm mt-4">
+            <Link href={`/games/${game.id}`}>
+                Lisätietoja -&gt;
+            </Link>
+          </div>
+        }
       </CardContent>
     </Card> 
   )

@@ -1,0 +1,8 @@
+.arrow-icon {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+button:hover .arrow-icon {
+  opacity: 1;
+}

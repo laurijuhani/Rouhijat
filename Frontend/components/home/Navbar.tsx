@@ -43,12 +43,12 @@ const Navbar = () => {
   }, [scrollDown, isOpen, lastScrollY]); 
 
   return (
-    <>
+    <nav>
       <div className={`navbar fixed top-0 w-full bg-gray-800 text-white flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
         <div className="flex items-center">
           <Link href="/">
             <Image 
-              src="/logo.svg"
+              src="/logo_alt.svg"
               alt="logo"
               width={50}
               height={50}
@@ -99,7 +99,7 @@ const Navbar = () => {
           </div>
         ))}
       </div>
-    </>
+    </nav>
   );
 };
 

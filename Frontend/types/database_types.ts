@@ -18,3 +18,30 @@ export interface Game {
   awayScore: number | null;
   gameDate: string;
 }
+
+export interface GamePoints {
+  player: {
+    name: string;
+    number: number;
+  }; 
+  goals: number;
+  assists: number;
+};
+
+
+
+export interface GameAndPoints extends Game {
+  points: GamePoints[];
+}
+
+export interface Player {
+  id: number;
+  name: string;
+  nickname: string | null;
+  number: number;
+  games: number;
+  points: {
+    goals: number;
+    assists: number;
+  };
+}

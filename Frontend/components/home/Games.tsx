@@ -2,10 +2,9 @@ import GameCard from "./GameCard"
 import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel"
 import { Game } from "@/types/database_types";
 
-
 const fetchGames = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games`, {
-    next: { revalidate: 60 }, // Revalidate every 60 seconds
+    next: { revalidate: 6 }, // Revalidate every 6 seconds
   });
   if (!res.ok) {
     throw new Error("Failed to fetch games");

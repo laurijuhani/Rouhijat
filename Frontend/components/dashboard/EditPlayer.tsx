@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Player } from "@/types/basicTypes"
+import { Player } from "@/types/database_types"
 import { useState } from "react"
 
 

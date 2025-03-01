@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useRef, useCallback } from 'react';
-import { Player } from '@/types/basicTypes';
+import { Player } from '@/types/database_types';
 
 interface PlayersContextProps {
   players: Player[];
