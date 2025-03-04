@@ -21,9 +21,6 @@ passport.use(
         return;
       }
 
-      console.log(profile);
-      
-
       const user = await authenticationService.logIn(profile.emails[0].value);
       if (user) {
         done(null, profile);
@@ -43,7 +40,7 @@ passport.use(
       }
       
       console.log('accessToken', accessToken);
-      // mayve save the accessToken to the user
+      // maybe save the accessToken to the user
       console.log('profile', profile);
       done(null, profile);
     }
@@ -54,14 +51,14 @@ authenticateRouter.get('/google', passport.authenticate('google', { scope: ['pro
 
 
 authenticateRouter.get('/google/callback', (req, res, next) => {
-  passport.authenticate('google', { session: false }, (err, user, info) => {
+  passport.authenticate('google', { session: false }, async (err, user, info) => {
     if (err) {
       return res.redirect(`${process.env.FRONTEND_URL}/login?error=500&message=Internal server error`);
     }
     if (!user) {
       return res.redirect(`${process.env.FRONTEND_URL}/login?error=401&message=${info?.message || 'Authentication failed'}`);
     }
-    const token = generateToken(user);
+    const token = await generateToken(user);
     res.redirect(`${process.env.FRONTEND_URL}/authorized/?token=${token}`);
   })(req, res, next);
 });

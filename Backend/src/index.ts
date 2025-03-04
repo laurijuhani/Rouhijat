@@ -9,6 +9,7 @@ import gamesRouter from './controllers/games';
 import invitesRouter from './controllers/invites';
 import usersRouter from './controllers/users';
 import playersRouter from './controllers/players';
+import pointsRouter from './controllers/points';
 import authenticateRouter from './controllers/authenticate';
 import clientIp from './utils/clientIp';
 
@@ -28,6 +29,7 @@ apiRouter.use('/invites', invitesRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/auth', loginRateLimiter, authenticateRouter);
 apiRouter.use('/players', playersRouter);
+apiRouter.use('/points', pointsRouter);
 
 app.use('/api/v1', apiRouter);
 

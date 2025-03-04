@@ -17,8 +17,6 @@ const UsersList = lazy(() => import("@/components/dashboard/UsersList"));
 const PlayersList = lazy(() => import("@/components/dashboard/PlayersList"));
 const GamesList = lazy(() => import("@/components/dashboard/GamesList"));
 
-// TODO: add user here to all components and subcomponents
-
 const Page = ({ user }: { user: User }) => {
   return (
     <PlayersProvider>

@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox"; // Ensure Checkbox component accepts the correct event type
-import { Player } from "@/types/basicTypes";
+import { Player } from "@/types/database_types";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -11,7 +11,7 @@ interface PlayerPointsProps {
 }
 
 const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsProps) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(playerPoints[player.id] ? true : false);
 
   const handleCheckboxChange = (checked: boolean) => {
     const newPlayerPoints = { ...playerPoints };

@@ -45,3 +45,9 @@ export interface Player {
     assists: number;
   };
 }
+
+export type PlayerPointsData = {
+  playerId: number;
+  goals: number;
+  assists: number;
+};

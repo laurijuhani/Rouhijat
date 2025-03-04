@@ -99,7 +99,7 @@ const createPlayer = async (name: string, nickname: string, number: number) => {
   return await prisma.player.create({
     data: {
       name,
-      nickname,
+      nickname: nickname || null,
       number,
     },
   });
@@ -113,7 +113,7 @@ const updatePlayer = async (id: number, name: string, nickname: string, number: 
     },
     data: {
       name,
-      nickname,
+      nickname: nickname || null,
       number,
     },
   });

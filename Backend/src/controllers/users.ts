@@ -11,8 +11,8 @@ const usersRouter = Router();
 
 
 usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
-  const user = req.userData;
-  if (!user || user.role !== 'admin') {
+  const user = req.userData?.item;
+  if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 

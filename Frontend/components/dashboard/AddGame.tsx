@@ -44,7 +44,6 @@ const AddGame = ({ setGames }: AddGameProps) => {
     setIsLoading(true);
     const newErrors: { [key: string]: string } = {};
 
-    // TODO: Send a POST request to the backend with the new game data
     const form = e.target as HTMLFormElement;
     const homeTeam = form.homeTeam.value;
     const awayTeam = form.awayTeam.value;
@@ -95,7 +94,6 @@ const AddGame = ({ setGames }: AddGameProps) => {
       }
 
       const data: Game = await response.json();
-      console.log(data);
       setGames((prev) => [...prev, data]);
 
       showToast(

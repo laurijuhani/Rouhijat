@@ -22,11 +22,14 @@ import {
 import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
 import { format, parse } from "date-fns"
-import { Game } from "@/types/database_types"
+import { Game, PlayerPointsData } from "@/types/database_types"
 import { parseDateString, parseTime } from "@/utils/dateparser"
 import { usePlayers } from "@/context/PlayersContext"
 import PlayerPoints from "./PlayerPoints"
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/context/ToastContext";
+import { LoaderCircleIcon } from "lucide-react";
+import { checkGamesEqual, modifiedPoints } from "@/utils/gamemodify"
 
 interface ModifyGameProps {
   game: Game; 
@@ -41,7 +44,12 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
   const [inputDate, setInputDate] = useState<string>(parseDateString(game.gameDate));
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number] }>({});
+  const [originalPoints, setOriginalPoints] = useState<PlayerPointsData[]>([]);
   const [played, setPlayed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
       setPlayed(Date.now() > (date?.getTime() || Infinity));
@@ -50,15 +58,53 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
       }
   }, [date, fetchPlayers, played]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    const fetchPlayerPoints = async () => {
+      setIsFetching(true);
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const data: PlayerPointsData[] = await response.json();
+        const points: { [key: number]: [number, number] } = {};
+        data.forEach((point) => {
+          points[point.playerId] = [
+            point.goals,
+            point.assists
+          ];
+        });
+        setPlayerPoints(points);     
+        setOriginalPoints(data);   
+      } catch (error) {
+        console.error('Error fetching player points:', error);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+  
+    if (isDialogOpen) {
+      fetchPlayerPoints();
+    }
+  }, [isDialogOpen, game.id]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const newErrors: { [key: string]: string } = {};
 
-    // TODO: Send a PUT request to the backend with the modified game data
-    // When 200 OK, update the game in the state, and close the dialog
     const form = e.target as HTMLFormElement;
     const homeTeam = form.homeTeam.value;
     const awayTeam = form.awayTeam.value;
+    const homeScore = form.homeScore.value;
+    const awayScore = form.awayScore.value;
     setErrors({});
     const combinedDateTime = getCombinedDateTime();
     if (!combinedDateTime) {
@@ -77,7 +123,69 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
       return;
     }
 
-    console.log(homeTeam, awayTeam, combinedDateTime);    
+    const newGame: Game = {
+      id: game.id,
+      homeTeam,
+      awayTeam,
+      homeScore: homeScore ? parseInt(homeScore) : null,
+      awayScore: awayScore ? parseInt(awayScore) : null,
+      gameDate: combinedDateTime?.toISOString() || game.gameDate,
+    }
+
+    if (!checkGamesEqual(game, newGame)) {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/games/' + game.id, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(newGame)
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to update game');
+        }
+
+        setGames((prev) => prev.map((g) => (g.id === game.id ? newGame : g)));
+      } catch (error) {
+        console.error('Error updating game:', error);
+        showToast('error', 'Virhe päivitettäessä peliä', 'Yritä myöhemmin uudelleen');
+        setIsLoading(false);
+        setIsDialogOpen(false);
+        return;
+      }
+    }     
+
+    const newPoints = modifiedPoints(originalPoints, playerPoints);
+    if (newPoints.length > 0) {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ playerData: newPoints })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update player points');
+        }
+
+
+      } catch (error) {
+        console.error('Error updating player points:', error);
+        showToast('error', 'Virhe päivitettäessä pelaajien pisteitä', 'Yritä myöhemmin uudelleen');
+        setIsLoading(false);
+        setIsDialogOpen(false);
+        return;
+      }
+    }
+    
+    setIsLoading(false);
+    showToast('success', 'Peli päivitetty', 'Pelin tiedot on päivitetty onnistuneesti');
+    setIsDialogOpen(false);
   }; 
 
   const handleDateChange = (date: Date | undefined) => {
@@ -121,7 +229,7 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
 
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="max-w-[fit-content] max-h-[fit-content]">
           <Image src="/icons/edit.svg" alt="Edit" width={12} height={12} />
@@ -189,12 +297,17 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
                       Tulos
                     </Label>
                     <div className="col-span-4 flex justify-center items-center gap-2">
-                      H<Input id="homeScore" type="number" className="w-16 text-center" />
+                      H<Input id="homeScore" type="number" defaultValue={game.homeScore || 0} className="w-16 text-center" />
                       <span>-</span>
-                      <Input id="awayScore" type="number" className="w-16 text-center" />A
+                      <Input id="awayScore" type="number" defaultValue={game.awayScore || 0} className="w-16 text-center" />A
                     </div>
 
-                    {players.map((player) => (
+                  {isFetching ? (
+                    <div className="col-span-4 flex justify-center items-center">
+                      <LoaderCircleIcon className="animate-spin" size={24} aria-hidden="true" />
+                    </div>
+                  ) : (
+                    players.map((player) => (
                       <div key={player.id} className="col-span-4">
                         <PlayerPoints 
                         player={player} 
@@ -202,18 +315,31 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
                         setPlayerPoints={setPlayerPoints}
                         /> 
                       </div>
-                    ))}
+                    ))
+                  )}
                     </div>
                 </>
               )}
             </div>
             <DialogFooter className="flex flex-row gap-3 justify-end border-t py-4">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" className="max-w-[fit-content]">
+                <Button type="button" variant="secondary" disabled={isLoading} className="max-w-[fit-content]">
                   Sulje
                 </Button>
               </DialogClose>
-              <Button type="submit" className="max-w-[fit-content]">Tallenna muutokset</Button>
+              <Button 
+                type="submit" 
+                disabled={isLoading}
+                data-loading={isLoading}
+                className="max-w-[fit-content] group relative disabled:opacity-100"
+              >
+                <span className="group-data-[loading=true]:text-transparent">Tallenna muutokset</span>
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <LoaderCircleIcon className="animate-spin" size={16} aria-hidden="true" />
+                </div>
+              )}
+              </Button>
             </DialogFooter>
           </form>
         </ScrollArea>

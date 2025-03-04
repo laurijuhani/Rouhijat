@@ -4,11 +4,12 @@ import redisClient from "../utils/redisClient";
 const cacheKey = 'games';
 
 const getGames = async () => {
+  /*
   const cachedGames = await redisClient.get(cacheKey);
   if (cachedGames) {
     return JSON.parse(cachedGames);
   }
-
+*/
   const games = await prisma.game.findMany();
 
   redisClient.set(cacheKey, JSON.stringify(games), {
@@ -19,6 +20,7 @@ const getGames = async () => {
 };
 
 const getGameById = async (id: number) => {
+  /* 
   const cachedGames = await redisClient.get(cacheKey);
   if (cachedGames) {
     const games = JSON.parse(cachedGames);
@@ -27,11 +29,26 @@ const getGameById = async (id: number) => {
       return game;
     }
   }
+    */ 
 
   return await prisma.game.findUnique({
     where: {
       id,
     },
+    include: {
+      points: {
+        select: {
+          player: {
+            select: {
+              name: true,
+              number: true,
+            }
+          },
+          goals: true,
+          assists: true,
+        }
+      }
+    }
   });
 };
 
@@ -42,17 +59,32 @@ const createGame = async (homeTeam: string, awayTeam: string, homeScore: number 
     data: {
       homeTeam,
       awayTeam,
-      homeScore,
-      awayScore,
+      homeScore: homeScore || null,
+      awayScore: awayScore || null,
       gameDate,
     },
   });
 };
 
-const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date) => {
+const updateScore = async (id: number, homeScore: number, awayScore: number) => {
   redisClient.del(cacheKey);
 
   return await prisma.game.update({
+    where: {
+      id,
+    },
+    data: {
+      homeScore,
+      awayScore,
+    },
+  });
+};
+
+
+const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date) => {
+  redisClient.del(cacheKey);
+
+  await prisma.game.update({
     where: {
       id,
     },
@@ -68,11 +100,15 @@ const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeSc
 
 const deleteGame = async (id: number) => {
   redisClient.del(cacheKey);
+  redisClient.del('points' + id);
 
-  return await prisma.game.delete({
-    where: {
-      id,
-    },
+  await prisma.$transaction(async (prisma) => {
+    await prisma.point.deleteMany({
+      where: { gameId: id },
+    });
+    await prisma.game.delete({
+      where: { id },
+    });
   });
 };
 
@@ -83,4 +119,5 @@ export default {
   createGame,
   updateGame,
   deleteGame,
+  updateScore,
 };

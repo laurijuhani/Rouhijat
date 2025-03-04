@@ -40,14 +40,14 @@ playersRouter.get('/:id', async (req, res): Promise<any> => {
 playersRouter.post('/', authenticateToken, async (req, res): Promise<any> => {
   const { name, nickname, number } = req.body as { name: string, nickname: string, number: number };
 
-  if (!name || !nickname) {
+  if (!name || !number) {
     return res.status(400).json({ error: 'missing required fields' });
   }
 
   try {
     const player = await playerService.createPlayer(name, nickname, number);
-
-    res.status(201).json(player);
+  
+    res.status(201).json(player.id);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
   }
@@ -70,19 +70,15 @@ playersRouter.delete('/:id', authenticateToken, async (req, res): Promise<any> =
 });
 
 playersRouter.put('/:id', authenticateToken, async (req, res): Promise<any> => {
-  const { id, name, nickname, number } = req.body as { id: string, name: string, nickname: string, number: number };
+  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number };
+  const { id } = req.params;
 
-  if (!name || !nickname || !id) {
+  if (!name || !id) {
     return res.status(400).json({ error: 'missing required fields' });
   }
 
   try {
-    const id_number = parseInt(id);
-    if (isNaN(id_number)) {
-      return res.status(400).json({ error: 'malformatted id' });
-    }
-
-    const player = await playerService.updatePlayer(id_number, name, nickname, number);
+    const player = await playerService.updatePlayer(parseInt(id), name, nickname, number);
 
     res.json(player);
   } catch (error) {

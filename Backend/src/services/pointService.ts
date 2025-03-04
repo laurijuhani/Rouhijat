@@ -1,16 +1,15 @@
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
 
-const cacheKey = 'players';
+const cacheKey = 'points';
 
 interface GamePoints {
   playerId: number;
-  gameId: number;
   goals: number;
   assists: number;
 }
 
-interface PlayerData {
+export interface PlayerData {
   playerId: number;
   goals: number;
   assists: number;
@@ -18,18 +17,30 @@ interface PlayerData {
 
 
 const getPointsByGame = async (gameId: number): Promise<GamePoints[]> => {
-  const cachedPoints = await redisClient.get(cacheKey);
+  const cachedPoints = await redisClient.get(cacheKey + gameId);
   if (cachedPoints) {
-    const points = JSON.parse(cachedPoints);
-    const gamePoints = points.filter((point: any) => point.gameId === gameId);
-    return gamePoints;
+    return JSON.parse(cachedPoints);
   }
 
-  return await prisma.point.findMany({
+  const points = await prisma.point.findMany({
     where: {
       gameId,
     },
-  }) ;
+  });
+
+  const gamePoints = points.map((point) => {
+    return {
+      playerId: point.playerId,
+      goals: point.goals,
+      assists: point.assists,
+    };
+  });
+
+  redisClient.set(cacheKey + gameId, JSON.stringify(gamePoints), {
+    EX: 3600,
+  });
+
+  return gamePoints; 
 };
 
 
@@ -66,24 +77,43 @@ const addPointsToGame = async (gameId: number, playerData: PlayerData[]) => {
   });
 };
 
-const updatePoints = async (gameId: number, playerData: PlayerData[]) => {
+const updatePoints = async (gameId: number, updateData: PlayerData[], deleteData: PlayerData[]) => {
   redisClient.del(cacheKey);
+  redisClient.del(cacheKey + gameId);
 
-  const points = playerData.map((data) => {
-    return {
-      playerId: data.playerId,
-      gameId,
-      goals: data.goals,
-      assists: data.assists,
-    };
+  const upsertPromises = updateData.map((data) => {
+    return prisma.point.upsert({
+      where: {
+        playerId_gameId: {
+          gameId,
+          playerId: data.playerId,
+        },
+      },
+      update: {
+        goals: data.goals,
+        assists: data.assists,
+      }, 
+      create: {
+        gameId,
+        playerId: data.playerId,
+        goals: data.goals,
+        assists: data.assists,
+      },
+    });
   });
 
-  await prisma.point.updateMany({
-    where: {
-      gameId,
-    },
-    data: points,
+  const deletePromises = deleteData.map((data) => {
+    return prisma.point.delete({
+      where: {
+        playerId_gameId: {
+          gameId,
+          playerId: data.playerId,
+        },
+      },
+    });
   });
+
+  await Promise.all([...upsertPromises, ...deletePromises]);
 };
 
 export default {

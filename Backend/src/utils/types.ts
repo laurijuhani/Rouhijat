@@ -2,10 +2,18 @@ import { Request } from "express";
 
 export interface CustomRequest extends Request {
   token?: string;
-  userData?: DecodedToken; 
+  userData?: Data;
   clientIp?: string;
 };
 
+export interface Data {
+  item: DecodedToken;
+  iat: number;
+  exp: number;
+}
+
+
+export type Role = 'admin' | 'user' | 'owner';
 
 export interface DecodedToken {
   id: number; 

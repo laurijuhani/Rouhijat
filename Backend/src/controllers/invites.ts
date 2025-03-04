@@ -12,9 +12,9 @@ invitesRouter.get('/', authenticateToken, async (_req, res): Promise<any> => {
 });
 
 invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
-  const user = req.userData; 
+  const user = req.userData?.item; 
 
-  if (!user || user.role !== 'admin') {
+  if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
@@ -34,19 +34,19 @@ invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res): Prom
 });
 
 
-invitesRouter.delete('/:id', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
-  const user = req.userData; 
-
-  if (!user || user.role !== 'admin') {
+invitesRouter.delete('/:email', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
+  const user = req.userData?.item;
+  
+  if (!user || (user.role !== 'admin' && user.role !== 'owner')) {    
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
-  const { id } = req.params;
+  const { email } = req.params;
 
   try {
     await prisma.invitedEmail.delete({
       where: {
-        id: parseInt(id),
+        email,
       }
     });
 

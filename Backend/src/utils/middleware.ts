@@ -1,8 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 require('dotenv').config();
-import jwt from 'jsonwebtoken';
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
-import { CustomRequest, DecodedToken } from "./types";
+import { CustomRequest } from "./types";
 import { verifyToken } from "./token";
 
 const unknownEndpoint = (_req: Request, res: Response): void => {
@@ -26,27 +25,6 @@ const errorHandler = (error: Error, _request: Request, response: Response, _next
 
   return response.status(500).json({ error: 'Something went wrong' });
 }; 
-
-const tokenExtractor = (req: CustomRequest, _res: Response, next: NextFunction) => {
-  const authorization = req.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    req.token = authorization.substring(7);
-  }
-  next();
-};
-
-const userExtractor = (request: CustomRequest, _response: Response, next: NextFunction) => {
-  try {
-      if (request.token) {
-          const decodedToken = jwt.verify(request.token, process.env.SECRET || '') as DecodedToken;
-          request.userData = decodedToken;       
-      }
-      next();
-  } catch (error) {
-    next(error);
-  }
-}; 
-
 
 const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction): void => {
   const authorization = req.get('authorization');
@@ -75,7 +53,5 @@ const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction
 export {
   unknownEndpoint,
   errorHandler,
-  tokenExtractor,
-  userExtractor,
   authenticateToken
 };

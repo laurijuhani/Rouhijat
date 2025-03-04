@@ -15,12 +15,21 @@ import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
 import { usePlayers } from "@/context/PlayersContext"
 import PlayerPoints from "./PlayerPoints"
+import { useToast } from "@/context/ToastContext";
+import { LoaderCircleIcon } from "lucide-react";
 
-const AddScore = ({ game }: { game: Game }) => {
+interface AddScoreProps {
+  game: Game
+  setGames: React.Dispatch<React.SetStateAction<Game[]>>
+}
+
+const AddScore = ({ game, setGames }: AddScoreProps) => {
   const { players, fetchPlayers } = usePlayers();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState<string>('');
   const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number] }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (isDialogOpen) {
@@ -29,9 +38,9 @@ const AddScore = ({ game }: { game: Game }) => {
   }, [isDialogOpen, fetchPlayers]);
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Send a POST request to the backend with the new score data and player stats
+    setIsLoading(true);
     const form = e.target as HTMLFormElement;
     const homeScore = form.homeScore.value;
     const awayScore = form.awayScore.value;
@@ -39,16 +48,66 @@ const AddScore = ({ game }: { game: Game }) => {
 
     if (!homeScore || !awayScore) {
       setError('Tulos on pakollinen');
+      setIsLoading(false);
       return;
     }
 
+    const playerData = Object.entries(playerPoints).map(([playerId, [goals, assists]]) => ({
+      playerId: parseInt(playerId),
+      goals,
+      assists
+    }));
+    
+    try {
+      const res1 = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/games/score/' + game.id, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          homeScore: parseInt(homeScore),
+          awayScore: parseInt(awayScore)
+        })
+      });
 
-    
+      if (!res1.ok) {
+        showToast("error", "Virhe", "Tuloksen ja pisteiden lisääminen epäonnistui");
+        setIsDialogOpen(false);
+        console.error("Error adding game:", res1);
+        return
+      }
+        
+      const res2 = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          playerData
+        })
+      });
 
-    console.log(homeScore, awayScore);
-    console.log(playerPoints);
-    
-    
+      if (!res2.ok) {
+        showToast("error", "Virhe", "Pisteiden lisääminen epäonnistui");
+        setIsDialogOpen(false);
+        console.error("Error adding game:", res2);
+        return
+      }
+
+
+      showToast("success", "Onnistui", "Tulos lisätty onnistuneesti");
+      setIsDialogOpen(false);
+      setGames((games) => games.map((g) => g.id === game.id ? { ...g, homeScore: parseInt(homeScore), awayScore: parseInt(awayScore) } : g));
+    } catch (error) {
+      console.error("Error adding game:", error);
+      setError('Jotain meni pieleen');
+      setIsDialogOpen(false);
+      showToast("error", "Virhe", "Tuloksen lisääminen epäonnistui");
+    } finally {
+      setIsLoading(false);
+    }  
   };
 
   return (
@@ -99,10 +158,21 @@ const AddScore = ({ game }: { game: Game }) => {
           </div>
           <DialogFooter className="flex flex-row gap-2 justify-end mt-4">
             <DialogClose asChild>
-              <Button variant="secondary">Sulje</Button>
+              <Button variant="secondary" disabled={isLoading}>Sulje</Button>
             </DialogClose>
-            <Button variant="outline" type="submit">
-              Tallenna
+            <Button 
+              variant="outline" 
+              type="submit"
+              disabled={isLoading}
+              data-loading={isLoading}
+               className="group relative disabled:opacity-100"
+            >
+              <span className="group-data-[loading=true]:text-transparent">Tallenna</span>
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <LoaderCircleIcon className="animate-spin" size={16} aria-hidden="true" />
+                </div>
+              )}
             </Button>
           </DialogFooter>
         </form>
