@@ -126,7 +126,7 @@ const UsersList = ({ user }: { user: User }) => {
               <TableCell>{dbuser.name}</TableCell>
               <TableCell>{dbuser.email}</TableCell>
               <TableCell>
-                {user.role === 'admin' || user.role === 'owner' ? (
+                {(user.role === 'admin' || user.role === 'owner') ? (
                   <RoleChange 
                     role={dbuser.role} 
                     id={dbuser.id} 
@@ -141,7 +141,7 @@ const UsersList = ({ user }: { user: User }) => {
         </TableBody>
       </Table> 
 
-      {user.role === 'admin' || user.role === 'owner'  && (
+      {(user.role === 'admin' || user.role === 'owner')  && (
         <>
           <form onSubmit={handleSubmit} className="mt-4 grid grid-cols-3 gap-4 mr-2 ml-2">
             <Label htmlFor="email" className="col-span-4">Kutsu käyttäjä</Label>

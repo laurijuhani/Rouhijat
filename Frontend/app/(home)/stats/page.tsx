@@ -2,11 +2,25 @@ import { Player } from "@/types/database_types";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 
+
+const fetchPlayers = async () => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/players`, {
+      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, 
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch players");
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching players:", error);
+    return [];
+  }
+}
+
+
 const Stats = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/players`, {
-    next: { revalidate: 6 }, // TODO: Modify this to 10 minutes in production
-  });
-  const players: Player[] = await res.json();
+  const players: Player[] = await fetchPlayers();
   players.sort((a, b) => a.number - b.number);
 
   return (

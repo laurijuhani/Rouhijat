@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
 }
 
 model User {
@@ -15,7 +16,6 @@ model User {
   role      String   @default("user")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-  posts     BlogPost[]
   @@map("users")
   }
 
@@ -23,16 +23,6 @@ model InvitedEmail {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   @@map("invited_emails")
-}
-
-model BlogPost {
-  id        Int      @id @default(autoincrement())
-  title     String
-  createdAt DateTime @default(now()) @map("created_at")
-  content   String
-  authorId  String     @map("author_id")
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  @@map("blog_posts")
 }
 
 model Game {

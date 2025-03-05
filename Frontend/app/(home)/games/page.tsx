@@ -2,13 +2,18 @@ import Tab from "./tab"
 import { Game } from "@/types/database_types";
 
 const fetchGames = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games`, {
-    next: { revalidate: 6 }, // Revalidate every 6 seconds
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch games");
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games`, {
+      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch games");
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching games:", error);
+    return [];
   }
-  return res.json();
 };
 
 const Page = async  () => {

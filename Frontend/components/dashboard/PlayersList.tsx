@@ -40,7 +40,7 @@ const PlayersList = ({ user }: { user: User }) => {
               <TableCell>{player.name}</TableCell>
               <TableCell>{player.nickname || "-"}</TableCell>
               <TableCell>{player.number}</TableCell>
-              {user.role === 'admin' || user.role === 'owner' && (
+              {(user.role === 'admin' || user.role === 'owner') && (
                 <TableCell>
                   <Suspense fallback={<div>Ladataan...</div>}>
                     <EditPlayer 
@@ -56,7 +56,7 @@ const PlayersList = ({ user }: { user: User }) => {
           ))}
         </TableBody>
       </Table>
-      {user.role === 'admin' || user.role === 'owner' && (
+      {(user.role === 'admin' || user.role === 'owner') && (
         <Suspense fallback={<div>Ladataan...</div>}>
           <AddPlayer setPlayers={setPlayers}/>
         </Suspense>

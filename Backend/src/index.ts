@@ -4,7 +4,6 @@ require('dotenv').config();
 import { unknownEndpoint, errorHandler } from './utils/middleware';
 
 import { generalRateLimiter, loginRateLimiter } from './utils/rateLimiter';
-import blogsRouter from './controllers/blogs';
 import gamesRouter from './controllers/games';
 import invitesRouter from './controllers/invites';
 import usersRouter from './controllers/users';
@@ -23,7 +22,6 @@ app.use(generalRateLimiter);
 
 const apiRouter = express.Router();
 
-apiRouter.use('/blogs', blogsRouter);
 apiRouter.use('/games', gamesRouter);
 apiRouter.use('/invites', invitesRouter);
 apiRouter.use('/users', usersRouter);
