@@ -36,16 +36,16 @@ const Games = async () => {
   }
 
   return (
-    <div className="w-3/4 mx-auto">
+    <div className="w-3/4 mx-auto pl-2 pr-2">
       <Carousel
       opts={{
         align: "center",
       }}
-      className="w-full max-w-screen-lg mx-auto"
+      className="w-full max-w-screen-lg"
       >
           <CarouselContent>
             {games.map((game) => (
-              <CarouselItem key={game.id} className="md:basis-1/2 lg:basis-1/4 flex justify-center">
+              <CarouselItem key={game.id} className="flex items-center justify-center sm:basis-1/2 md:basis-1/3 lg:basis-1/3">
                 <GameCard game={game} />
               </CarouselItem>
             ))}
