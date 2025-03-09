@@ -80,6 +80,7 @@ const addPointsToGame = async (gameId: number, playerData: PlayerData[]) => {
 const updatePoints = async (gameId: number, updateData: PlayerData[], deleteData: PlayerData[]) => {
   redisClient.del(cacheKey);
   redisClient.del(cacheKey + gameId);
+  redisClient.del('players');
 
   const upsertPromises = updateData.map((data) => {
     return prisma.point.upsert({

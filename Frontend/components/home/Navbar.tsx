@@ -61,9 +61,9 @@ const Navbar = () => {
           {navItems.map((item) => (
             <Link key={item.path} href={item.path}>
               <div
-                className={`mx-4 ${
-                  pathname === item.path ? "text-yellow-500" : "text-white"
-                } hover:text-yellow-300`}
+                className={`mx-4 link-5${
+                  pathname === item.path ? "-active" : ""
+                }`}
               >
                 {item.name}
               </div>
@@ -89,8 +89,8 @@ const Navbar = () => {
             <Link href={item.path}>
               <div
                 className={`py-2 ${
-                  pathname === item.path ? "text-yellow-500" : "text-white"
-                } hover:text-yellow-300`}
+                  pathname === item.path ? "text-[#0f9cd8]" : "text-white"
+                } hover:text-[#0f9cd8]`}
                 onClick={() => setIsOpen(false)}
               >
                 {item.name}

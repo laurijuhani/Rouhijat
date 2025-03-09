@@ -18,9 +18,9 @@ export const columns: ColumnDef<Player>[] = [
           #
           {column.getIsSorted() ? (
             column.getIsSorted() === "asc" ? (
-              <ArrowUp />
-            ) : (
               <ArrowDown />
+            ) : (
+              <ArrowUp />
             )
           ) : (
             <ArrowUpDown className="arrow-icon" />
@@ -66,9 +66,9 @@ export const columns: ColumnDef<Player>[] = [
           Pisteet
           {column.getIsSorted() ? (
             column.getIsSorted() === "asc" ? (
-              <ArrowDown />
-            ) : (
               <ArrowUp />
+            ) : (
+              <ArrowDown />
             )
           ) : (
             <ArrowUpDown className="arrow-icon" />
