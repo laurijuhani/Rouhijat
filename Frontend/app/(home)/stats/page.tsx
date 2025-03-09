@@ -9,7 +9,7 @@ const fetchPlayers = async () => {
       next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, 
     });
     if (!res.ok) {
-      throw new Error("Failed to fetch players");
+      return [];
     }
     return res.json();
   } catch (error) {
