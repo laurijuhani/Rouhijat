@@ -15,10 +15,10 @@ const GameCard = ({ game }: { game: Game} ) => {
         <div className="flex flex-col items-center justify-center">
           <div className="text-center">{game.homeTeam}-{game.awayTeam}</div>
           <div className="text-center mt-4">
-            {(game.homeScore ? `${game.homeScore} - ${game.awayScore}`: "Tulosta ei saatavilla")}
+            {((game.homeScore !== null) ? `${game.homeScore} - ${game.awayScore}`: "Tulosta ei saatavilla")}
           </div>
         </div>
-        {game.homeScore && 
+        {(game.homeScore !== null) && 
           <div className="flex justify-end text-sm mt-4">
             <Link href={`/games/${game.id}`}>
                 Lisätietoja -&gt;

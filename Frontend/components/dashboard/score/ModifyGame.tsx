@@ -9,17 +9,8 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
 import { format, parse } from "date-fns"
 import { Game, PlayerPointsData } from "@/types/database_types"
@@ -30,6 +21,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/context/ToastContext";
 import { LoaderCircleIcon } from "lucide-react";
 import { checkGamesEqual, modifiedPoints } from "@/utils/gamemodify"
+import GameDetails from "./forms/GameDetails"
 
 interface ModifyGameProps {
   game: Game; 
@@ -43,7 +35,7 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
   const [inputTime, setInputTime] = useState<string>(parseTime(game.gameDate));
   const [inputDate, setInputDate] = useState<string>(parseDateString(game.gameDate));
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number] }>({});
+  const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number, number] }>({});
   const [originalPoints, setOriginalPoints] = useState<PlayerPointsData[]>([]);
   const [played, setPlayed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,23 +54,28 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
     const fetchPlayerPoints = async () => {
       setIsFetching(true);
       try {
+        console.log(game.id);
+        
         const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
-  
+
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
 
         const data: PlayerPointsData[] = await response.json();
-        const points: { [key: number]: [number, number] } = {};
+        console.log(data);
+        
+        const points: { [key: number]: [number, number, number] } = {};
         data.forEach((point) => {
           points[point.playerId] = [
             point.goals,
-            point.assists
+            point.assists,
+            point.pm
           ];
         });
         setPlayerPoints(points);     
@@ -157,7 +154,7 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
       }
     }     
 
-    const newPoints = modifiedPoints(originalPoints, playerPoints);
+    const newPoints = modifiedPoints(originalPoints, playerPoints);    
     if (newPoints.length > 0) {
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
@@ -245,69 +242,32 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="Päivämäärä" className="text-right">
-                  Päivämäärä
-                </Label>
-                <div className="relative col-span-2">
-                  <Input id="date" value={inputDate} onChange={handleDateInputChange} className="w-full pr-10" />
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "absolute right-0 top-0 h-full px-3 py-2",
-                          !date && "text-muted-foreground"
-                        )}
-                        >
-                        <CalendarIcon />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={handleDateChange}
-                        initialFocus
-                        />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <Input id="time" type="clock" value={inputTime} placeholder="00:00" onChange={handleTimeInputChange} className="col-span-1"/>
-                {errors.date && <p className="text-red-500 text-sm col-span-4 text-center">{errors.date}</p>}
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="homeTeam" className="text-right">
-                  Kotijoukkue
-                </Label>
-                <Input id="homeTeam"  className="col-span-3" defaultValue={game.homeTeam}/>
-                {errors.homeTeam && <p className="text-red-500 text-sm col-span-4 text-center">{errors.homeTeam}</p>}
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="awayTeam" className="text-right">
-                  Vierasjoukkue
-                </Label>
-                <Input id="awayTeam" className="col-span-3" defaultValue={game.awayTeam}/>
-                {errors.awayTeam && <p className="text-red-500 text-sm col-span-4 text-center">{errors.awayTeam}</p>}
-              </div>
+              <GameDetails 
+                game={game}
+                played={played}
+                inputDate={inputDate}
+                inputTime={inputTime}
+                date={date}
+                errors={errors}
+                handleDateInputChange={handleDateInputChange}
+                handleTimeInputChange={handleTimeInputChange}
+                handleDateChange={handleDateChange}
+              />
               {played && (
                 <>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="score" className="text-center col-span-4">
-                      Tulos
-                    </Label>
-                    <div className="col-span-4 flex justify-center items-center gap-2">
-                      H<Input id="homeScore" type="number" defaultValue={game.homeScore || 0} className="w-16 text-center" />
-                      <span>-</span>
-                      <Input id="awayScore" type="number" defaultValue={game.awayScore || 0} className="w-16 text-center" />A
-                    </div>
-
+                    
                   {isFetching ? (
                     <div className="col-span-4 flex justify-center items-center">
                       <LoaderCircleIcon className="animate-spin" size={24} aria-hidden="true" />
                     </div>
                   ) : (
-                    players.map((player) => (
+                    <>
+                    <Label className="col-span-1 text-right">Pelaaja</Label>
+                    <Label className="col-span-1 text-right">Maalit</Label>
+                    <Label className="col-span-1 text-right">Syötöt</Label>
+                    <Label className="col-span-1 text-center">+/-</Label>
+                    {players.map((player) => (
                       <div key={player.id} className="col-span-4">
                         <PlayerPoints 
                         player={player} 
@@ -315,7 +275,8 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
                         setPlayerPoints={setPlayerPoints}
                         /> 
                       </div>
-                    ))
+                    ))}
+                    </>
                   )}
                     </div>
                 </>

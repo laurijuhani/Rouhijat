@@ -10,21 +10,12 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { LoaderCircleIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import { format, parse } from "date-fns";
 import { Game } from "@/types/database_types";
 import { useToast } from "@/context/ToastContext";
+import GameDetails from "./score/forms/GameDetails";
 
 interface AddGameProps {
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
@@ -148,6 +139,15 @@ const AddGame = ({ setGames }: AddGameProps) => {
     return combinedDate;
   };
 
+  const game: Game = {
+    id: 0,
+    homeTeam: "",
+    awayTeam: "",
+    gameDate: "",
+    homeScore: null,
+    awayScore: null,
+  };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
@@ -163,87 +163,18 @@ const AddGame = ({ setGames }: AddGameProps) => {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="Päivämäärä" className="text-right">
-                Päivämäärä
-              </Label>
-              <div className="relative col-span-2">
-                <Input
-                  id="date"
-                  value={inputDate}
-                  onChange={handleDateInputChange}
-                  className="w-full pr-10"
-                />
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "absolute right-0 top-0 h-full px-3 py-2",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={handleDateChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <Input
-                id="time"
-                type="clock"
-                value={inputTime}
-                placeholder="00:00"
-                onChange={handleTimeInputChange}
-                className="col-span-1"
+          <GameDetails 
+                game={game}
+                played={Date.now() > (date?.getTime() || Infinity)}
+                inputDate={inputDate}
+                inputTime={inputTime}
+                date={date}
+                errors={errors}
+                handleDateInputChange={handleDateInputChange}
+                handleTimeInputChange={handleTimeInputChange}
+                handleDateChange={handleDateChange}
               />
-              {errors.date && (
-                <p className="text-red-500 text-sm col-span-4 text-center">
-                  {errors.date}
-                </p>
-              )}
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="homeTeam" className="text-right">
-                Kotijoukkue
-              </Label>
-              <Input id="homeTeam" className="col-span-3" />
-              {errors.homeTeam && (
-                <p className="text-red-500 text-sm col-span-4 text-center">
-                  {errors.homeTeam}
-                </p>
-              )}
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="awayTeam" className="text-right">
-                Vierasjoukkue
-              </Label>
-              <Input id="awayTeam" className="col-span-3" />
-              {errors.awayTeam && (
-                <p className="text-red-500 text-sm col-span-4 text-center">
-                  {errors.awayTeam}
-                </p>
-              )}
-            </div>
-            {Date.now() > (date?.getTime() || Infinity) && (
-              <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="score" className="text-center col-span-3">
-                  Tulos
-                </Label>
-                <div className="col-span-3 flex justify-center items-center gap-2">
-                  H<Input id="homeScore" type="number" className="w-16 text-center" />
-                  <span>-</span>
-                  <Input id="awayScore" type="number" className="w-16 text-center" />A
-                </div>
-              </div>
-            )}
+            
           </div>
           <DialogFooter className="flex flex-row gap-3 justify-end">
             <DialogClose asChild>

@@ -27,7 +27,7 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
   const { players, fetchPlayers } = usePlayers();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState<string>('');
-  const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number] }>({});
+  const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number, number] }>({});
   const [isLoading, setIsLoading] = useState(false);
   const { showToast } = useToast();
 
@@ -52,10 +52,11 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
       return;
     }
 
-    const playerData = Object.entries(playerPoints).map(([playerId, [goals, assists]]) => ({
+    const playerData = Object.entries(playerPoints).map(([playerId, [goals, assists, pm]]) => ({
       playerId: parseInt(playerId),
       goals,
-      assists
+      assists,
+      pm
     }));
     
     try {
@@ -138,13 +139,10 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
               Merkkaa oliko pelaaja kokoonpanossa ja syöttöjen sekä maalien määrä.
               Nollat voi jättää tyhjäksi.
             </Label>
-            <Label htmlFor="goals" className="text-right col-span-2">
-              Maalit
-            </Label>
-            <div className="col-span-1"></div>
-            <Label htmlFor="assists" className="text-left col-span-1">
-              Syötöt
-            </Label>
+            <Label className="col-span-1 text-right">Pelaaja</Label>
+            <Label className="col-span-1 text-right">Maalit</Label>
+            <Label className="col-span-1 text-right">Syötöt</Label>
+            <Label className="col-span-1 text-center">+/-</Label>
              
             {players.map((player) => (
               <div key={player.id} className="col-span-4 flex justify-center items-center gap-2">

@@ -50,6 +50,7 @@ model Point {
   gameId   Int   @map("game_id")
   goals    Int
   assists  Int
+  pm       Int 
   player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
   game     Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
   @@id([playerId, gameId])

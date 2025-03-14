@@ -6,8 +6,8 @@ import { useState } from "react";
 
 interface PlayerPointsProps {
   player: Player;
-  playerPoints: { [key: number]: [number, number] };
-  setPlayerPoints: React.Dispatch<React.SetStateAction<{ [key: number]: [number, number] }>>;
+  playerPoints: { [key: number]: [number, number, number] };
+  setPlayerPoints: React.Dispatch<React.SetStateAction<{ [key: number]: [number, number, number] }>>;
 }
 
 const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsProps) => {
@@ -16,7 +16,7 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
   const handleCheckboxChange = (checked: boolean) => {
     const newPlayerPoints = { ...playerPoints };
     if (checked) {
-      newPlayerPoints[player.id] = [0, 0];
+      newPlayerPoints[player.id] = [0, 0, 0];
     } else {
       delete newPlayerPoints[player.id];
     }
@@ -31,6 +31,7 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
       [player.id]: [
         index === 0 ? points : prev[player.id]?.[0] || 0,
         index === 1 ? points : prev[player.id]?.[1] || 0,
+        index === 2 ? points : prev[player.id]?.[2] || 0,
       ],
     }));
   };
@@ -59,6 +60,14 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
           type="number"
           value={playerPoints[player.id]?.[1] || ''}
           onChange={(e) => handlePointsChange(e, 1)}
+          disabled={!isChecked}
+          className="col-span-1"
+        />
+        <Input
+          id={`player-${player.id}-pm`}
+          type="number"
+          value={playerPoints[player.id]?.[2] || ''}
+          onChange={(e) => handlePointsChange(e, 2)}
           disabled={!isChecked}
           className="col-span-1"
         />

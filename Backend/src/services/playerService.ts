@@ -11,6 +11,7 @@ interface Player {
   points: {
     goals: number;
     assists: number;
+    pm: number;
   };
 }
 
@@ -26,6 +27,7 @@ const getPlayersAndPoints = async (): Promise<Player[]> => {
         select: {
           goals: true,
           assists: true,
+          pm: true,
         },
       },
     },
@@ -35,6 +37,7 @@ const getPlayersAndPoints = async (): Promise<Player[]> => {
     const games = player.points.length;
     const goals = player.points.reduce((sum, point) => sum + point.goals, 0);
     const assists = player.points.reduce((sum, point) => sum + point.assists, 0);
+    const pm = player.points.reduce((sum, point) => sum + point.pm, 0);
 
     const { points, ...rest } = player;
     return {
@@ -43,6 +46,7 @@ const getPlayersAndPoints = async (): Promise<Player[]> => {
       points: {
         goals,
         assists,
+        pm,
       },
     };
   });
@@ -70,6 +74,7 @@ const getPlayerById = async (id: number): Promise<Player | null> => {
         select: {
           goals: true,
           assists: true,
+          pm: true,
         },
       },
     },
@@ -82,6 +87,7 @@ const getPlayerById = async (id: number): Promise<Player | null> => {
   const games = player.points.length;
   const goals = player.points.reduce((sum, point) => sum + point.goals, 0);
   const assists = player.points.reduce((sum, point) => sum + point.assists, 0);
+  const pm = player.points.reduce((sum, point) => sum + point.pm, 0);
 
   const { points, ...rest } = player;
   return {
@@ -90,6 +96,7 @@ const getPlayerById = async (id: number): Promise<Player | null> => {
     points: {
       goals,
       assists,
+      pm,
     },
   };
 };

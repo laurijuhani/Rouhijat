@@ -29,15 +29,16 @@ const checkGamesEqual = (a: Game, b: Game): boolean => {
 }
 
 
-const modifiedPoints = (original: PlayerPointsData[], newPoints: {[key: string]: [number, number]}): PlayerPointsData[] => {
+const modifiedPoints = (original: PlayerPointsData[], newPoints: {[key: string]: [number, number, number]}): PlayerPointsData[] => {
   const returnArray: PlayerPointsData[] = [];
     Object.entries(newPoints).forEach(([playerId, points]) => {
       const originalPoint = original.find((point) => point.playerId === parseInt(playerId));
-      if (!originalPoint || points[0] !== originalPoint.goals || points[1] !== originalPoint.assists) {
+      if (!originalPoint || points[0] !== originalPoint.goals || points[1] !== originalPoint.assists || points[2] !== originalPoint.pm) {
         returnArray.push({
           playerId: parseInt(playerId),
           goals: points[0],
           assists: points[1],
+          pm: points[2],
         });
       }
     });
@@ -49,6 +50,7 @@ const modifiedPoints = (original: PlayerPointsData[], newPoints: {[key: string]:
           playerId: originalPoint.playerId,
           goals: -1, // Indicate that the player was not in the game
           assists: 0,
+          pm: 0,
         });
       }
     });

@@ -1,6 +1,8 @@
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
 
+// TODO: Remove the comments 
+
 const cacheKey = 'games';
 
 const getGames = async () => {
@@ -46,6 +48,7 @@ const getGameById = async (id: number) => {
           },
           goals: true,
           assists: true,
+          pm: true,
         }
       }
     }

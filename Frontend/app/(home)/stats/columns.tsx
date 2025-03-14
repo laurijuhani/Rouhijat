@@ -88,4 +88,29 @@ export const columns: ColumnDef<Player>[] = [
       return totalPointsB - totalPointsA; 
     },
   },
+  {
+    accessorKey: "points",
+    id: "pm",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          +/-
+          {column.getIsSorted() ? (
+            column.getIsSorted() === "asc" ? (
+              <ArrowUp />
+            ) : (
+              <ArrowDown />
+            )
+          ) : (
+            <ArrowUpDown className="arrow-icon" />
+          )}
+        </Button>
+      )
+    },
+    cell: ({ row }) => row.original.points.pm,
+    sortingFn: (a, b) => b.original.points.pm - a.original.points.pm,
+  },
 ]

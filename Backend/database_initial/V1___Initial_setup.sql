@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS points (
   game_id INT NOT NULL,
   goals INT NOT NULL,
   assists INT NOT NULL,
+  pm INT NOT NULL,
   FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE,
   FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE,
   PRIMARY KEY (player_id, game_id)

@@ -3,20 +3,17 @@ import redisClient from "../utils/redisClient";
 
 const cacheKey = 'points';
 
-interface GamePoints {
-  playerId: number;
-  goals: number;
-  assists: number;
-}
+
 
 export interface PlayerData {
   playerId: number;
   goals: number;
   assists: number;
+  pm: number;
 }
 
 
-const getPointsByGame = async (gameId: number): Promise<GamePoints[]> => {
+const getPointsByGame = async (gameId: number): Promise<PlayerData[]> => {
   const cachedPoints = await redisClient.get(cacheKey + gameId);
   if (cachedPoints) {
     return JSON.parse(cachedPoints);
@@ -33,6 +30,7 @@ const getPointsByGame = async (gameId: number): Promise<GamePoints[]> => {
       playerId: point.playerId,
       goals: point.goals,
       assists: point.assists,
+      pm: point.pm,
     };
   });
 
@@ -44,7 +42,7 @@ const getPointsByGame = async (gameId: number): Promise<GamePoints[]> => {
 };
 
 
-const getPoints = async (): Promise<GamePoints[]> => {
+const getPoints = async (): Promise<PlayerData[]> => {
   const cachedPoints = await redisClient.get(cacheKey);
   if (cachedPoints) {
     return JSON.parse(cachedPoints);
@@ -62,6 +60,8 @@ const getPoints = async (): Promise<GamePoints[]> => {
 
 const addPointsToGame = async (gameId: number, playerData: PlayerData[]) => {
   redisClient.del(cacheKey);
+  redisClient.del(cacheKey + gameId);
+  redisClient.del('players');
 
   const points = playerData.map((data) => {
     return {
@@ -69,6 +69,7 @@ const addPointsToGame = async (gameId: number, playerData: PlayerData[]) => {
       gameId,
       goals: data.goals,
       assists: data.assists,
+      pm: data.pm,
     };
   });
 
@@ -93,12 +94,14 @@ const updatePoints = async (gameId: number, updateData: PlayerData[], deleteData
       update: {
         goals: data.goals,
         assists: data.assists,
+        pm: data.pm,
       }, 
       create: {
         gameId,
         playerId: data.playerId,
         goals: data.goals,
         assists: data.assists,
+        pm: data.pm,
       },
     });
   });

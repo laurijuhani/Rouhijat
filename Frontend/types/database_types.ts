@@ -26,6 +26,7 @@ export interface GamePoints {
   }; 
   goals: number;
   assists: number;
+  pm: number;
 };
 
 
@@ -43,6 +44,7 @@ export interface Player {
   points: {
     goals: number;
     assists: number;
+    pm: number;
   };
 }
 
@@ -50,4 +52,5 @@ export type PlayerPointsData = {
   playerId: number;
   goals: number;
   assists: number;
+  pm: number;
 };

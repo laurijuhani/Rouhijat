@@ -11,6 +11,7 @@ import playersRouter from './controllers/players';
 import pointsRouter from './controllers/points';
 import authenticateRouter from './controllers/authenticate';
 import clientIp from './utils/clientIp';
+import redisClient from './utils/redisClient';
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
   errorHandler(err, req, res, next);
 });
 
+redisClient.flushAll();
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
