@@ -12,6 +12,7 @@ import { lazy, Suspense } from "react";
 import Spinner from "@/components/basics/Spinner";
 import { PlayersProvider } from "@/context/PlayersContext";
 import { ToastProvider } from "@/context/ToastContext";
+import { InfoIcon } from "lucide-react";
 
 const UsersList = lazy(() => import("@/components/dashboard/UsersList"));
 const PlayersList = lazy(() => import("@/components/dashboard/PlayersList"));
@@ -23,6 +24,13 @@ const Page = ({ user }: { user: User }) => {
       <ToastProvider>
         <UserNavBar user={user} />
 
+
+        <div className="dark bg-muted text-foreground px-4 py-3 mb-4 mx-auto lg:w-[1024px] rounded-xl gap-3 flex items-center">
+        <InfoIcon className="w-5 h-5" />
+          <p className="text-center flex-grow text-base">
+            Muutoksilla voi mennä 10 minuuttia, ennen kuin ne näkyy muille käyttäjille
+          </p>
+        </div>
 
         <Tabs defaultValue="users" className="w-full">
         <TabsList className="grid w-full grid-cols-3">

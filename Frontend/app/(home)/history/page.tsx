@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Timeline } from "@/components/ui/timeline";
 
-export default function TimelineDemo() {
+export default function History() {
   const data = [
     {
       title: "Helmikuu 2025",

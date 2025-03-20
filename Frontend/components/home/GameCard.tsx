@@ -5,7 +5,7 @@ import Link from "next/link";
 
 
 const GameCard = ({ game }: { game: Game} ) => {
-  return (
+  const content = (
     <Card className="w-[200px] h-[200px]">
       <CardHeader>
         <CardTitle>{parseDate(game.gameDate)}</CardTitle>
@@ -20,14 +20,20 @@ const GameCard = ({ game }: { game: Game} ) => {
         </div>
         {(game.homeScore !== null) && 
           <div className="flex justify-end text-sm mt-4">
-            <Link href={`/games/${game.id}`}>
-                Lisätietoja -&gt;
-            </Link>
+            Lisätietoja -&gt;
           </div>
         }
       </CardContent>
     </Card> 
   )
+
+  return game.homeScore ? (
+    <Link href={`/games/${game.id}`}>
+      {content}
+    </Link>
+  ) : (
+    content
+  );
 }
 
 export default GameCard
