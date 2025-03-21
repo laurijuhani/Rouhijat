@@ -44,7 +44,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className={`navbar fixed top-0 w-full bg-gray-800 text-white flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
+      <div className={`navbar fixed top-0 w-full bg-background text-white flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
         <div className="flex items-center">
           <Link href="/">
             <Image 
@@ -85,7 +85,7 @@ const Navbar = () => {
       <div className={`dropdown-menu ${isOpen ? "open" : ""}`}>
         {navItems.map((item) => (
           <div key={item.path} className="w-full flex-col text-center">
-            <hr className="border-gray-600 w-full" />
+            <hr className="w-full border-white" />
             <Link href={item.path}>
               <div
                 className={`py-2 ${

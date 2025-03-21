@@ -21,7 +21,7 @@ const Games = async () => {
   } catch (error) {
     console.error("Error fetching games:", error);
     return (
-      <div className="w-3/4 h-3 mx-auto">
+      <div className="w-3/4 mx-auto mb-4">
         <p className="text-center text-2xl">Failed to load games</p>
       </div>
     );
@@ -36,7 +36,7 @@ const Games = async () => {
   }
 
   return (
-    <div className="w-3/4 max-w-screen-lg mx-auto pl-2 pr-2">
+    <div className="w-3/4 max-w-screen-lg mx-auto pl-2 pr-2 bg-secondary">
       <Carousel className="w-full">
           <CarouselContent>
             {games.map((game) => (

@@ -10,7 +10,7 @@ export default function HomeLayout({
   return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="mt-16 flex-grow">
+        <main className="mt-16 flex-grow bg-secondary">
           {children}
         </main>
           <Footer />
