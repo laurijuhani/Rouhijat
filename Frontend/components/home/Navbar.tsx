@@ -44,7 +44,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className={`navbar fixed top-0 w-full bg-background text-white flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
+      <div className={`navbar fixed top-0 w-full bg-primary text-white flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
         <div className="flex items-center">
           <Link href="/">
             <Image 

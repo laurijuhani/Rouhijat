@@ -36,7 +36,7 @@ const Games = async () => {
   }
 
   return (
-    <div className="w-3/4 max-w-screen-lg mx-auto pl-2 pr-2 bg-secondary">
+    <div className="w-3/4 max-w-screen-lg mx-auto pl-2 pr-2">
       <Carousel className="w-full">
           <CarouselContent>
             {games.map((game) => (
@@ -45,8 +45,8 @@ const Games = async () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="bg-accent"/>
+          <CarouselNext className="bg-accent"/>
       </Carousel>
     </div>
   ); 

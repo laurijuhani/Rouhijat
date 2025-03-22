@@ -6,7 +6,7 @@ import Loading from "../loading";
 export default function Home() {
   return (
     <div className="text-center items-center justify-center content-center">
-      <div className="bg-zinc-600 p-4">
+      <div className="p-4">
         <Image
           className="logo mx-auto"
           src="/logo.svg"

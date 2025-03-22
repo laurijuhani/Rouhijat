@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const GameCard = ({ game }: { game: Game} ) => {
   const content = (
-    <Card className="w-[200px] h-[200px]">
+    <Card className="w-[200px] h-[200px] bg-primary border-2 border-border">
       <CardHeader>
         <CardTitle>{parseDate(game.gameDate)}</CardTitle>
         <CardDescription>klo: {parseTime(game.gameDate)}</CardDescription>
