@@ -68,7 +68,7 @@ const Footer = () => {
             </div>
         </div>
         
-        <hr className="my-6 border-gray-200 md:my-10 dark:border-gray-700" />
+        <hr className="my-6 md:my-10 border-foreground" />
         
         <div className="flex flex-col items-center justify-end sm:flex-row">
           <p className="mt-4 text-sm text-gray-500 sm:mt-0 dark:text-gray-300">© 2025 Lauri Wilppu. All Rights Reserved.</p>
