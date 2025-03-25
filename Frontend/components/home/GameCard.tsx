@@ -6,24 +6,24 @@ import Link from "next/link";
 
 const GameCard = ({ game }: { game: Game} ) => {
   const content = (
-    <Card className="w-[200px] h-[200px] bg-primary border-2 border-border">
+    <Card className="w-[200px] h-[200px] bg-primary border-2 border-border relative">
       <CardHeader>
         <CardTitle>{parseDate(game.gameDate)}</CardTitle>
         <CardDescription>klo: {parseTime(game.gameDate)}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="absolute top-[5.5rem] left-1/2 transform -translate-x-1/2 w-full">
         <div className="flex flex-col items-center justify-center">
           <div className="text-center">{game.homeTeam}-{game.awayTeam}</div>
           <div className="text-center mt-4">
             {((game.homeScore !== null) ? `${game.homeScore} - ${game.awayScore}`: "Tulosta ei saatavilla")}
           </div>
         </div>
+      </CardContent>
         {(game.homeScore !== null) && 
-          <div className="flex justify-end text-sm mt-4">
+          <div className="absolute bottom-1 right-2 text-sm">
             Lisätietoja -&gt;
           </div>
         }
-      </CardContent>
     </Card> 
   )
 

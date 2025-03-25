@@ -90,7 +90,7 @@ button{
   top: 4rem;
   left: 0;
   width: 100%;
-  background-color: hsl(var(--background));
+  background-color: hsl(var(--primary));
   color: white;
   opacity: 0;
   visibility: hidden;

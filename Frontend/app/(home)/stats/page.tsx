@@ -24,7 +24,7 @@ const Stats = async () => {
   players.sort((a, b) => a.number - b.number);
 
   return (
-    <div>
+    <div className="mt-4">
       <DataTable columns={columns} data={players} />
     </div>
   )
