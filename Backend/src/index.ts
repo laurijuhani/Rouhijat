@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 import { unknownEndpoint, errorHandler } from './utils/middleware';
 
 import { generalRateLimiter, loginRateLimiter } from './utils/rateLimiter';
@@ -34,12 +35,23 @@ app.use('/api/v1', apiRouter);
 
 app.use(unknownEndpoint);
 
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  errorHandler(err, req, res, next);
+app.use((err: Error, req: express.Request, res: express.Response) => {
+  errorHandler(err, req, res);
 });
 
-redisClient.flushAll();
+
+// Flush Redis cache on startup
+(async () => {
+  try {
+    await redisClient.flushAll(); 
+  } catch (error) {
+    console.error('Failed to connect to Redis:', error);
+  }
+})().catch((error) => {
+  console.error('Unexpected error:', error);
+});
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
-})
+});

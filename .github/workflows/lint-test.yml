@@ -1,0 +1,45 @@
+name: Lint test
+
+on: 
+  push: 
+    branches: 
+      - main
+  workflow_call:
+    
+
+jobs: 
+  lint: 
+    name: ESLint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+     - name: Checkout repo
+       uses: actions/checkout@v4
+
+     - name: Setup Node.js
+       uses: actions/setup-node@v4
+       with:
+        node-version: 20
+
+     - name: Install dependencies for frontend
+       run: |
+        cd Frontend
+        npm ci
+
+     - name: Install dependencies for backend
+       run: |
+        cd Backend
+        npm ci
+
+     - name: Run ESLint for frontend
+       run: |
+        cd Frontend
+        npm run lint
+
+     - name: Run ESLint for backend
+       run: |
+        cd Backend
+        npm run lint
+
+
+# Make tests for the backend 

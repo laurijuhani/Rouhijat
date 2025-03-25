@@ -16,7 +16,7 @@ export interface PlayerData {
 const getPointsByGame = async (gameId: number): Promise<PlayerData[]> => {
   const cachedPoints = await redisClient.get(cacheKey + gameId);
   if (cachedPoints) {
-    return JSON.parse(cachedPoints);
+    return JSON.parse(cachedPoints) as PlayerData[];
   }
 
   const points = await prisma.point.findMany({
@@ -34,7 +34,7 @@ const getPointsByGame = async (gameId: number): Promise<PlayerData[]> => {
     };
   });
 
-  redisClient.set(cacheKey + gameId, JSON.stringify(gamePoints), {
+  void redisClient.set(cacheKey + gameId, JSON.stringify(gamePoints), {
     EX: 3600,
   });
 
@@ -45,12 +45,12 @@ const getPointsByGame = async (gameId: number): Promise<PlayerData[]> => {
 const getPoints = async (): Promise<PlayerData[]> => {
   const cachedPoints = await redisClient.get(cacheKey);
   if (cachedPoints) {
-    return JSON.parse(cachedPoints);
+    return JSON.parse(cachedPoints) as PlayerData[];
   }
 
   const points = await prisma.point.findMany();
 
-  redisClient.set(cacheKey, JSON.stringify(points), {
+  void redisClient.set(cacheKey, JSON.stringify(points), {
     EX: 3600,
   });
 
@@ -59,9 +59,9 @@ const getPoints = async (): Promise<PlayerData[]> => {
 
 
 const addPointsToGame = async (gameId: number, playerData: PlayerData[]) => {
-  redisClient.del(cacheKey);
-  redisClient.del(cacheKey + gameId);
-  redisClient.del('players');
+  void redisClient.del(cacheKey);
+  void redisClient.del(cacheKey + gameId);
+  void redisClient.del('players');
 
   const points = playerData.map((data) => {
     return {
@@ -79,9 +79,9 @@ const addPointsToGame = async (gameId: number, playerData: PlayerData[]) => {
 };
 
 const updatePoints = async (gameId: number, updateData: PlayerData[], deleteData: PlayerData[]) => {
-  redisClient.del(cacheKey);
-  redisClient.del(cacheKey + gameId);
-  redisClient.del('players');
+  void redisClient.del(cacheKey);
+  void redisClient.del(cacheKey + gameId);
+  void redisClient.del('players');
 
   const upsertPromises = updateData.map((data) => {
     return prisma.point.upsert({
@@ -125,4 +125,4 @@ export default {
   getPoints,
   addPointsToGame,
   updatePoints,
-}
+}; 

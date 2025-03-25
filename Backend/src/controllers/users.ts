@@ -2,7 +2,8 @@ import { Router } from "express";
 import { authenticateToken } from "../utils/middleware";
 import prisma from "../utils/client";
 import { CustomRequest } from "../utils/types";
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const usersRouter = Router();
 
@@ -10,55 +11,61 @@ const usersRouter = Router();
 
 
 
-usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
+usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res) => {
   const user = req.userData?.item;
   if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
-    return res.status(403).json({ error: 'Unauthorized' });
+    res.status(403).json({ error: 'Unauthorized' });
+    return;
   }
 
   const { id, role } = req.body as { id: string, role: 'admin' | 'user' | 'owner' };
 
   if (!id || !role) {
-    return res.status(400).json({ error: 'Missing parameters' });
+    res.status(400).json({ error: 'Missing parameters' });
+    return;
   }
 
   try {
     const userToModify = await prisma.user.findUnique({ where: { id } });
     if (!userToModify) {
-      return res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ error: 'User not found' });
+      return; 
     }
 
     if (userToModify.role === 'owner') {
-      return res.status(403).json({ error: 'Unauthorized' });
+      res.status(403).json({ error: 'Unauthorized' });
+      return;
     }
 
     if (userToModify.role === 'admin' && user.role === 'admin') {
-      return res.status(403).json({ error: 'Unauthorized' });
+      res.status(403).json({ error: 'Unauthorized' });
+      return;
     }
 
     await prisma.user.update({ where: { id }, data: { role } });
-    return res.status(200).json({ message: 'Role updated' });
+    res.status(200).json({ message: 'Role updated' });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 
 });
 
 
 
-usersRouter.get('/', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
+usersRouter.get('/', authenticateToken, async (req: CustomRequest, res) => {
   const user = req.userData;
   if (!user) {
-    return res.status(403).json({ error: 'Unauthorized' });
+    res.status(403).json({ error: 'Unauthorized' });
+    return;
   }
 
   try {
     const users = await prisma.user.findMany();
-    return res.status(200).json(users);
+    res.status(200).json(users);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 });
 

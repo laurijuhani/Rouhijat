@@ -18,7 +18,7 @@ interface Player {
 const getPlayersAndPoints = async (): Promise<Player[]> => {
   const cachedPlayers = await redisClient.get(cacheKey);
   if (cachedPlayers) {
-    return JSON.parse(cachedPlayers);
+    return JSON.parse(cachedPlayers) as Player[];
   }
 
   const playersWithPoints = await prisma.player.findMany({
@@ -34,24 +34,19 @@ const getPlayersAndPoints = async (): Promise<Player[]> => {
   });
 
   const aggregatedPlayers = playersWithPoints.map(player => {
-    const games = player.points.length;
-    const goals = player.points.reduce((sum, point) => sum + point.goals, 0);
-    const assists = player.points.reduce((sum, point) => sum + point.assists, 0);
-    const pm = player.points.reduce((sum, point) => sum + point.pm, 0);
-
     const { points, ...rest } = player;
     return {
       ...rest,
-      games,
+      games: points.length,
       points: {
-        goals,
-        assists,
-        pm,
+        goals: points.reduce((sum, point) => sum + point.goals, 0),
+        assists: points.reduce((sum, point) => sum + point.assists, 0),
+        pm: points.reduce((sum, point) => sum + point.pm, 0),
       },
     };
   });
 
-  redisClient.set(cacheKey, JSON.stringify(aggregatedPlayers), {
+  void redisClient.set(cacheKey, JSON.stringify(aggregatedPlayers), {
     EX: 3600,
   });
 
@@ -61,9 +56,9 @@ const getPlayersAndPoints = async (): Promise<Player[]> => {
 const getPlayerById = async (id: number): Promise<Player | null> => {
   const cachedPlayers = await redisClient.get(cacheKey);
   if (cachedPlayers) {
-    const players = JSON.parse(cachedPlayers);
-    const player = players.find((player: any) => player.id === id);
-      return player
+    const players = JSON.parse(cachedPlayers) as Player[];
+    const player = players.find((player: Player) => player.id === id);
+      return player || null;
   }
   const player = await prisma.player.findUnique({
     where: {
@@ -84,25 +79,20 @@ const getPlayerById = async (id: number): Promise<Player | null> => {
     return null;
   }
 
-  const games = player.points.length;
-  const goals = player.points.reduce((sum, point) => sum + point.goals, 0);
-  const assists = player.points.reduce((sum, point) => sum + point.assists, 0);
-  const pm = player.points.reduce((sum, point) => sum + point.pm, 0);
-
   const { points, ...rest } = player;
   return {
     ...rest,
-    games,
+    games: points.length,
     points: {
-      goals,
-      assists,
-      pm,
+      goals: points.reduce((sum, point) => sum + point.goals, 0),
+        assists: points.reduce((sum, point) => sum + point.assists, 0),
+        pm: points.reduce((sum, point) => sum + point.pm, 0),
     },
   };
 };
 
 const createPlayer = async (name: string, nickname: string, number: number) => {
-  redisClient.del(cacheKey);
+  void redisClient.del(cacheKey);
   return await prisma.player.create({
     data: {
       name,
@@ -113,7 +103,7 @@ const createPlayer = async (name: string, nickname: string, number: number) => {
 };
 
 const updatePlayer = async (id: number, name: string, nickname: string, number: number) => {
-  redisClient.del(cacheKey);
+  void redisClient.del(cacheKey);
   return await prisma.player.update({
     where: {
       id,
@@ -127,7 +117,7 @@ const updatePlayer = async (id: number, name: string, nickname: string, number: 
 };
 
 const deletePlayer = async (id: number) => {
-  redisClient.del(cacheKey);
+  void redisClient.del(cacheKey);
   return await prisma.player.delete({
     where: {
       id,

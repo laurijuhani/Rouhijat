@@ -1,8 +1,11 @@
 import rateLimit from "express-rate-limit";
 
 
-const keyGenerator = (req: any) => {
-  return req.clientIp || req.ip;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const keyGenerator = (req: any): string => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  return req.clientIp as string || req.ip as string;
 };
 
 // General rate limiter for public APIs

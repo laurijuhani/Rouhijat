@@ -1,5 +1,6 @@
 import { NextFunction, Response, Request } from "express";
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { CustomRequest } from "./types";
 import { verifyToken } from "./token";
@@ -8,7 +9,7 @@ const unknownEndpoint = (_req: Request, res: Response): void => {
   res.status(404).send({ error: "unknown endpoint" });
 };
 
-const errorHandler = (error: Error, _request: Request, response: Response, _next: NextFunction) => {
+const errorHandler = (error: Error, _request: Request, response: Response) => {
   console.log(error.message);
   
   if (error instanceof Error) {
@@ -42,6 +43,7 @@ const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction
       next();
     } catch (error) {
       res.status(401).json({ error: 'Token missing or invalid' });
+      console.log(error);
     }
   } else {
     res.status(401).json({ error: 'Token missing or invalid' });

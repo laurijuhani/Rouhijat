@@ -14,7 +14,7 @@ const getGames = async () => {
 */
   const games = await prisma.game.findMany();
 
-  redisClient.set(cacheKey, JSON.stringify(games), {
+  void redisClient.set(cacheKey, JSON.stringify(games), {
     EX: 3600,
   });
 
@@ -56,7 +56,7 @@ const getGameById = async (id: number) => {
 };
 
 const createGame = async (homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number | undefined, gameDate: Date) => {
-  redisClient.del(cacheKey);
+  void redisClient.del(cacheKey);
   
   return await prisma.game.create({
     data: {
@@ -70,7 +70,7 @@ const createGame = async (homeTeam: string, awayTeam: string, homeScore: number 
 };
 
 const updateScore = async (id: number, homeScore: number, awayScore: number) => {
-  redisClient.del(cacheKey);
+  void redisClient.del(cacheKey);
 
   return await prisma.game.update({
     where: {
@@ -85,7 +85,7 @@ const updateScore = async (id: number, homeScore: number, awayScore: number) => 
 
 
 const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date) => {
-  redisClient.del(cacheKey);
+  void redisClient.del(cacheKey);
 
   await prisma.game.update({
     where: {
@@ -102,8 +102,8 @@ const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeSc
 };
 
 const deleteGame = async (id: number) => {
-  redisClient.del(cacheKey);
-  redisClient.del('points' + id);
+  void redisClient.del(cacheKey);
+  void redisClient.del('points' + id);
 
   await prisma.$transaction(async (prisma) => {
     await prisma.point.deleteMany({

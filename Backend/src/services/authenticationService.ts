@@ -29,7 +29,7 @@ const signUp = async (details: SignIn): Promise<boolean> => {
       return false;
     }
   } else return false;
-}
+}; 
 
 
 export default {

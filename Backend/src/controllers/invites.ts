@@ -6,16 +6,17 @@ import { CustomRequest } from "../utils/types";
 
 const invitesRouter = Router();
 
-invitesRouter.get('/', authenticateToken, async (_req, res): Promise<any> => {
+invitesRouter.get('/', authenticateToken, async (_req, res) => {
   const invites = await prisma.invitedEmail.findMany();
   res.json(invites.map(invite => invite.email));
 });
 
-invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
+invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res) => {
   const user = req.userData?.item; 
 
   if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
-    return res.status(403).json({ error: 'Unauthorized' });
+    res.status(403).json({ error: 'Unauthorized' });
+    return;
   }
 
   const { email } = req.body as { email: string };
@@ -27,18 +28,20 @@ invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res): Prom
       }
     });
 
-    return res.status(201).json({ message: 'Invitation sent' });
+    res.status(201).json({ message: 'Invitation sent' });
   } catch (error) {
-    return res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
   }
 });
 
 
-invitesRouter.delete('/:email', authenticateToken, async (req: CustomRequest, res): Promise<any> => {
+invitesRouter.delete('/:email', authenticateToken, async (req: CustomRequest, res) => {
   const user = req.userData?.item;
   
   if (!user || (user.role !== 'admin' && user.role !== 'owner')) {    
-    return res.status(403).json({ error: 'Unauthorized' });
+    res.status(403).json({ error: 'Unauthorized' });
+    return;
   }
 
   const { email } = req.params;
@@ -50,9 +53,10 @@ invitesRouter.delete('/:email', authenticateToken, async (req: CustomRequest, re
       }
     });
 
-    return res.status(204).end();
+    res.status(204).end();
   } catch (error) {
-    return res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
   }
 });
 

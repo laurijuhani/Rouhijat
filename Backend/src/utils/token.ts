@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
-import { Data, DecodedToken, Role } from './types';
+import { Data, DecodedToken, Role, GoogleUser } from './types';
 import prisma from './client';
 const secret = process.env.JWT_SECRET as string;
 
-export const generateToken = async (user: any) => {  
+
+
+export const generateToken = async (user: GoogleUser) => {  
   const res = await prisma.user.findUnique({
     where: {
       email: user.emails[0].value
@@ -27,7 +29,7 @@ export const generateToken = async (user: any) => {
     iat: Date.now(),
     exp: Date.now() + 1000 * 60 * 60 * 24, // 24 hours
     role,
-  }
+  }; 
   const token = jwt.sign({ item }, secret, { expiresIn: '24h' }); // change to smaller once in production
   return token;
 };

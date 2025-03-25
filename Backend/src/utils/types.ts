@@ -16,7 +16,7 @@ export interface Data {
 export type Role = 'admin' | 'user' | 'owner';
 
 export interface DecodedToken {
-  id: number; 
+  id: string; 
   email: string; 
   name: string;
   picture: string;
@@ -39,4 +39,11 @@ export interface SignIn {
   email: string;
   name: string;
   picture?: string;
+}
+
+export interface GoogleUser {
+  id: string;
+  emails: { value: string }[];
+  displayName: string;
+  photos: { value: string }[];
 }

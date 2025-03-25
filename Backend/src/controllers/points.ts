@@ -5,13 +5,14 @@ import { PlayerData } from "../services/pointService";
 
 const pointsRouter = Router();
 
-pointsRouter.post('/:id', authenticateToken, async (req, res): Promise<any> => {
-  console.log(req.body)
+pointsRouter.post('/:id', authenticateToken, async (req, res) => {
+  console.log(req.body);
   const { playerData } = req.body as { playerData: PlayerData[] };
   const gameId = parseInt(req.params.id);
   
   if (!playerData) {
-    return res.status(400).json({ error: 'missing required fields' });
+    res.status(400).json({ error: 'missing required fields' });
+    return;
   }
 
   try {
@@ -19,15 +20,17 @@ pointsRouter.post('/:id', authenticateToken, async (req, res): Promise<any> => {
     res.status(201).json({ message: 'points added' });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
   }
 });
 
-pointsRouter.put('/:id', authenticateToken, async (req, res): Promise<any> => {
+pointsRouter.put('/:id', authenticateToken, async (req, res) => {
   const { playerData } = req.body as { playerData: PlayerData[] };
   const gameId = parseInt(req.params.id);
 
   if (!playerData) {
-    return res.status(400).json({ error: 'missing required fields' });
+    res.status(400).json({ error: 'missing required fields' });
+    return;
   }
 
   const updateArray: PlayerData[] = [];
@@ -46,11 +49,12 @@ pointsRouter.put('/:id', authenticateToken, async (req, res): Promise<any> => {
     res.status(200).json({ message: 'points updated' });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
   }
 });
 
 
-pointsRouter.get('/:id', authenticateToken, async (req, res): Promise<any> => {
+pointsRouter.get('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -58,6 +62,7 @@ pointsRouter.get('/:id', authenticateToken, async (req, res): Promise<any> => {
     res.json(points);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
   }
 
 });
