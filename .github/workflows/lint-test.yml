@@ -1,9 +1,6 @@
 name: Lint test
 
 on: 
-  push: 
-    branches: 
-      - main
   workflow_call:
     
 
@@ -45,6 +42,11 @@ jobs:
        run: |
         cd Backend
         npm run lint
+
+     - name: Run typecheck for backend
+       run: |
+        cd Backend
+        npm run type-check  
 
 
 # Make tests for the backend 

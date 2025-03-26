@@ -36,4 +36,4 @@ jobs:
             echo "Deployed successfully"
 
 
-# Not ready yet
+# TODO: Add more tests to make sure the deployment is successful

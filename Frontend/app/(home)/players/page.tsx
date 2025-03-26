@@ -3,7 +3,7 @@ const Page = () => {
   return (
     <div>
       Pelaajat sivu
-      Hardcoded values for now      
+      Tulee joskus    
     </div>
   );
 };
