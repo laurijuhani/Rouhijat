@@ -26,7 +26,7 @@ jobs:
      - name: Install dependencies for backend
        run: |
         cd Backend
-        npm ci
+        npm i
 
      - name: Run ESLint for frontend
        run: |
