@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,13 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { LoaderCircleIcon } from "lucide-react";
 import { useToast } from "@/context/ToastContext";
-import { Label } from "@/components/ui/label"
-import { Player } from "@/types/database_types"
-import React, { useState } from "react"
+import { Label } from "@/components/ui/label";
+import { Player } from "@/types/database_types";
+import React, { useState } from "react";
 
 interface EditPlayerProps {
   player: Player;
@@ -176,7 +176,7 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default EditPlayer
+export default EditPlayer;

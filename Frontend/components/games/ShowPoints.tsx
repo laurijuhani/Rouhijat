@@ -1,4 +1,4 @@
-import { GamePoints } from '@/types/database_types'
+import { GamePoints } from '@/types/database_types';
 import {
   Table,
   TableBody,
@@ -42,9 +42,9 @@ const ShowPoints = ({ gamePoints }: { gamePoints: GamePoints[]}) => {
         </TableBody>
       </Table>
     </div>
-  )
-}
+  );
+};
 
-export default ShowPoints
+export default ShowPoints;
 
 

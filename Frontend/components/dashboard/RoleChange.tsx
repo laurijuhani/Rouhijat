@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "../ui/button";
 import {
@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import { DBUser } from "@/types/database_types";
 import { useState } from "react";
 
@@ -75,7 +75,7 @@ const RoleChange = ({ role, id, setUsers }: RoleChangeProps) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RoleChange
+export default RoleChange;

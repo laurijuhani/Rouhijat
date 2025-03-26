@@ -1,5 +1,5 @@
-import GameCard from "./GameCard"
-import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel"
+import GameCard from "./GameCard";
+import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel";
 import { Game } from "@/types/database_types";
 
 const fetchGames = async () => {
@@ -32,7 +32,7 @@ const Games = async () => {
       <div className="w-3/4 h-3 mx-auto">
         <p className="text-center text-2xl">Ei pelejä</p>
       </div>  
-    )
+    );
   }
 
   return (
@@ -53,4 +53,4 @@ const Games = async () => {
 }; 
 
 
-export default Games
+export default Games;

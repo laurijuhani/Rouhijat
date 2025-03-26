@@ -13,7 +13,7 @@ const Spinner: React.FC<SpinnerProps> = ({ className }) => {
       </svg>
       <span className="sr-only">Loading...</span>
     </div>
-  )
-}
+  );
+};
 
-export default Spinner
+export default Spinner;

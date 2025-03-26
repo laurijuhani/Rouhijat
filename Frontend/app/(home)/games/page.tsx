@@ -1,4 +1,4 @@
-import Tab from "./tab"
+import Tab from "./tab";
 import { Game } from "@/types/database_types";
 
 const fetchGames = async () => {
@@ -35,7 +35,7 @@ const Page = async  () => {
         <div className="w-3/4 h-3 mx-auto">
           <p className="text-center text-2xl">Ei pelejä</p>
         </div>  
-      )
+      );
     }
 
   return (
@@ -46,7 +46,7 @@ const Page = async  () => {
 
    
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

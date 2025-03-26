@@ -1,5 +1,5 @@
 "use client";
-import ProtectedRoute from "@/components/auth/ProtectedRoute"
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import UserNavBar from "@/components/dashboard/UserNavBar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,11 +18,11 @@ const Page = ({ user }: { user: User }) => {
 
 
     </div>
-  )
-}
+  );
+};
 
 export default function Profile() {
   return (
     <ProtectedRoute WrappedComponent={Page} />
-  )
+  );
 }

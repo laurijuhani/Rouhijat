@@ -1,7 +1,7 @@
-"use client"
-import { useRouter } from "next/navigation"
-import { Button } from "../ui/button"
-import Image from "next/image"
+"use client";
+import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+import Image from "next/image";
 
 
 const BackButton = () => {
@@ -12,7 +12,7 @@ const BackButton = () => {
       <Image src="/icons/back.svg" alt="Back" width={15} height={15} />
       Takaisin
     </Button> 
-  )
-}
+  );
+};
 
-export default BackButton
+export default BackButton;

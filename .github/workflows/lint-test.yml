@@ -24,7 +24,7 @@ jobs:
      - name: Install dependencies for frontend
        run: |
         cd Frontend
-        npm ci
+        npm ci --force 
 
      - name: Install dependencies for backend
        run: |
@@ -35,6 +35,11 @@ jobs:
        run: |
         cd Frontend
         npm run lint
+
+     - name: Run typecheck for frontend
+       run: |
+        cd Frontend
+        npm run type-check
 
      - name: Run ESLint for backend
        run: |

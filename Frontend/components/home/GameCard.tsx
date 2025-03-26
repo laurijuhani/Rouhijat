@@ -25,7 +25,7 @@ const GameCard = ({ game }: { game: Game} ) => {
           </div>
         }
     </Card> 
-  )
+  );
 
   return game.homeScore ? (
     <Link href={`/games/${game.id}`}>
@@ -34,6 +34,6 @@ const GameCard = ({ game }: { game: Game} ) => {
   ) : (
     content
   );
-}
+};
 
-export default GameCard
+export default GameCard;

@@ -16,7 +16,7 @@ const fetchPlayers = async () => {
     console.error("Error fetching players:", error);
     return [];
   }
-}
+};
 
 
 const Stats = async () => {
@@ -27,7 +27,7 @@ const Stats = async () => {
     <div className="mt-4">
       <DataTable columns={columns} data={players} />
     </div>
-  )
-}
+  );
+};
 
-export default Stats
+export default Stats;

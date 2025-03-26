@@ -1,5 +1,5 @@
 "use client";
-import ProtectedRoute from "@/components/auth/ProtectedRoute"
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import UserNavBar from "@/components/dashboard/UserNavBar";
 import { User } from "@/hooks/useSession";
 import {
@@ -58,11 +58,11 @@ const Page = ({ user }: { user: User }) => {
       
     </ToastProvider>
   </PlayersProvider>
-  )
-}
+  );
+};
 
 export default function Dashboard() {
   return (
     <ProtectedRoute WrappedComponent={Page} />
-  )
+  );
 }

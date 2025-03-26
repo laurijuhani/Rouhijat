@@ -1,14 +1,14 @@
-"use client"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 const Custom404 = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
-    router.push("/")
-  } , [router])
+    router.push("/");
+  } , [router]);
 
   return null; 
-}
+};
 
-export default Custom404
+export default Custom404;

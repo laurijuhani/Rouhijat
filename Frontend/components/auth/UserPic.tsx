@@ -1,4 +1,4 @@
-import useSession from "@/hooks/useSession"
+import useSession from "@/hooks/useSession";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import useSignout from "@/hooks/useSignout";
 import { 
@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu';
 
 const UserPic = () => {
   const { user } = useSession();
@@ -41,7 +41,7 @@ const UserPic = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </>
-  )
-}
+  );
+};
 
-export default UserPic
+export default UserPic;

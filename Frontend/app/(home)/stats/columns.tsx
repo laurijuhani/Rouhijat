@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { Player } from "@/types/database_types"
-import { Button } from "@/components/ui/button"
-import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
-import "@/css/columns.css"
+import { ColumnDef } from "@tanstack/react-table";
+import { Player } from "@/types/database_types";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import "@/css/columns.css";
 
 export const columns: ColumnDef<Player>[] = [
   {
@@ -26,7 +26,7 @@ export const columns: ColumnDef<Player>[] = [
             <ArrowUpDown className="arrow-icon" />
           )}
         </Button>
-      )
+      );
     }
   },
   {
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Player>[] = [
             <ArrowUpDown className="arrow-icon" />
           )}
         </Button>
-      )
+      );
     }
   },
   {
@@ -74,7 +74,7 @@ export const columns: ColumnDef<Player>[] = [
             <ArrowUpDown className="arrow-icon" />
           )}
         </Button>
-      )
+      );
     },
     cell: ({ row }) => `${row.original.points.goals} + ${row.original.points.assists} = ${row.original.points.goals + row.original.points.assists}`,      
     sortingFn: (a, b) => {
@@ -108,9 +108,9 @@ export const columns: ColumnDef<Player>[] = [
             <ArrowUpDown className="arrow-icon" />
           )}
         </Button>
-      )
+      );
     },
     cell: ({ row }) => row.original.points.pm,
     sortingFn: (a, b) => b.original.points.pm - a.original.points.pm,
   },
-]
+];

@@ -22,7 +22,7 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
     }
     setPlayerPoints(newPlayerPoints);
     setIsChecked(checked);
-  }
+  };
 
   const handlePointsChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const points = parseInt(e.target.value, 10) || 0;
@@ -74,6 +74,6 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
       </div>
     </div>
   );
-}
+};
 
-export default PlayerPoints
+export default PlayerPoints;

@@ -5,7 +5,7 @@ const Page = () => {
       Pelaajat sivu
       Hardcoded values for now      
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

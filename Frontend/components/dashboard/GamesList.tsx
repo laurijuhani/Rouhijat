@@ -1,6 +1,6 @@
-"use client"
-import { Game } from '@/types/database_types'
-import React, { useEffect, useState } from 'react'
+"use client";
+import { Game } from '@/types/database_types';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import { parseGameTime } from '@/utils/dateparser';
 import AddGame from './AddGame';
 import AddScore from './score/AddScore';
@@ -40,7 +40,7 @@ const GamesList = () => {
         console.error(error);
       }
       );
-  }, [])
+  }, []);
 
 
   const handleDelete = async (id: number) => {
@@ -119,7 +119,7 @@ const GamesList = () => {
         <AddGame setGames={setGames}/>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default GamesList
+export default GamesList;

@@ -1,4 +1,4 @@
-import { Game } from "@/types/database_types"
+import { Game } from "@/types/database_types";
 import {
   Dialog,
   DialogContent,
@@ -8,13 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useEffect, useState } from "react"
-import { usePlayers } from "@/context/PlayersContext"
-import PlayerPoints from "./PlayerPoints"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
+import { usePlayers } from "@/context/PlayersContext";
+import PlayerPoints from "./PlayerPoints";
 import { useToast } from "@/context/ToastContext";
 import { LoaderCircleIcon } from "lucide-react";
 
@@ -76,7 +76,7 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
         showToast("error", "Virhe", "Tuloksen ja pisteiden lisääminen epäonnistui");
         setIsDialogOpen(false);
         console.error("Error adding game:", res1);
-        return
+        return;
       }
         
       const res2 = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
@@ -94,7 +94,7 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
         showToast("error", "Virhe", "Pisteiden lisääminen epäonnistui");
         setIsDialogOpen(false);
         console.error("Error adding game:", res2);
-        return
+        return;
       }
 
 
@@ -176,7 +176,7 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default AddScore
+export default AddScore;

@@ -11,3 +11,6 @@ jobs:
   lint: 
     name: Lint
     uses: ./.github/workflows/lint-test.yml
+
+
+    # Add testing that builds all and tests that all works

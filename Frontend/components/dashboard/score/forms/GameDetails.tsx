@@ -1,11 +1,11 @@
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { CalendarIcon } from "lucide-react"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
-import { Game } from "@/types/database_types"
-import { cn } from "@/lib/utils"
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Game } from "@/types/database_types";
+import { cn } from "@/lib/utils";
 
 interface GameDetailsProps {
   game: Game;
@@ -81,7 +81,7 @@ const GameDetails = ({ game, played, inputDate, inputTime, date, errors, handleD
         </div>
       }
     </>
-  )
-}
+  );
+};
 
-export default GameDetails
+export default GameDetails;

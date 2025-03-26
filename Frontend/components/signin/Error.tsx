@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useSearchParams } from "next/navigation";
 const Error = () => {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ const Error = () => {
     <div className="border border-red-500 text-white bg-red-500 p-4 rounded-lg mb-6 w-[90%] max-w-[400px] text-center">
       <p>{message}</p>
     </div>
-  )
-}
+  );
+};
 
-export default Error
+export default Error;

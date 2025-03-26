@@ -1,7 +1,7 @@
-import CancelButton from "@/components/signin/CancelButton"
-import Error from "@/components/signin/Error"
-import Signin from "@/components/signin/Signin"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import CancelButton from "@/components/signin/CancelButton";
+import Error from "@/components/signin/Error";
+import Signin from "@/components/signin/Signin";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Page = () => {
   
@@ -26,7 +26,7 @@ const Page = () => {
     </div>
   </div>
  
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

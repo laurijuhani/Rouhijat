@@ -1,6 +1,6 @@
-import BackButton from "./BackButton"
-import UserPic from "../auth/UserPic"
-import { User } from "@/hooks/useSession"
+import BackButton from "./BackButton";
+import UserPic from "../auth/UserPic";
+import { User } from "@/hooks/useSession";
 
 
 
@@ -13,7 +13,7 @@ const UserNavBar = ({ user}: { user: User}) => {
           <p className="ml-4">{user.name}</p>
         </div>
       </div>
-  )
-}
+  );
+};
 
-export default UserNavBar
+export default UserNavBar;

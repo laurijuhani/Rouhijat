@@ -1,4 +1,4 @@
-import { Game } from "@/types/database_types"
+import { Game } from "@/types/database_types";
 import { getDateAndWeekday, parseTime } from "@/utils/dateparser";
 import Link from "next/link";
 
@@ -48,6 +48,6 @@ const GameInfo = ({ game }: Props) => {
   ) : (
     content
   );
-}
+};
 
-export default GameInfo
+export default GameInfo;

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,11 +8,11 @@ import {
   DialogTrigger,
   DialogClose,
   DialogDescription,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { LoaderCircleIcon } from "lucide-react";
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 import { useToast } from "@/context/ToastContext";
 import { Player } from "@/types/database_types";
 
@@ -67,13 +67,13 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
       const id = await response.json();
       
       setPlayers((prevPlayers) => {
-        return [...prevPlayers, { name, nickname, number: parseInt(number), id, games: 0, points: { goals: 0, assists: 0 } }];
+        return [...prevPlayers, { name, nickname, number: parseInt(number), id, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
       });
       showToast('success', 'Pelaaja lisätty', '');
       setIsDialogOpen(false);
       setIsLoading(false);
     };
-  }
+  };
 
 
   return (
@@ -128,7 +128,7 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default AddPlayer
+export default AddPlayer;

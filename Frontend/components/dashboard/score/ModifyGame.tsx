@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,20 +8,20 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import Image from "next/image"
-import { useState, useEffect } from "react"
-import { format, parse } from "date-fns"
-import { Game, PlayerPointsData } from "@/types/database_types"
-import { parseDateString, parseTime } from "@/utils/dateparser"
-import { usePlayers } from "@/context/PlayersContext"
-import PlayerPoints from "./PlayerPoints"
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { format, parse } from "date-fns";
+import { Game, PlayerPointsData } from "@/types/database_types";
+import { parseDateString, parseTime } from "@/utils/dateparser";
+import { usePlayers } from "@/context/PlayersContext";
+import PlayerPoints from "./PlayerPoints";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/context/ToastContext";
 import { LoaderCircleIcon } from "lucide-react";
-import { checkGamesEqual, modifiedPoints } from "@/utils/gamemodify"
-import GameDetails from "./forms/GameDetails"
+import { checkGamesEqual, modifiedPoints } from "@/utils/gamemodify";
+import GameDetails from "./forms/GameDetails";
 
 interface ModifyGameProps {
   game: Game; 
@@ -127,7 +127,7 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
       homeScore: homeScore ? parseInt(homeScore) : null,
       awayScore: awayScore ? parseInt(awayScore) : null,
       gameDate: combinedDateTime?.toISOString() || game.gameDate,
-    }
+    };
 
     if (!checkGamesEqual(game, newGame)) {
       try {
@@ -307,6 +307,6 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
       </DialogContent>
     </Dialog>
   );
-}
+};
 
-export default ModifyGame
+export default ModifyGame;

@@ -1,5 +1,5 @@
 "use client";
-import { User } from "@/hooks/useSession"
+import { User } from "@/hooks/useSession";
 import { DBUser } from "@/types/database_types";
 import { useState, useEffect } from "react";
 import {
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import RoleChange from "./RoleChange";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -107,7 +107,7 @@ const UsersList = ({ user }: { user: User }) => {
       setInvites(invites.filter(invite => invite !== email));
       showToast('success', 'Kutsu poistettu', '');
     }
-  }
+  };
 
   return (
     <div>
@@ -176,7 +176,7 @@ const UsersList = ({ user }: { user: User }) => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default UsersList
+export default UsersList;

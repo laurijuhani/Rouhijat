@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/hooks/useSession"
+import { User } from "@/hooks/useSession";
 import { usePlayers } from "@/context/PlayersContext";
 import { lazy, useEffect, useState, Suspense } from "react";
 import {
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 const EditPlayer = lazy(() => import('./player/EditPlayer'));
 const AddPlayer = lazy(() => import('./player/AddPlayer'));
@@ -62,7 +62,7 @@ const PlayersList = ({ user }: { user: User }) => {
         </Suspense>
       )}
     </>
-  )
-}
+  );
+};
 
-export default PlayersList
+export default PlayersList;
