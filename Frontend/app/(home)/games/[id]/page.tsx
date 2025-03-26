@@ -48,21 +48,4 @@ const GamePage = async ({ params }: { params: Params }) => {
   );
 };
 
-export async function generateStaticParams() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games`);
-    if (!res.ok) {
-      throw new Error("Failed to fetch games data");
-    }
-    const games = await res.json();
-
-    return games.map((game: { id: number }) => ({
-      id: game.id.toString(),
-    }));
-  } catch (error) {
-    console.error("Error fetching games data:", error);
-    return [];
-  }
-}
-
 export default GamePage;

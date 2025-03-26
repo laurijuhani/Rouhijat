@@ -4,7 +4,7 @@ import { Game } from "@/types/database_types";
 import Link from "next/link";
 
 
-const GameCard = ({ game }: { game: Game} ) => {
+const GameCard = ({ game }: { game: Game} ) => {  
   const content = (
     <Card className="w-[200px] h-[200px] bg-primary border-2 border-border relative">
       <CardHeader>
@@ -27,7 +27,7 @@ const GameCard = ({ game }: { game: Game} ) => {
     </Card> 
   );
 
-  return game.homeScore ? (
+  return game.homeScore !== null ? (
     <Link href={`/games/${game.id}`}>
       {content}
     </Link>
