@@ -26,12 +26,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /Rouhijat
+            cd Rouhijat/
             git pull
             docker-compose down
             docker-compose up --build -d
 
-            docker image prune -af
+            docker image prune -f
 
             echo "Deployed successfully"
 
