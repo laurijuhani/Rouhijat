@@ -17,6 +17,22 @@ playersRouter.get('/', async (_req, res) => {
   }
 });
 
+playersRouter.get('/season/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const players = await playerService.getAllPlayersStatsBySeason(parseInt(id));
+    if (!players) {
+      res.status(404).json({ error: 'players not found' });
+      return;
+    }
+
+    res.status(200).json(players);
+    } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
+  }
+});
+
 playersRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
 

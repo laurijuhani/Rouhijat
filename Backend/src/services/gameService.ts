@@ -2,6 +2,7 @@ import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
 
 // TODO: Remove the comments 
+// TODO: Check what to flush 
 
 const cacheKey = 'games';
 
@@ -20,6 +21,32 @@ const getGames = async () => {
 
   return games;
 };
+
+const getGameBySeason = async (seasonId: number) => {
+  /*
+  const cachedGames = await redisClient.get(cacheKey + "/season/" + seasonId);
+  if (cachedGames) {
+    const games = JSON.parse(cachedGames);
+    const game = games.find((game: any) => game.seasonId === seasonId);
+    if (game) {
+      return game;
+    }
+  }
+  */
+
+  const games = await prisma.game.findMany({
+    where: {
+      seasonId,
+    },
+  });
+
+  void redisClient.set(cacheKey + "/season/" + seasonId, JSON.stringify(games), {
+    EX: 3600,
+  });
+
+  return games;
+};
+
 
 const getGameById = async (id: number) => {
   /* 
@@ -55,8 +82,8 @@ const getGameById = async (id: number) => {
   });
 };
 
-const createGame = async (homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number | undefined, gameDate: Date) => {
-  void redisClient.del(cacheKey);
+const createGame = async (homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number | undefined, gameDate: Date, seasonId: number) => {
+  void redisClient.flushAll();  
   
   return await prisma.game.create({
     data: {
@@ -65,6 +92,7 @@ const createGame = async (homeTeam: string, awayTeam: string, homeScore: number 
       homeScore: homeScore || null,
       awayScore: awayScore || null,
       gameDate,
+      seasonId,
     },
   });
 };
@@ -84,7 +112,7 @@ const updateScore = async (id: number, homeScore: number, awayScore: number) => 
 };
 
 
-const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date) => {
+const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date, seasonId: number) => {
   void redisClient.del(cacheKey);
 
   await prisma.game.update({
@@ -97,6 +125,7 @@ const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeSc
       homeScore,
       awayScore,
       gameDate,
+      seasonId,
     },
   });
 };
@@ -123,4 +152,5 @@ export default {
   updateGame,
   deleteGame,
   updateScore,
+  getGameBySeason,
 };

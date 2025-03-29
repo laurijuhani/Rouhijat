@@ -50,7 +50,7 @@ export default function History() {
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Image
-              src="/rouhijat valkone.png"
+              src="/logo.svg"
               alt="Logo"
               width={200}
               height={200}
@@ -70,7 +70,7 @@ export default function History() {
               height={500}
               className="rounded-lg object-cover w-full"
             />
-            <p className="col-span-2">Ensimmäinen versio logosta. Tämä on jotain aivan järkyttävää :D</p>
+            <p className="text-neutral-200 text-xs md:text-sm font-normal mb-8 col-span-2">Ensimmäinen versio logosta. Tämä on jotain aivan järkyttävää :D</p>
           </div>
         </div>
       ),

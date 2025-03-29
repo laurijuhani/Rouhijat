@@ -12,6 +12,11 @@ export interface Data {
   exp: number;
 }
 
+export interface Season {
+  id: number;
+  name: string;
+}
+
 
 export type Role = 'admin' | 'user' | 'owner';
 
@@ -23,7 +28,7 @@ export interface DecodedToken {
   iat: number;
   exp: number;
   role: 'admin' | 'user' | 'owner';
-};
+}
 
 export interface GameRequest {
   id?: string;
@@ -32,7 +37,8 @@ export interface GameRequest {
   homeScore?: number;
   awayScore?: number;
   gameDate: string; // Date object as string
-};
+  seasonId: number;
+}
 
 export interface SignIn {
   id: string;
@@ -46,4 +52,22 @@ export interface GoogleUser {
   emails: { value: string }[];
   displayName: string;
   photos: { value: string }[];
+}
+
+export interface Player {
+  id: number;
+  name: string;
+  nickname: string | null;
+  games: number;
+  points: {
+    goals: number;
+    assists: number;
+    pm: number;
+  };
+}
+
+export interface Points {
+  goals: number;
+  assists: number;
+  pm: number;
 }

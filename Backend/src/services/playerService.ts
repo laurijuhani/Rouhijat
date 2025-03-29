@@ -1,20 +1,23 @@
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
+import { Player, Points } from "../utils/types";
 
 const cacheKey = 'players';
 
-interface Player {
-  id: number;
-  name: string;
-  nickname: string | null;
-  games: number;
-  points: {
-    goals: number;
-    assists: number;
-    pm: number;
-  };
-}
+// TODO: The caching is incorrect atm
 
+// utility function, move it to utils
+const aggregatePoints = (points: Points[]): Points => {
+  return {
+    goals: points.reduce((sum, point) => sum + point.goals, 0),
+    assists: points.reduce((sum, point) => sum + point.assists, 0),
+    pm: points.reduce((sum, point) => sum + point.pm, 0),
+  }; 
+} 
+
+
+// TODO: Maybe delete this function and use querying 
+// from distinct seasons
 const getPlayersAndPoints = async (): Promise<Player[]> => {
   const cachedPlayers = await redisClient.get(cacheKey);
   if (cachedPlayers) {
@@ -53,6 +56,7 @@ const getPlayersAndPoints = async (): Promise<Player[]> => {
   return aggregatedPlayers;
 };
 
+// TODO: Maybe delete this function
 const getPlayerById = async (id: number): Promise<Player | null> => {
   const cachedPlayers = await redisClient.get(cacheKey);
   if (cachedPlayers) {
@@ -90,6 +94,92 @@ const getPlayerById = async (id: number): Promise<Player | null> => {
     },
   };
 };
+
+
+const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
+  const cachedPlayers = await redisClient.get(cacheKey);
+  if (cachedPlayers) {
+    const players = JSON.parse(cachedPlayers) as Player[];
+    const player = players.find((player: Player) => player.id === playerId);
+    if (player) {
+      return player.points;
+    }
+  }
+
+  const player = await prisma.player.findUnique({
+    where: {
+      id: playerId,
+    },
+    include: {
+      points: {
+        where: {
+          game: {
+            seasonId
+          }
+        },
+        select: {
+          goals: true,
+          assists: true,
+          pm: true,
+        },
+      },
+    },
+  });
+
+  if (!player) {
+    return null;
+  }
+
+  const { points, ...rest } = player;
+
+  return {
+    ...rest,
+    games: points.length,
+    points: aggregatePoints(points),
+  };
+}
+
+
+const getAllPlayersStatsBySeason = async (seasonId: number) => {
+  const cachedPlayers = await redisClient.get(cacheKey);
+  if (cachedPlayers) {
+    const players = JSON.parse(cachedPlayers) as Player[];
+    return players.map(player => ({
+      ...player,
+      points: player.points,
+    }));
+  }
+  const players = await prisma.player.findMany({
+    include: {
+      points: {
+        where: {
+          game: {
+            seasonId
+          }
+        },
+        select: {
+          goals: true,
+          assists: true,
+          pm: true,
+        },
+      },
+    },
+  });
+  const aggregatedPlayers = players.map(player => {
+    const { points, ...rest } = player;
+    return {
+      ...rest,
+      games: points.length,
+      points: aggregatePoints(points),
+    };
+  }
+  );
+  void redisClient.set(cacheKey, JSON.stringify(aggregatedPlayers), {
+    EX: 3600,
+  });
+  return aggregatedPlayers;
+};
+
 
 const createPlayer = async (name: string, nickname: string, number: number) => {
   void redisClient.del(cacheKey);
@@ -132,4 +222,6 @@ export default {
   createPlayer,
   updatePlayer,
   deletePlayer,
+  getPlayerStatsBySeason,
+  getAllPlayersStatsBySeason
 };
