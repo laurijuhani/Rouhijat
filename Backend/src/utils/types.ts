@@ -17,6 +17,10 @@ export interface Season {
   name: string;
 }
 
+export interface SeasonData extends Season {
+  active?: boolean;
+}
+
 
 export type Role = 'admin' | 'user' | 'owner';
 

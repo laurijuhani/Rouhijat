@@ -47,7 +47,7 @@ model Game {
   homeScore Int? @map("home_score")
   awayScore Int? @map("away_score")
   gameDate  DateTime @map("game_date")
-  seasonId  Int 
+  seasonId  Int     @map("seasonid")
   season    Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
   points    Point[]
   @@map("games")

@@ -5,7 +5,7 @@ import { authenticateToken } from "../utils/middleware";
 
 const seasonsRouter = Router();
 
-
+// add try/catch to all routes
 
 seasonsRouter.get('/', async (_req, res) => {
   const seasons = await seasonService.getSeasons();

@@ -12,6 +12,25 @@ gamesRouter.get('/', async (_req, res) => {
   res.json(games);
 });
 
+gamesRouter.get('/season/current', async (_req, res) => {  
+  try {
+    const currentSeason = await seasonService.getCurrentSeason();
+    if (!currentSeason) {
+      res.status(404).json({ error: 'current season not found' });
+      return; 
+    }    
+    const games = await gameService.getGameBySeason(currentSeason.id);
+    if (!games) {
+      res.status(404).json({ error: 'game not found' });
+      return;
+    }
+    res.json(games);
+    } catch (error) {
+      res.status(500).json({ error: 'Something went wrong' });
+      console.log(error);
+    }
+
+});
 
 gamesRouter.get('/season/:id', async (req, res) => {
   const { id } = req.params;
@@ -31,25 +50,6 @@ gamesRouter.get('/season/:id', async (req, res) => {
   }
 });
 
-gamesRouter.get('/season/current', async (_req, res) => {
-  try {
-    const currentSeason = await seasonService.getCurrentSeason();
-    if (!currentSeason) {
-      res.status(404).json({ error: 'current season not found' });
-      return; 
-    }
-    const games = await gameService.getGameBySeason(currentSeason.id);
-    if (!games) {
-      res.status(404).json({ error: 'game not found' });
-      return;
-    }
-    res.json(games);
-    } catch (error) {
-      res.status(500).json({ error: 'Something went wrong' });
-      console.log(error);
-    }
-
-});
 
 gamesRouter.get('/:id', async (req, res) => {
   const { id } = req.params;

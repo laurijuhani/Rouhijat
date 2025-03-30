@@ -1,5 +1,6 @@
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
+import { SeasonData } from "../utils/types";
 import settingsService from "./settingsService";
 
 
@@ -15,7 +16,17 @@ const getSeasons = async () => {
     return JSON.parse(cachedSeasons);
   }
 */
-  const seasons = await prisma.season.findMany();
+  const seasons: SeasonData[] = await prisma.season.findMany();
+  const activeSeason = await settingsService.getSetting('currentSeason');
+  
+  seasons.map((season) => {
+    if (activeSeason && season.id === parseInt(activeSeason.value)) {
+      season.active = true;
+    } else {
+      season.active = false;
+    }
+      return season;
+  });
 
   void redisClient.set(cacheKey, JSON.stringify(seasons), {
     EX: 3600,
@@ -73,7 +84,7 @@ const getCurrentSeason = async () => {
     where: {
       id: parseInt(id.value),
     },
-  });
+  });  
   if (!season) {
     return null;
   }

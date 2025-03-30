@@ -97,6 +97,7 @@ const getPlayerById = async (id: number): Promise<Player | null> => {
 
 
 const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
+  /*
   const cachedPlayers = await redisClient.get(cacheKey);
   if (cachedPlayers) {
     const players = JSON.parse(cachedPlayers) as Player[];
@@ -105,7 +106,7 @@ const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
       return player.points;
     }
   }
-
+  */
   const player = await prisma.player.findUnique({
     where: {
       id: playerId,
@@ -139,8 +140,11 @@ const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
   };
 }
 
+// TODO: getPlayerStatsFromAllSeasons
+
 
 const getAllPlayersStatsBySeason = async (seasonId: number) => {
+  /*
   const cachedPlayers = await redisClient.get(cacheKey);
   if (cachedPlayers) {
     const players = JSON.parse(cachedPlayers) as Player[];
@@ -149,6 +153,7 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
       points: player.points,
     }));
   }
+  */
   const players = await prisma.player.findMany({
     include: {
       points: {
