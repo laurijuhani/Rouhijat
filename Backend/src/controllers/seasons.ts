@@ -105,7 +105,7 @@ seasonsRouter.post('/', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
     console.log(error);
   }
-})
+});
 
 
 seasonsRouter.delete('/:id', authenticateToken, async (req, res) => {
@@ -143,8 +143,6 @@ seasonsRouter.put('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-
-seasonsRouter
 
 
 

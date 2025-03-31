@@ -127,6 +127,7 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
       homeScore: homeScore ? parseInt(homeScore) : null,
       awayScore: awayScore ? parseInt(awayScore) : null,
       gameDate: combinedDateTime?.toISOString() || game.gameDate,
+      seasonId: game.seasonId
     };
 
     if (!checkGamesEqual(game, newGame)) {

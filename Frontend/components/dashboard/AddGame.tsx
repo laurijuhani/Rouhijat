@@ -13,15 +13,16 @@ import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { format, parse } from "date-fns";
-import { Game } from "@/types/database_types";
+import { Game, Season } from "@/types/database_types";
 import { useToast } from "@/context/ToastContext";
 import GameDetails from "./score/forms/GameDetails";
 
 interface AddGameProps {
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
+  season: Season | null; 
 }
 
-const AddGame = ({ setGames }: AddGameProps) => {
+const AddGame = ({ setGames, season }: AddGameProps) => {
   const [date, setDate] = useState<Date>();
   const [inputTime, setInputTime] = useState<string>("");
   const [inputDate, setInputDate] = useState<string>("");
@@ -146,6 +147,7 @@ const AddGame = ({ setGames }: AddGameProps) => {
     gameDate: "",
     homeScore: null,
     awayScore: null,
+    seasonId: season?.id || 1, // TODO: change this to actually excpect season
   };
 
   return (

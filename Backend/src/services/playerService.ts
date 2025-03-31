@@ -13,7 +13,7 @@ const aggregatePoints = (points: Points[]): Points => {
     assists: points.reduce((sum, point) => sum + point.assists, 0),
     pm: points.reduce((sum, point) => sum + point.pm, 0),
   }; 
-} 
+}; 
 
 
 // TODO: Maybe delete this function and use querying 
@@ -138,7 +138,7 @@ const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
     games: points.length,
     points: aggregatePoints(points),
   };
-}
+};
 
 // TODO: getPlayerStatsFromAllSeasons
 
