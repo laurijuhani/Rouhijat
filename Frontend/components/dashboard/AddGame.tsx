@@ -16,6 +16,7 @@ import { format, parse } from "date-fns";
 import { Game, Season } from "@/types/database_types";
 import { useToast } from "@/context/ToastContext";
 import GameDetails from "./score/forms/GameDetails";
+import Fetch from "@/utils/fetch";
 
 interface AddGameProps {
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
@@ -70,23 +71,14 @@ const AddGame = ({ setGames, season }: AddGameProps) => {
     };
 
     try {
-      
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const { json } = await Fetch.post<Game>(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/games`,
+        gameData,
+        {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(gameData),
-      });
-
-      if (!response.ok) {
-        console.log(response);
-        
-        throw new Error("Failed to add game");
-      }
-
-      const data: Game = await response.json();
+        }
+      );
+      const data = await json;
       setGames((prev) => [...prev, data]);
 
       showToast(

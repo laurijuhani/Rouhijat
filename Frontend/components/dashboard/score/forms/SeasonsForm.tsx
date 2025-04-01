@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Season } from "@/types/database_types";
 import ModifySeason from "./ModifySeason";
+import Fetch from "@/utils/fetch";
 
 
 interface SeasonsFormProps {
@@ -21,41 +22,40 @@ const SeasonsForm = ({ seasons, setSeasons }: SeasonsFormProps) => {
     const seasonName = form.seasonName.value.trim();
     if (seasonName) {
       if (!window.confirm(`Haluatko varmasti lisätä kauden "${seasonName}"?`)) return; 
-
-      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/seasons', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ name: seasonName }),
-      });
-      if (res.ok) {
-        const newSeason: Season = await res.json();
-        newSeason.active = false; // Set the new season as inactive by default
-        setSeasons([...seasons, newSeason]);
-        form.reset();
-        return;
-      }
-      throw new Error('Failed to add season');
+        try {
+          const { json } = await Fetch.post<Season>(
+            process.env.NEXT_PUBLIC_BACKEND_URL + '/seasons',
+            { name: seasonName },
+            {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+          );
+          const newSeason = await json;
+          newSeason.active = false; // Set the new season as inactive by default
+          setSeasons([...seasons, newSeason]);
+          form.reset();
+        } catch (error) {
+          console.error(error);
+          alert('Kauden lisääminen epäonnistui');
+        }
     }
   };
 
 
   const handleActiveSeasonChange = async (season: Season) => {
     if (window.confirm(`Haluatko varmasti vaihtaa aktiivisen kauden "${season.name}"?`)) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/seasons/current`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ id: season.id }),
-      });
-      if (res.ok) {
+      try {
+        await Fetch.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/seasons/current`,
+          { id: season.id },
+          {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        );
         setSeasons(seasons.map(s => ({ ...s, active: s.id === season.id })));
-      } else {
-        throw new Error('Failed to update season');
+      } catch (error) {
+        console.error(error);
+        alert('Kauden vaihtaminen epäonnistui');
       }
     }
   }; 

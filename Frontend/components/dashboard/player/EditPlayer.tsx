@@ -15,6 +15,7 @@ import { useToast } from "@/context/ToastContext";
 import { Label } from "@/components/ui/label";
 import { Player } from "@/types/database_types";
 import React, { useState } from "react";
+import Fetch from "@/utils/fetch";
 
 interface EditPlayerProps {
   player: Player;
@@ -54,32 +55,30 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
       return;
     }
 
-    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify({ name, nickname, number: parseInt(number) })
-    });
 
-    if (!response.ok) {
-      showToast('error', 'Pelaajan muokkaaminen epäonnistui', 'Yritä myöhemmin uudelleen');
-      setIsLoading(false);
-      return;
-    }
-
-    setPlayers((prevPlayers) =>
-      prevPlayers.map((p) => {
-        if (p.id === player.id) {
-          return { ...p, name, nickname, number: parseInt(number) };
+    try {
+      await Fetch.put(
+        process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
+        { name, nickname, number: parseInt(number) },
+        {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
-        return p;
-      })
-    );
-    setIsDialogOpen(false);
+      );
+
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((p) => {
+          if (p.id === player.id) {
+            return { ...p, name, nickname, number: parseInt(number) };
+          }
+          return p;
+        })
+      );
+      setIsDialogOpen(false);
+      showToast('success', 'Pelaaja muokattu', 'Pelaajan tiedot on muokattu onnistuneesti');
+    } catch  {
+      showToast('error', 'Pelaajan muokkaaminen epäonnistui', 'Yritä myöhemmin uudelleen');
+    }
     setIsLoading(false);
-    showToast('success', 'Pelaaja muokattu', 'Pelaajan tiedot on muokattu onnistuneesti');
   };
 
   
@@ -87,24 +86,21 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
     if (window.confirm('Haluatko varmasti poistaa pelaajan?')) {
       console.log('poistetaan');
       setIsLoading(true);
-      
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
 
-      if (!response.ok) {
+      try {
+        await Fetch.delete(
+          process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
+          {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        );
+        setPlayers((prevPlayers) => prevPlayers.filter((p) => p.id !== player.id));
+        setIsDialogOpen(false);
+        showToast('success', 'Pelaaja poistettu', 'Pelaaja on poistettu onnistuneesti');
+      } catch {
         showToast('error', 'Pelaajan poistaminen epäonnistui', 'Yritä myöhemmin uudelleen');
-        setIsLoading(false);
       }
-
-      setPlayers((prevPlayers) => prevPlayers.filter((p) => p.id !== player.id));
       setIsLoading(false);
-      setIsDialogOpen(false);
-      showToast('success', 'Pelaaja poistettu', 'Pelaaja on poistettu onnistuneesti');
     }
   };
 

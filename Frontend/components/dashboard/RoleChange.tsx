@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DBUser } from "@/types/database_types";
+import Fetch from "@/utils/fetch";
 import { useState } from "react";
 
 type Role = 'user' | 'admin' | 'owner';
@@ -31,26 +32,24 @@ const RoleChange = ({ role, id, setUsers }: RoleChangeProps) => {
 
 
   const handleButtonClick = async() => {    
-    const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/users/changerole', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify({ id, role: selectedRole })
-    });
-
-    if (!res.ok) {
-      console.error('Failed to change role');
-      return;
+    try {
+      await Fetch.put(
+        process.env.NEXT_PUBLIC_BACKEND_URL + '/users/changerole',
+        { id, role: selectedRole },
+        {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      );
+      setUsers((prev) => prev.map((user) => {
+        if (user.id === id) {
+          return { ...user, role: selectedRole };
+        }
+        return user;
+      }));
+    } catch (error) {
+      console.error("Error changing role:", error);
     }
 
-    setUsers((prev) => prev.map((user) => {
-      if (user.id === id) {
-        return { ...user, role: selectedRole };
-      }
-      return user;
-    }));
   };
 
   return (

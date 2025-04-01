@@ -124,18 +124,9 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
 
     if (!checkGamesEqual(game, newGame)) {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/games/' + game.id, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json', 
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify(newGame)
+        await Fetch.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games/${game.id}`, newGame, {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         });
-    
-        if (!response.ok) {
-          throw new Error('Failed to update game');
-        }
 
         setGames((prev) => prev.map((g) => (g.id === game.id ? newGame : g)));
       } catch (error) {
@@ -150,20 +141,9 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
     const newPoints = modifiedPoints(originalPoints, playerPoints);    
     if (newPoints.length > 0) {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ playerData: newPoints })
+        await Fetch.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/points/${game.id}`, { playerData: newPoints }, {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to update player points');
-        }
-
-
       } catch (error) {
         console.error('Error updating player points:', error);
         showToast('error', 'Virhe päivitettäessä pelaajien pisteitä', 'Yritä myöhemmin uudelleen');

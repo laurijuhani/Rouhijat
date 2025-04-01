@@ -19,6 +19,7 @@ import { TrashIcon } from "lucide-react";
 import { useToast } from "@/context/ToastContext";
 import SeasonSelector from './score/forms/SeasonSelector';
 import SeasonsForm from './score/forms/SeasonsForm';
+import Fetch from '@/utils/fetch';
 
 const GamesList = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -29,20 +30,12 @@ const GamesList = () => {
 
   useEffect(() => {
     const fetchgames = async () => {
-      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/games');
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const data = await res.json();
+      const data = await Fetch.get<Game[]>(process.env.NEXT_PUBLIC_BACKEND_URL + '/games');
       setGames(data);
     };
 
     const fetchSeasons = async () => {
-      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/seasons');
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const data: Season[] = await res.json();
+      const data = await Fetch.get<Season[]>(process.env.NEXT_PUBLIC_BACKEND_URL + '/seasons');
       setSeasons(data);
 
       setSelectedSeason(data.find((season) => season.active === true) || null);

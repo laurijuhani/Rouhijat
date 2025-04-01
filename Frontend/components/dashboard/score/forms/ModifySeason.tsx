@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Season } from "@/types/database_types";
+import Fetch from "@/utils/fetch";
 import { useState } from "react";
 
 interface ModifySeasonProps {
@@ -20,21 +21,21 @@ const ModifySeason = ({ season, handleActiveSeasonChange, setSeasons }: ModifySe
 
   const handleSeasonNameUpdate = async () => {
     if (window.confirm(`Haluatko varmasti muuttaa kauden "${season.name}" nimeksi "${seasonName}"?`)) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/seasons/${season.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ name: seasonName }),
-      });
-      if (res.ok) {
+      try {
+        await Fetch.put(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/seasons/${season.id}`,
+          { name: seasonName },
+          {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        );
         setSeasonName(seasonName);
         setSeasons((prevSeasons) =>
           prevSeasons.map((s) => (s.id === season.id ? { ...s, name: seasonName } : s))
         );
-      } else {
-        throw new Error('Failed to update season name');
+      } catch (error) {
+        console.error("Error updating season name:", error);
+        alert("Kauden nimeä ei voitu muuttaa.");
       }
     }
   };

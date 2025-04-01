@@ -17,7 +17,8 @@ class Fetch {
     return await response.json();
   }
 
-  static async post<T>(url: string, data: T, headers: HeadersInit = {}): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async post<T>(url: string, data: any, headers: HeadersInit = {}): Promise<{ json: Promise<T>; response: Response }> {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -31,10 +32,14 @@ class Fetch {
       throw new Error(`Error: ${response.status}`);
     }
 
-    return await response.json();
+    return {
+      json: response.json(),
+      response, 
+    };
   }
 
-  static async put<T>(url: string, data: T, headers: HeadersInit = {}): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static async put<T>(url: string, data: any, headers: HeadersInit = {}): Promise<{ json: Promise<T>; response: Response }> {
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
@@ -48,7 +53,10 @@ class Fetch {
       throw new Error(`Error: ${response.status}`);
     }
 
-    return await response.json();
+    return {
+      json: response.json(),
+      response,
+    };
   }
 
   static async delete(url: string, headers: HeadersInit = {}): Promise<void> {

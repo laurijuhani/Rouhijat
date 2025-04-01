@@ -11,6 +11,7 @@ import {
 import { Game, Season } from "@/types/database_types";
 import { useEffect, useState } from "react";
 import Tab from "./tab";
+import Fetch from "@/utils/fetch";
 
 interface SelectorProps {
   seasons: Season[];
@@ -37,15 +38,10 @@ const SeasonSelector = ({ seasons }: SelectorProps) => {
     }
 
     try {
-      const res = await fetch(
+      const fetchedGames = await Fetch.get<Game[]>(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/games/season/${seasonId}`,
       );
-      
-      if (!res.ok) {
-        throw new Error("Failed to fetch games");
-      }
-      const fetchedGames = await res.json();
-      
+
       setgameCache((prev) => ({ ...prev, [seasonId]: fetchedGames }));
       setGames(fetchedGames);
       setLoading(false);
