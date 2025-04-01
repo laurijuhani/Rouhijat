@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Season } from "@/types/database_types";
+import ModifySeason from "./ModifySeason";
 
 
 interface SeasonsFormProps {
@@ -59,12 +60,6 @@ const SeasonsForm = ({ seasons, setSeasons }: SeasonsFormProps) => {
     }
   }; 
 
-  const handleModifySeasonName = async (season: Season) => {
-    // TODO: implement this
-  };
-
-
-
   return (
     <Sheet key="bottom">
       <SheetTrigger asChild>
@@ -78,23 +73,13 @@ const SeasonsForm = ({ seasons, setSeasons }: SeasonsFormProps) => {
         </SheetDescription>
         </SheetHeader>
         <div className="mb-10">
-          {seasons.map((season) => (
-            <div key={season.id} className="flex justify-between items-center p-2 border-b">
-              <Label htmlFor={`season-${season.id}`} className="text-right">
-                {season.active ? "Aktiivinen" : 
-                <Button 
-                  variant="outline" 
-                  onClick={() => handleActiveSeasonChange(season)}>
-                    Aseta
-                </Button>}
-              </Label>
-              <Input
-                id={`season-${season.id}`}
-                value={season.name}
-                className="flex-1 mx-2"
+        {seasons.map((season) => (
+            <ModifySeason
+              key={season.id}
+              season={season}
+              handleActiveSeasonChange={handleActiveSeasonChange}
+              setSeasons={setSeasons}
               />
-              <Button variant="outline">Muokkaa</Button>
-            </div>
           ))}
 
           <form className="flex flex-col gap-2 mt-4" onSubmit={handleAddSeason}>

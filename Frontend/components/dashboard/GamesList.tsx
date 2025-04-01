@@ -113,7 +113,7 @@ const GamesList = () => {
             <TableRow key={game.id}>
               {modify && <TableCell>
                 <div className="flex flex-col md:flex-row h-full">
-                    <ModifyGame game={game} setGames={setGames} />
+                    <ModifyGame game={game} setGames={setGames} seasons={seasons} />
                     <Button variant="destructive" className='max-w-[46px] max-h-[30px] mt-2 md:mt-0 md:ml-2'
                       onClick={() => handleDelete(game.id)}
                     >

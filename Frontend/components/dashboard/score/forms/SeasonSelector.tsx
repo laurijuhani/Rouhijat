@@ -25,7 +25,11 @@ const SeasonSelector = ({ seasons, selectedSeason, setSelectedSeason }: SeasonSe
     <div className="*:not-first:mt-2">
       <Select defaultValue={selectedSeason?.id.toString()} onValueChange={handleSeasonChange} >
         <SelectTrigger id="seasons">
-          <SelectValue placeholder="Valitse kausi" />
+        {selectedSeason ? (
+            <span>{selectedSeason.name}</span> 
+          ) : (
+            <SelectValue placeholder="Valitse kausi" />
+          )}
         </SelectTrigger>
         <SelectContent>
           {seasons.map((season) => (

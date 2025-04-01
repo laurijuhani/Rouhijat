@@ -40,6 +40,6 @@ const useSession = (): Session => {
 
 
   return { user };
-}
+};
 
 export default useSession;

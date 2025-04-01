@@ -66,6 +66,7 @@ const AddGame = ({ setGames, season }: AddGameProps) => {
       gameDate: combinedDateTime,
       homeScore: homeScore ? parseInt(homeScore) : null,
       awayScore: awayScore ? parseInt(awayScore) : null,
+      seasonId: season?.id
     };
 
     try {

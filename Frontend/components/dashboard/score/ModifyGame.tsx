@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { format, parse } from "date-fns";
-import { Game, PlayerPointsData } from "@/types/database_types";
+import { Game, PlayerPointsData, Season } from "@/types/database_types";
 import { parseDateString, parseTime } from "@/utils/dateparser";
 import { usePlayers } from "@/context/PlayersContext";
 import PlayerPoints from "./PlayerPoints";
@@ -22,14 +22,17 @@ import { useToast } from "@/context/ToastContext";
 import { LoaderCircleIcon } from "lucide-react";
 import { checkGamesEqual, modifiedPoints } from "@/utils/gamemodify";
 import GameDetails from "./forms/GameDetails";
+import SeasonSelector from "./forms/SeasonSelector";
+import Fetch from "@/utils/fetch";
 
 interface ModifyGameProps {
   game: Game; 
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
+  seasons: Season[];
 }
 
 
-const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
+const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
   const { players, fetchPlayers } = usePlayers();
   const [date, setDate] = useState<Date | undefined>(new Date(game.gameDate));
   const [inputTime, setInputTime] = useState<string>(parseTime(game.gameDate));
@@ -37,6 +40,7 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number, number] }>({});
   const [originalPoints, setOriginalPoints] = useState<PlayerPointsData[]>([]);
+  const [selectedSeason, setSelectedSeason] = useState<Season | null>(seasons.find((season) => season.id === game.seasonId) || null);
   const [played, setPlayed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -53,23 +57,11 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
   useEffect(() => {
     const fetchPlayerPoints = async () => {
       setIsFetching(true);
-      try {
-        console.log(game.id);
-        
-        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/points/' + game.id, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
+      try {        
+        const data = await Fetch.get<PlayerPointsData[]>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/points/${game.id}`, {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-
-        const data: PlayerPointsData[] = await response.json();
-        console.log(data);
-        
         const points: { [key: number]: [number, number, number] } = {};
         data.forEach((point) => {
           points[point.playerId] = [
@@ -127,7 +119,7 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
       homeScore: homeScore ? parseInt(homeScore) : null,
       awayScore: awayScore ? parseInt(awayScore) : null,
       gameDate: combinedDateTime?.toISOString() || game.gameDate,
-      seasonId: game.seasonId
+      seasonId: selectedSeason?.id || game.seasonId,
     };
 
     if (!checkGamesEqual(game, newGame)) {
@@ -243,6 +235,11 @@ const ModifyGame = ({ game, setGames }: ModifyGameProps) => {
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
+              <SeasonSelector
+                seasons={seasons}
+                selectedSeason={selectedSeason}
+                setSelectedSeason={setSelectedSeason}
+              />
               <GameDetails 
                 game={game}
                 played={played}
