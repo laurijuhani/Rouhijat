@@ -6,8 +6,10 @@ services:
     env_file:
       - ./Backend/.env
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
     restart: unless-stopped
 
 
@@ -31,6 +33,7 @@ services:
       - ./ssl/nginx.key:/etc/nginx/ssl/nginx.key
     ports:
       - "443:443"
+      - "80:80"
     restart: unless-stopped
 
   postgres:
@@ -42,7 +45,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-      - ./Backend/database_initial:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   redis:
     image: redis:latest
