@@ -30,7 +30,7 @@ jobs:
             git pull
 
             echo "Creating Prisma migration..."
-            backend_container=$(docker-compose ps -q backend)
+            backend_container=$(docker compose ps -q backend)
             docker exec $backend_container npx prisma migrate dev --create-only --name init
 
             echo "Copying migration files to host..."
