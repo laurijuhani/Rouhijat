@@ -25,6 +25,21 @@ model InvitedEmail {
   @@map("invited_emails")
 }
 
+
+model Season {
+  id       Int      @id @default(autoincrement())
+  name     String   @unique
+  game Game[]
+  @@map("seasons")
+}
+
+model Setting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String
+  @@map("settings")
+}
+
 model Game {
   id        Int      @id @default(autoincrement())
   homeTeam  String @map("home_team")
@@ -32,6 +47,8 @@ model Game {
   homeScore Int? @map("home_score")
   awayScore Int? @map("away_score")
   gameDate  DateTime @map("game_date")
+  seasonId  Int     @map("seasonid")
+  season    Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
   points    Point[]
   @@map("games")
 }

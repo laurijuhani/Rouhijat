@@ -18,7 +18,7 @@ export const parseDate = (date: string): string => {
   ];
 
   return `${dateObj.getDate()}. ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
-}
+};
 
 export const getDateAndWeekday = (date: string): string => {
   const dateObj = new Date(date);
@@ -32,18 +32,18 @@ export const getDateAndWeekday = (date: string): string => {
     "la",
   ];
   return `${weekdays[dateObj.getDay()]} ${dateObj.getDate()}.${dateObj.getMonth() + 1}.`;
-}
+};
 
 
 export const parseGameTime = (time: string): string => {
   const date = new Date(time);  
   const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${date.getDate()}.${date.getMonth() + 1} klo: ${date.getHours()}:${minutes}`;
-}
+};
 
 export const formatDate = (date: Date): string => {
   return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
-}
+};
 
 
 export const parseDateString = (date: string): string => {

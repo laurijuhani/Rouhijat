@@ -25,8 +25,12 @@ const checkGamesEqual = (a: Game, b: Game): boolean => {
     return false;
   }
 
+  if (a.seasonId !== b.seasonId) {
+    return false;
+  }
+
   return true;
-}
+};
 
 
 const modifiedPoints = (original: PlayerPointsData[], newPoints: {[key: string]: [number, number, number]}): PlayerPointsData[] => {

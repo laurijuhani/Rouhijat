@@ -13,15 +13,17 @@ import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { format, parse } from "date-fns";
-import { Game } from "@/types/database_types";
+import { Game, Season } from "@/types/database_types";
 import { useToast } from "@/context/ToastContext";
 import GameDetails from "./score/forms/GameDetails";
+import Fetch from "@/utils/fetch";
 
 interface AddGameProps {
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
+  season: Season | null; 
 }
 
-const AddGame = ({ setGames }: AddGameProps) => {
+const AddGame = ({ setGames, season }: AddGameProps) => {
   const [date, setDate] = useState<Date>();
   const [inputTime, setInputTime] = useState<string>("");
   const [inputDate, setInputDate] = useState<string>("");
@@ -65,26 +67,18 @@ const AddGame = ({ setGames }: AddGameProps) => {
       gameDate: combinedDateTime,
       homeScore: homeScore ? parseInt(homeScore) : null,
       awayScore: awayScore ? parseInt(awayScore) : null,
+      seasonId: season?.id
     };
 
     try {
-      
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const { json } = await Fetch.post<Game>(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/games`,
+        gameData,
+        {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(gameData),
-      });
-
-      if (!response.ok) {
-        console.log(response);
-        
-        throw new Error("Failed to add game");
-      }
-
-      const data: Game = await response.json();
+        }
+      );
+      const data = await json;
       setGames((prev) => [...prev, data]);
 
       showToast(
@@ -146,6 +140,7 @@ const AddGame = ({ setGames }: AddGameProps) => {
     gameDate: "",
     homeScore: null,
     awayScore: null,
+    seasonId: season?.id || 1, // TODO: change this to actually excpect season
   };
 
   return (

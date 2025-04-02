@@ -17,6 +17,13 @@ export interface Game {
   homeScore: number | null;
   awayScore: number | null;
   gameDate: string;
+  seasonId: number; 
+}
+
+export interface Season {
+  id: number;
+  name: string;
+  active?: boolean;
 }
 
 export interface GamePoints {

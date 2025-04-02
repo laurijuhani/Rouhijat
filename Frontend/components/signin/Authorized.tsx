@@ -12,7 +12,7 @@ const Authorized = () => {
       localStorage.setItem('token', token);
       router.push('/');
     } else {
-      router.push('/signin');
+      router.push('/login');
     }
   }, [router, searchParams]);
 

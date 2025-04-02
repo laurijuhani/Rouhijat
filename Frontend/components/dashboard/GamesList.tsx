@@ -1,5 +1,5 @@
 "use client";
-import { Game } from '@/types/database_types';
+import { Game, Season } from '@/types/database_types';
 import React, { useEffect, useState } from 'react';
 import {
   Table,
@@ -17,29 +17,38 @@ import { Button } from '../ui/button';
 import ModifyGame from './score/ModifyGame';
 import { TrashIcon } from "lucide-react";
 import { useToast } from "@/context/ToastContext";
+import SeasonSelector from './score/forms/SeasonSelector';
+import SeasonsForm from './score/forms/SeasonsForm';
+import Fetch from '@/utils/fetch';
 
 const GamesList = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [modify, setModify] = useState(false);
+  const [seasons, setSeasons] = useState<Season[]>([]);
+  const [selectedSeason, setSelectedSeason] = useState<Season | null>(null);
   const { showToast } = useToast();
 
   useEffect(() => {
-    fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/games')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return response.json();
-      }
-      )
-      .then((data) => {
-        setGames(data);        
-      }
-      )
+    const fetchgames = async () => {
+      const data = await Fetch.get<Game[]>(process.env.NEXT_PUBLIC_BACKEND_URL + '/games');
+      setGames(data);
+    };
+
+    const fetchSeasons = async () => {
+      const data = await Fetch.get<Season[]>(process.env.NEXT_PUBLIC_BACKEND_URL + '/seasons');
+      setSeasons(data);
+
+      setSelectedSeason(data.find((season) => season.active === true) || null);
+    };
+
+    fetchgames()
       .catch((error) => {
         console.error(error);
-      }
-      );
+      });
+    fetchSeasons()
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
 
@@ -71,7 +80,14 @@ const GamesList = () => {
   return (
     <div>
 
-      <Button className='h-[fit-content] ml-2' onClick={() => setModify(!modify)}>{modify ? 'Peruuta' : 'Muokkaa'}</Button>
+      <div className='flex justify-between items-center ml-3 mr-3'>
+        <Button className='h-[fit-content]' onClick={() => setModify(!modify)}>{modify ? 'Peruuta' : 'Muokkaa'}</Button>
+        <SeasonSelector 
+          seasons={seasons}
+          selectedSeason={selectedSeason}
+          setSelectedSeason={setSelectedSeason}
+        />
+      </div>
 
       <Table>
         <TableCaption>Pelit</TableCaption>
@@ -84,13 +100,13 @@ const GamesList = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {games.sort((a: Game, b: Game) => 
+          {games.filter((game) => game.seasonId === selectedSeason?.id).sort((a: Game, b: Game) => 
           new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime())
           .map((game) => (
             <TableRow key={game.id}>
               {modify && <TableCell>
                 <div className="flex flex-col md:flex-row h-full">
-                    <ModifyGame game={game} setGames={setGames} />
+                    <ModifyGame game={game} setGames={setGames} seasons={seasons} />
                     <Button variant="destructive" className='max-w-[46px] max-h-[30px] mt-2 md:mt-0 md:ml-2'
                       onClick={() => handleDelete(game.id)}
                     >
@@ -115,8 +131,9 @@ const GamesList = () => {
           ))}
         </TableBody>
       </Table>
-      <div className='flex justify-center mt-6'>
-        <AddGame setGames={setGames}/>
+      <div className='flex flex-col justify-center mt-6 w-[fit-content] mx-auto space-y-3'>
+        <AddGame setGames={setGames} season={selectedSeason}/>
+        <SeasonsForm seasons={seasons} setSeasons={setSeasons} />
       </div>
     </div>
   );

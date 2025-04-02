@@ -3,7 +3,7 @@ import { Carousel, CarouselItem, CarouselContent, CarouselNext, CarouselPrevious
 import { Game } from "@/types/database_types";
 
 const fetchGames = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/season/current`, {
     next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, 
   });
   if (!res.ok) {

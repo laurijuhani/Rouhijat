@@ -6,7 +6,7 @@ import playerService from "../services/playerService";
 const playersRouter = Router();
 
 
-
+// TODO: add so only active season players and points are returned
 playersRouter.get('/', async (_req, res) => {
   try {    
     const players = await playerService.getPlayersAndPoints();
@@ -17,6 +17,24 @@ playersRouter.get('/', async (_req, res) => {
   }
 });
 
+playersRouter.get('/season/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const players = await playerService.getAllPlayersStatsBySeason(parseInt(id));
+    if (!players) {
+      res.status(404).json({ error: 'players not found' });
+      return;
+    }
+
+    res.status(200).json(players);
+    } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
+  }
+});
+
+
+// TODO: All points grouped by season
 playersRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
 

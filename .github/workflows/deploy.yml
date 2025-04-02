@@ -28,6 +28,14 @@ jobs:
           script: |
             cd Rouhijat/
             git pull
+
+            echo "Creating Prisma migration..."
+            backend_container=$(docker-compose ps -q backend)
+            docker exec $backend_container npx prisma migrate dev --create-only --name init
+
+            echo "Copying migration files to host..."
+            docker cp $backend_container:/app/prisma/migrations ./Backend/prisma
+
             docker compose down
             docker compose up --build -d
 

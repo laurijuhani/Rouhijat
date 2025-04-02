@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useToast } from "@/context/ToastContext";
 import { Player } from "@/types/database_types";
+import Fetch from "@/utils/fetch";
 
 interface AddPlayerProps {
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
@@ -47,31 +48,28 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
     if (window.confirm('Lisätäänkö pelaaja?')) {
       console.log('Lisätään');
 
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/players', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ name, nickname, number: parseInt(number) })
-      });
+      try {
+        const { json } = await Fetch.post<number>(
+          process.env.NEXT_PUBLIC_BACKEND_URL + '/players',
+          { name, nickname, number: parseInt(number) },
+          {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        );
+        const id = await json;
 
-      if (!response.ok) {
-        console.log(response);
+        setPlayers((prevPlayers) => {
+          return [...prevPlayers, { name, nickname, number: parseInt(number), id, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
+        });
+        showToast('success', 'Pelaaja lisätty', '');
+        setIsDialogOpen(false);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
         showToast('error', 'Pelaajan lisääminen epäonnistui', '');
         setIsDialogOpen(false);
         setIsLoading(false);
-        return;
       }
-
-      const id = await response.json();
-      
-      setPlayers((prevPlayers) => {
-        return [...prevPlayers, { name, nickname, number: parseInt(number), id, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
-      });
-      showToast('success', 'Pelaaja lisätty', '');
-      setIsDialogOpen(false);
-      setIsLoading(false);
     };
   };
 
