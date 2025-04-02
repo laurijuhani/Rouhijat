@@ -22,7 +22,6 @@ COPY package.json ./
 RUN npm install --omit=dev && npm cache clean --force
 
 COPY --from=build /app/build ./build
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma  
 COPY --from=build /app/prisma ./prisma
 
 EXPOSE 3003
