@@ -1,3 +1,5 @@
+"use client";
+
 import useSession from "@/hooks/useSession";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import useSignout from "@/hooks/useSignout";
@@ -9,12 +11,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useEffect, useState } from "react";
 
 const UserPic = () => {
   const { user } = useSession();
   const signout = useSignout();
+  const [isClient, setIsClient] = useState(false);
 
-  if (!user) return null; 
+  useEffect(() => {
+    setIsClient(true);
+  }
+  ,[]);
+
+  if (!user || !isClient) return null; 
 
   return (
     <>  
@@ -22,7 +31,7 @@ const UserPic = () => {
         <DropdownMenuTrigger>
           <Avatar>
             <AvatarImage src={user.picture} alt={user.name} />
-            <AvatarFallback></AvatarFallback>
+            <AvatarFallback>{user.name?.charAt(0) || "?"}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
