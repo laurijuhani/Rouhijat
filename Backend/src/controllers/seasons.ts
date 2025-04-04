@@ -8,25 +8,34 @@ const seasonsRouter = Router();
 // add try/catch to all routes
 
 seasonsRouter.get('/', async (_req, res) => {
-  const seasons = await seasonService.getSeasons();
-  res.json(seasons);
+  try {
+    const seasons = await seasonService.getSeasons();
+    res.json(seasons);
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);  
+  }
 });
 
-// TODO: make redis cache for this
 seasonsRouter.get('/current', async (_req, res) => {
-  const currentSeason = await settingsService.getSetting('currentSeason');
-  if (!currentSeason) {
-    res.status(404).json({ error: 'current season not found' });
-    return; 
+  try {
+    const currentSeason = await settingsService.getSetting('currentSeason');
+    if (!currentSeason) {
+      res.status(404).json({ error: 'current season not found' });
+      return; 
+    }
+  
+    const season = await seasonService.getSeasonById(parseInt(currentSeason.value));
+    if (!season) {
+      res.status(404).json({ error: 'current season not found' });
+      return; 
+    }
+  
+    res.json(season);    
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
   }
-
-  const season = await seasonService.getSeasonById(parseInt(currentSeason.value));
-  if (!season) {
-    res.status(404).json({ error: 'current season not found' });
-    return; 
-  }
-
-  res.json(season);
 });
 
 // TODO: admins only
@@ -43,7 +52,7 @@ seasonsRouter.post('/current', authenticateToken, async (req, res) => {
       return; 
     }
 
-    await settingsService.setSetting('currentSeason', id.toString());
+    await settingsService.setSetting('currentSeason', id.toString(), ["seasons"]);
     
     res.json(season);
   } catch (error) {

@@ -9,7 +9,7 @@ pointsRouter.post('/:id', authenticateToken, async (req, res) => {
   console.log(req.body);
   const { playerData } = req.body as { playerData: PlayerData[] };
   const gameId = parseInt(req.params.id);
-  
+
   if (!playerData) {
     res.status(400).json({ error: 'missing required fields' });
     return;

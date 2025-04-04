@@ -20,7 +20,7 @@ gamesRouter.get('/season/current', async (_req, res) => {
       res.json(games);
       return;
     }    
-    const games = await gameService.getGameBySeason(currentSeason.id);
+    const games = await gameService.getGamesBySeason(currentSeason.id);
     if (!games) {
       res.status(404).json({ error: 'game not found' });
       return;
@@ -37,7 +37,7 @@ gamesRouter.get('/season/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const games = await gameService.getGameBySeason(parseInt(id));
+    const games = await gameService.getGamesBySeason(parseInt(id));
 
     if (!games) {
       res.status(404).json({ error: 'game not found' });

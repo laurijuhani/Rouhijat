@@ -1,12 +1,12 @@
+import deleteCacheForPattern from "../utils/cacheControl";
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
-import { Player, Points } from "../utils/types";
+import { BasePlayer, Player, PlayerPointsBySeason, Points } from "../utils/types";
+import seasonService from "./seasonService";
 
 const cacheKey = 'players';
 
-// TODO: The caching is incorrect atm
-
-// utility function, move it to utils
+// TODO: utility function, move it to utils
 const aggregatePoints = (points: Points[]): Points => {
   return {
     goals: points.reduce((sum, point) => sum + point.goals, 0),
@@ -16,97 +16,16 @@ const aggregatePoints = (points: Points[]): Points => {
 }; 
 
 
-// TODO: Maybe delete this function and use querying 
-// from distinct seasons
-const getPlayersAndPoints = async (): Promise<Player[]> => {
-  const cachedPlayers = await redisClient.get(cacheKey);
-  if (cachedPlayers) {
-    return JSON.parse(cachedPlayers) as Player[];
-  }
-
-  const playersWithPoints = await prisma.player.findMany({
-    include: {
-      points: {
-        select: {
-          goals: true,
-          assists: true,
-          pm: true,
-        },
-      },
-    },
-  });
-
-  const aggregatedPlayers = playersWithPoints.map(player => {
-    const { points, ...rest } = player;
-    return {
-      ...rest,
-      games: points.length,
-      points: {
-        goals: points.reduce((sum, point) => sum + point.goals, 0),
-        assists: points.reduce((sum, point) => sum + point.assists, 0),
-        pm: points.reduce((sum, point) => sum + point.pm, 0),
-      },
-    };
-  });
-
-  void redisClient.set(cacheKey, JSON.stringify(aggregatedPlayers), {
-    EX: 3600,
-  });
-
-  return aggregatedPlayers;
-};
-
-// TODO: Maybe delete this function
-const getPlayerById = async (id: number): Promise<Player | null> => {
-  const cachedPlayers = await redisClient.get(cacheKey);
-  if (cachedPlayers) {
-    const players = JSON.parse(cachedPlayers) as Player[];
-    const player = players.find((player: Player) => player.id === id);
-      return player || null;
-  }
-  const player = await prisma.player.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      points: {
-        select: {
-          goals: true,
-          assists: true,
-          pm: true,
-        },
-      },
-    },
-  });
-
-  if (!player) {
-    return null;
-  }
-
-  const { points, ...rest } = player;
-  return {
-    ...rest,
-    games: points.length,
-    points: {
-      goals: points.reduce((sum, point) => sum + point.goals, 0),
-        assists: points.reduce((sum, point) => sum + point.assists, 0),
-        pm: points.reduce((sum, point) => sum + point.pm, 0),
-    },
-  };
-};
-
-
 const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
-  /*
-  const cachedPlayers = await redisClient.get(cacheKey);
+  const cachedPlayers = await redisClient.get(cacheKey + "/season/" + seasonId);
   if (cachedPlayers) {
     const players = JSON.parse(cachedPlayers) as Player[];
     const player = players.find((player: Player) => player.id === playerId);
     if (player) {
-      return player.points;
+      return player;
     }
   }
-  */
+  
   const player = await prisma.player.findUnique({
     where: {
       id: playerId,
@@ -140,12 +59,44 @@ const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
   };
 };
 
-// TODO: getPlayerStatsFromAllSeasons
+const getPlayerStatsFromAllSeasons = async (id: number): Promise<PlayerPointsBySeason | null> => {
+  const seasons = await seasonService.getSeasons();
+
+  const seasonStats: {seasonId: number, games: number, points: Points}[] = [];
+  let playerBase: BasePlayer | null = null;
+  for (const season of seasons) {
+    const player = await getPlayerStatsBySeason(id, season.id);
+    if (player) {
+      if (!playerBase) {
+        playerBase = {
+          id: player.id,
+          name: player.name,
+          nickname: player.nickname,
+          number: player.number,
+        };
+      }
+
+      seasonStats.push({
+        seasonId: season.id,
+        games: player.games,
+        points: player.points,
+      });
+    }
+  }
+
+  if (!playerBase) {
+    return null;
+  }
+
+  return {
+    ...playerBase,
+    seasons: seasonStats,
+  };
+};
 
 
 const getAllPlayersStatsBySeason = async (seasonId: number) => {
-  /*
-  const cachedPlayers = await redisClient.get(cacheKey);
+  const cachedPlayers = await redisClient.get(cacheKey + "/season/" + seasonId);
   if (cachedPlayers) {
     const players = JSON.parse(cachedPlayers) as Player[];
     return players.map(player => ({
@@ -153,7 +104,7 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
       points: player.points,
     }));
   }
-  */
+
   const players = await prisma.player.findMany({
     include: {
       points: {
@@ -179,7 +130,7 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
     };
   }
   );
-  void redisClient.set(cacheKey, JSON.stringify(aggregatedPlayers), {
+  void redisClient.set(cacheKey + "/season/" + seasonId, JSON.stringify(aggregatedPlayers), {
     EX: 3600,
   });
   return aggregatedPlayers;
@@ -187,7 +138,8 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
 
 
 const createPlayer = async (name: string, nickname: string, number: number) => {
-  void redisClient.del(cacheKey);
+  void deleteCacheForPattern("games/*");
+  void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.create({
     data: {
       name,
@@ -198,7 +150,8 @@ const createPlayer = async (name: string, nickname: string, number: number) => {
 };
 
 const updatePlayer = async (id: number, name: string, nickname: string, number: number) => {
-  void redisClient.del(cacheKey);
+  void deleteCacheForPattern("games/*");
+  void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.update({
     where: {
       id,
@@ -212,7 +165,8 @@ const updatePlayer = async (id: number, name: string, nickname: string, number: 
 };
 
 const deletePlayer = async (id: number) => {
-  void redisClient.del(cacheKey);
+  void deleteCacheForPattern("games/*");
+  void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.delete({
     where: {
       id,
@@ -222,11 +176,10 @@ const deletePlayer = async (id: number) => {
 
 
 export default {
-  getPlayersAndPoints,
-  getPlayerById,
   createPlayer,
   updatePlayer,
   deletePlayer,
   getPlayerStatsBySeason,
-  getAllPlayersStatsBySeason
+  getAllPlayersStatsBySeason,
+  getPlayerStatsFromAllSeasons,
 };

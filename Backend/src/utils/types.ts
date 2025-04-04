@@ -57,21 +57,31 @@ export interface GoogleUser {
   displayName: string;
   photos: { value: string }[];
 }
-
-export interface Player {
-  id: number;
-  name: string;
-  nickname: string | null;
-  games: number;
-  points: {
-    goals: number;
-    assists: number;
-    pm: number;
-  };
-}
-
 export interface Points {
   goals: number;
   assists: number;
   pm: number;
 }
+
+
+export interface BasePlayer {
+  id: number;
+  name: string;
+  nickname: string | null;
+  number: number;
+}
+
+export interface Player extends BasePlayer {
+  games: number;
+  points: Points;
+}
+
+export interface PlayerPointsBySeason extends BasePlayer {
+  seasons: {
+    seasonId: number;
+    games: number;
+    points: Points;
+  }[];
+} 
+
+
