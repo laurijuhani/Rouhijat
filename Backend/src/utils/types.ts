@@ -84,4 +84,9 @@ export interface PlayerPointsBySeason extends BasePlayer {
   }[];
 } 
 
-
+export interface PlayerData {
+  playerId: number;
+  goals: number;
+  assists: number;
+  pm: number;
+}

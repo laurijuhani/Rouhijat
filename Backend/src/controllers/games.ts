@@ -121,6 +121,11 @@ gamesRouter.put('/:id', authenticateToken, async (req: CustomRequest, res) => {
   }
 
   try {
+    if (!(await gameService.getGameById(parseInt(id)))) {
+      res.status(404).json({ error: 'game not found' });
+      return; 
+    }
+
     await gameService.updateGame(parseInt(id), homeTeam, awayTeam, homeScore, awayScore, new Date(gameDate), seasonId);
 
     res.status(204).end();
@@ -136,6 +141,11 @@ gamesRouter.delete('/:id', authenticateToken, async (req: CustomRequest, res) =>
   const { id } = req.params;
 
   try {
+    if (!(await gameService.getGameById(parseInt(id)))) {
+      res.status(404).json({ error: 'game not found' });
+      return; 
+    }
+    
     await gameService.deleteGame(parseInt(id));
     res.status(204).end();
   } catch (error) {

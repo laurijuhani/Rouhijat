@@ -174,11 +174,19 @@ const deletePlayer = async (id: number) => {
   });
 };
 
+const getPlayerById = async (id: number) => {
+  return await prisma.player.findUnique({
+    where: {
+      id,
+    },
+  });
+};
 
 export default {
   createPlayer,
   updatePlayer,
   deletePlayer,
+  getPlayerById,
   getPlayerStatsBySeason,
   getAllPlayersStatsBySeason,
   getPlayerStatsFromAllSeasons,

@@ -41,19 +41,21 @@ app.use((err: Error, req: express.Request, res: express.Response) => {
   errorHandler(err, req, res);
 });
 
+export { app }; 
 
-// Flush Redis cache on startup
-(async () => {
-  try {
-    await redisClient.flushAll(); 
-  } catch (error) {
-    console.error('Failed to connect to Redis:', error);
-  }
-})().catch((error) => {
-  console.error('Unexpected error:', error);
-});
+if (process.env.NODE_ENV !== 'test') {
+  // Flush Redis cache on startup
+  (async () => {
+    try {
+      await redisClient.flushAll(); 
+    } catch (error) {
+      console.error('Failed to connect to Redis:', error);
+    }
+  })().catch((error) => {
+    console.error('Unexpected error:', error);
+  });
 
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
-});
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
+  });
+}

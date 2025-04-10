@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+ 
+ 
 import nodemailer from 'nodemailer';
 import path from 'path';
 
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+ 
 const transporter = nodemailer.createTransport({
   host: process.env.MAIL_HOST,
   secure: true,

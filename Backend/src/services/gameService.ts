@@ -1,4 +1,4 @@
-import { Game } from "@prisma/client";
+import { Game } from "../../prisma/app/generated/prisma/client";
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
 import deleteCacheForPattern from "../utils/cacheControl";
@@ -14,6 +14,16 @@ const getGamesBySeason = async (seasonId: number) => {
   const cachedGames = await redisClient.get(cacheKey + "/season/" + seasonId);
   if (cachedGames) return JSON.parse(cachedGames) as Game[];    
 
+const season = await prisma.season.findUnique({
+    where: {
+      id: seasonId,
+    },
+  });
+  
+  if (!season) {
+    return null;
+  }
+  
   const games = await prisma.game.findMany({
     where: {
       seasonId,

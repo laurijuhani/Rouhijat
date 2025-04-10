@@ -1,6 +1,6 @@
 import redisClient from "../utils/redisClient";
 import prisma from "../utils/client";
-import { Setting } from "@prisma/client";
+import { Setting } from "../../prisma/app/generated/prisma/client";
 
 
 const getSetting = async (key: string): Promise<Setting | null> => {

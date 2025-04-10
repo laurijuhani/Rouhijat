@@ -1,14 +1,20 @@
 import { Router } from "express";
 import { authenticateToken } from "../utils/middleware";
 import pointService from "../services/pointService";
-import { PlayerData } from "../services/pointService";
+import gameService from "../services/gameService";
+import { PlayerData } from "../utils/types";
 
 const pointsRouter = Router();
 
 pointsRouter.post('/:id', authenticateToken, async (req, res) => {
-  console.log(req.body);
   const { playerData } = req.body as { playerData: PlayerData[] };
   const gameId = parseInt(req.params.id);
+
+  const game = await gameService.getGameById(gameId);
+  if (!game) {
+    res.status(404).json({ error: 'game not found' });
+    return;
+  }
 
   if (!playerData) {
     res.status(400).json({ error: 'missing required fields' });
@@ -27,6 +33,12 @@ pointsRouter.post('/:id', authenticateToken, async (req, res) => {
 pointsRouter.put('/:id', authenticateToken, async (req, res) => {
   const { playerData } = req.body as { playerData: PlayerData[] };
   const gameId = parseInt(req.params.id);
+
+  const game = await gameService.getGameById(gameId);
+  if (!game) {
+    res.status(404).json({ error: 'game not found' });
+    return;
+  }
 
   if (!playerData) {
     res.status(400).json({ error: 'missing required fields' });
@@ -58,7 +70,13 @@ pointsRouter.get('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const points = await pointService.getPointsByGame(parseInt(id));
+    const game_id = parseInt(id);
+    const game = await gameService.getGameById(game_id);
+    if (!game) {
+      res.status(404).json({ error: 'game not found' });
+      return;
+    }
+    const points = await pointService.getPointsByGame(game_id);
     res.json(points);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });

@@ -1,16 +1,11 @@
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
-
+import { PlayerData } from "../utils/types";
 const cacheKey = 'points';
 
 
 
-export interface PlayerData {
-  playerId: number;
-  goals: number;
-  assists: number;
-  pm: number;
-}
+
 
 
 const getPointsByGame = async (gameId: number): Promise<PlayerData[]> => {
