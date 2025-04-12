@@ -4,7 +4,11 @@ import stylistic from '@stylistic/eslint-plugin';
 
 export default [
   {
-    ignores: ['**/generated/**', '**/node_modules/**'],
+    ignores: [
+      '**/generated/**', 
+      '**/node_modules/**',
+      'src/jest.setup.ts',
+    ],
   },
   {
     files: ['**/*.ts'],
