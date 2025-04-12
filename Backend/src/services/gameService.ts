@@ -1,39 +1,29 @@
+import { Game } from "../../prisma/app/generated/prisma/client";
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
-
-// TODO: Remove the comments 
-// TODO: Check what to flush 
+import deleteCacheForPattern from "../utils/cacheControl";
 
 const cacheKey = 'games';
 
+// If working correctly, this should not be needed
 const getGames = async () => {
-  /*
-  const cachedGames = await redisClient.get(cacheKey);
-  if (cachedGames) {
-    return JSON.parse(cachedGames);
-  }
-*/
-  const games = await prisma.game.findMany();
-
-  void redisClient.set(cacheKey, JSON.stringify(games), {
-    EX: 3600,
-  });
-
-  return games;
+  return await prisma.game.findMany();
 };
 
-const getGameBySeason = async (seasonId: number) => {
-  /*
+const getGamesBySeason = async (seasonId: number) => {
   const cachedGames = await redisClient.get(cacheKey + "/season/" + seasonId);
-  if (cachedGames) {
-    const games = JSON.parse(cachedGames);
-    const game = games.find((game: any) => game.seasonId === seasonId);
-    if (game) {
-      return game;
-    }
-  }
-  */
+  if (cachedGames) return JSON.parse(cachedGames) as Game[];    
 
+const season = await prisma.season.findUnique({
+    where: {
+      id: seasonId,
+    },
+  });
+  
+  if (!season) {
+    return null;
+  }
+  
   const games = await prisma.game.findMany({
     where: {
       seasonId,
@@ -47,19 +37,7 @@ const getGameBySeason = async (seasonId: number) => {
   return games;
 };
 
-
 const getGameById = async (id: number) => {
-  /* 
-  const cachedGames = await redisClient.get(cacheKey);
-  if (cachedGames) {
-    const games = JSON.parse(cachedGames);
-    const game = games.find((game: any) => game.id === id);
-    if (game) {
-      return game;
-    }
-  }
-    */ 
-
   return await prisma.game.findUnique({
     where: {
       id,
@@ -83,8 +61,10 @@ const getGameById = async (id: number) => {
 };
 
 const createGame = async (homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number | undefined, gameDate: Date, seasonId: number) => {
-  void redisClient.flushAll();  
-  
+  void redisClient.del(cacheKey + "/season/" + seasonId);
+  void redisClient.del("players/season/" + seasonId); 
+  void deleteCacheForPattern(cacheKey + "/*");
+
   return await prisma.game.create({
     data: {
       homeTeam,
@@ -98,9 +78,7 @@ const createGame = async (homeTeam: string, awayTeam: string, homeScore: number 
 };
 
 const updateScore = async (id: number, homeScore: number, awayScore: number) => {
-  void redisClient.del(cacheKey);
-
-  return await prisma.game.update({
+  const game = await prisma.game.update({
     where: {
       id,
     },
@@ -109,11 +87,33 @@ const updateScore = async (id: number, homeScore: number, awayScore: number) => 
       awayScore,
     },
   });
+
+  void redisClient.del(cacheKey + "/season/" + game.seasonId);
+  void redisClient.del("players/season/" + game.seasonId); 
+  void deleteCacheForPattern(cacheKey + "/*");
+
+  return game;
 };
 
 
 const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date, seasonId: number) => {
-  void redisClient.del(cacheKey);
+  void redisClient.del(cacheKey + "/season/" + seasonId);
+  void redisClient.del("players/season/" + seasonId); 
+  void deleteCacheForPattern(cacheKey + "/*");
+  const game = await prisma.game.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!game) {
+    throw new Error("Game not found");
+  }
+
+  // Check if the seasonId has changed
+  if (game.seasonId !== seasonId) {
+    void redisClient.del(cacheKey + "/season/" + game.seasonId);
+    void redisClient.del("players/season/" + game.seasonId); 
+  }
 
   await prisma.game.update({
     where: {
@@ -131,8 +131,18 @@ const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeSc
 };
 
 const deleteGame = async (id: number) => {
-  void redisClient.del(cacheKey);
-  void redisClient.del('points' + id);
+  const game = await prisma.game.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!game) {
+    throw new Error("Game not found");
+  }
+
+  void redisClient.del(cacheKey + "/season/" + game.seasonId);
+  void redisClient.del("players/season/" + game.seasonId); 
+  void deleteCacheForPattern(cacheKey + "/*");
 
   await prisma.$transaction(async (prisma) => {
     await prisma.point.deleteMany({
@@ -152,5 +162,5 @@ export default {
   updateGame,
   deleteGame,
   updateScore,
-  getGameBySeason,
+  getGamesBySeason,
 };

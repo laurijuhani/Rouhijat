@@ -1,21 +1,18 @@
+import deleteCacheForPattern from "../utils/cacheControl";
 import prisma from "../utils/client";
 import redisClient from "../utils/redisClient";
 import { SeasonData } from "../utils/types";
 import settingsService from "./settingsService";
 
-
 const cacheKey = 'seasons';
-
-// TODO: Remove the comments
 
 
 const getSeasons = async () => {
-  /*
   const cachedSeasons = await redisClient.get(cacheKey);
   if (cachedSeasons) {
-    return JSON.parse(cachedSeasons);
+    return JSON.parse(cachedSeasons) as SeasonData[];
   }
-*/
+
   const seasons: SeasonData[] = await prisma.season.findMany();
   const activeSeason = await settingsService.getSetting('currentSeason');
   
@@ -28,12 +25,12 @@ const getSeasons = async () => {
       return season;
   });
 
-  void redisClient.set(cacheKey, JSON.stringify(seasons), {
-    EX: 3600,
-  });
+  void redisClient.set(cacheKey, JSON.stringify(seasons));
 
   return seasons;
 };
+
+
 
 const getSeasonById = async (id: number) => {
   return await prisma.season.findUnique({
@@ -67,6 +64,8 @@ const updateSeason = async (id: number, name: string) => {
 
 const deleteSeason = async (id: number) => {
   void redisClient.del(cacheKey);
+  void deleteCacheForPattern('games/season/:id');
+  void deleteCacheForPattern('players/season/:id');
   return await prisma.season.delete({
     where: {
       id,
@@ -80,6 +79,18 @@ const getCurrentSeason = async () => {
   if (!id) {
     return null;
   }
+
+  const cachedSeasons = await redisClient.get(cacheKey);
+  if (cachedSeasons) {
+    const data = JSON.parse(cachedSeasons) as SeasonData[];
+    const season = data.find((season) => season.active === true);
+    if (season) {
+      return season;
+    }
+    return null;
+  }
+
+
   const season = await prisma.season.findUnique({
     where: {
       id: parseInt(id.value),

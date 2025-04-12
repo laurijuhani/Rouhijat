@@ -7,7 +7,7 @@ interface Props {
   game: Game;
 }
 
-const GameInfo = ({ game }: Props) => {
+const GameInfo = ({ game }: Props) => {  
   const content = (
     <div className="mb-2 grid grid-cols-1 md:grid-cols-3 gap-2 bg-gray-800 py-2 md:py-4 rounded-md">
       <div className="flex justify-between md:block ml-2">
@@ -16,7 +16,7 @@ const GameInfo = ({ game }: Props) => {
           {parseTime(game.gameDate)}
         </div>
         <div className="md:hidden">
-          {game.homeScore && (
+          {game.homeScore !== null && (
             <div className="flex justify-end text-sm mr-2">
               Lisätietoja -&gt;
             </div>
@@ -26,13 +26,13 @@ const GameInfo = ({ game }: Props) => {
 
       <div className="flex-grow text-center md:text-left">
         <p className="col-span-2">
-          {game.homeTeam} {game.homeScore ? game.homeScore : "‎ ‎"} - {" "}
-          {game.awayScore ? game.awayScore : "‎ ‎"} {game.awayTeam}
+          {game.homeTeam} {game.homeScore !== null ? game.homeScore : "‎ ‎"} - {" "}
+          {game.awayScore !== null ? game.awayScore : "‎ ‎"} {game.awayTeam}
         </p>
       </div>
 
       <div className="hidden md:block mr-2">
-        {game.homeScore && (
+        {game.homeScore !== null && (
           <div className="flex justify-end text-sm mt-1">
             Lisätietoja -&gt;
           </div>
@@ -41,7 +41,7 @@ const GameInfo = ({ game }: Props) => {
     </div>
   );
 
-  return game.homeScore ? (
+  return game.homeScore !== null ? (
     <Link href={`/games/${game.id}`}>
       {content}
     </Link>

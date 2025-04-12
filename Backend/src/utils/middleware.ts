@@ -33,7 +33,7 @@ const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction
     const token = authorization.substring(7);
     
     if (!token) {
-      res.status(401).json({ error: 'Token missing' });
+      res.status(401).json({ error: 'Unauthorized' });
       return; 
     }
 
@@ -42,11 +42,11 @@ const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction
       req.userData = user;
       next();
     } catch (error) {
-      res.status(401).json({ error: 'Token missing or invalid' });
+      res.status(401).json({ error: 'Unauthorized' });
       console.log(error);
     }
   } else {
-    res.status(401).json({ error: 'Token missing or invalid' });
+    res.status(401).json({ error: 'Unauthorized' });
   }
 };
 

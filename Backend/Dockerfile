@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build 
+FROM node:23-alpine AS build 
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN npx prisma generate
 COPY . .
 RUN npm run build
 
-FROM node:18-alpine
+FROM node:23-alpine
 
 WORKDIR /app
 
@@ -22,7 +22,6 @@ COPY package.json ./
 RUN npm install --omit=dev && npm cache clean --force
 
 COPY --from=build /app/build ./build
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma  
 COPY --from=build /app/prisma ./prisma
 
 EXPOSE 3003

@@ -2,6 +2,7 @@ import { Router } from "express";
 import prisma from "../utils/client";
 import { authenticateToken } from "../utils/middleware";
 import { CustomRequest } from "../utils/types";
+import mailer from "../utils/mailer";
 
 
 const invitesRouter = Router();
@@ -28,6 +29,9 @@ invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res) => {
       }
     });
 
+    // if you dont want to use the mailer, comment this line
+    await mailer.sendInviteEmail(email);
+
     res.status(201).json({ message: 'Invitation sent' });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
@@ -45,7 +49,7 @@ invitesRouter.delete('/:email', authenticateToken, async (req: CustomRequest, re
   }
 
   const { email } = req.params;
-
+  
   try {
     await prisma.invitedEmail.delete({
       where: {

@@ -55,12 +55,12 @@ passport.use(
 );
 
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+ 
 authenticateRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
 
 
 authenticateRouter.get('/google/callback', (req, res, next) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+   
   passport.authenticate('google', { session: false }, async (err, user: GoogleUser, info: { message?: string }) => {
     if (err) {
       return res.redirect(`${process.env.FRONTEND_URL}/login?error=500&message=Internal server error`);

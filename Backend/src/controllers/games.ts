@@ -20,7 +20,7 @@ gamesRouter.get('/season/current', async (_req, res) => {
       res.json(games);
       return;
     }    
-    const games = await gameService.getGameBySeason(currentSeason.id);
+    const games = await gameService.getGamesBySeason(currentSeason.id);
     if (!games) {
       res.status(404).json({ error: 'game not found' });
       return;
@@ -37,7 +37,7 @@ gamesRouter.get('/season/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const games = await gameService.getGameBySeason(parseInt(id));
+    const games = await gameService.getGamesBySeason(parseInt(id));
 
     if (!games) {
       res.status(404).json({ error: 'game not found' });
@@ -121,6 +121,11 @@ gamesRouter.put('/:id', authenticateToken, async (req: CustomRequest, res) => {
   }
 
   try {
+    if (!(await gameService.getGameById(parseInt(id)))) {
+      res.status(404).json({ error: 'game not found' });
+      return; 
+    }
+
     await gameService.updateGame(parseInt(id), homeTeam, awayTeam, homeScore, awayScore, new Date(gameDate), seasonId);
 
     res.status(204).end();
@@ -136,6 +141,11 @@ gamesRouter.delete('/:id', authenticateToken, async (req: CustomRequest, res) =>
   const { id } = req.params;
 
   try {
+    if (!(await gameService.getGameById(parseInt(id)))) {
+      res.status(404).json({ error: 'game not found' });
+      return; 
+    }
+    
     await gameService.deleteGame(parseInt(id));
     res.status(204).end();
   } catch (error) {

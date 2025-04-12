@@ -100,6 +100,7 @@ button{
   border-bottom-right-radius: 1.5rem;
   border-bottom: 1px solid hsl(var(--border));
   z-index: 5;
+  pointer-events: none;
 }
 
 .dropdown-menu.open {
@@ -107,6 +108,7 @@ button{
   visibility: visible;
   transform: translateY(0);
   z-index: 100;
+  pointer-events: auto;
 }
 
 @media (min-width: 768px) {

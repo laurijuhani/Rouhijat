@@ -1,6 +1,6 @@
 import redisClient from "../utils/redisClient";
 import prisma from "../utils/client";
-import { Setting } from "@prisma/client";
+import { Setting } from "../../prisma/app/generated/prisma/client";
 
 
 const getSetting = async (key: string): Promise<Setting | null> => {
@@ -25,7 +25,7 @@ const getSetting = async (key: string): Promise<Setting | null> => {
 }; 
 
 
-const setSetting = async (key: string, value: string): Promise<Setting> => {
+const setSetting = async (key: string, value: string, keysToDelete: string[]): Promise<Setting> => {
   const setting = await prisma.setting.upsert({
     where: { key },
     update: { value },
@@ -35,6 +35,10 @@ const setSetting = async (key: string, value: string): Promise<Setting> => {
   void redisClient.set(key, JSON.stringify(setting), {
     EX: 3600,
   });
+
+  for (const keyToDelete of keysToDelete) {
+    void redisClient.del(keyToDelete);
+  }
 
   return setting;
 };
