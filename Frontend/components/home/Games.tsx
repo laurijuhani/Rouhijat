@@ -68,7 +68,7 @@ const Games = async () => {
       </Carousel>
       
       <Link className="flex mt-3" href="/games">
-      <Button className="text-white flex items-center justify-center ml-auto">
+      <Button className="text-foreground flex items-center justify-center ml-auto">
         Kaikki pelit
         <ArrowRightIcon
           className="-me-1 opacity-60 transition-transform group-hover:translate-x-0.5"

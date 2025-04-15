@@ -8,10 +8,10 @@ export default function History() {
       title: "Helmikuu 2025",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+          <p className="text-xs md:text-sm font-normal mb-8">
             Paitojen suunnittelu alkoi. 
           </p>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+          <p className="text-xs md:text-sm font-normal mb-8">
             Paitoja alettiin suunnitelemaan Sepen ja Leksan toimesta. Suunnittelu oli yksi työmaa, jota ei auttanut vaativa johtoryhmä ja aivan paska 
             softa, jolla suunnittelu tehtiin.
           </p>
@@ -30,7 +30,7 @@ export default function History() {
               height={500}
               className="rounded-lg object-cover w-full"
             />
-            <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal">
+            <p className="text-xs md:text-sm font-normal">
               Havainnollistavat kuvat paidoista.
             </p>
        
@@ -42,10 +42,10 @@ export default function History() {
       title: "Tammikuu 2025",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+          <p className="text-xs md:text-sm font-normal mb-8">
             Ensimmäiset versiot Rouhijoiden logosta ja väreistä näkivät päivänvalon.
           </p>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-8">
+          <p className="text-xs md:text-sm font-normal mb-8">
             Ne eivät ole mitään taidetta, mutta onpa sentään jotain.
           </p>
           <div className="grid grid-cols-2 gap-4">
@@ -79,11 +79,11 @@ export default function History() {
       title: "Joulukuu 2024",
       content: (
         <div>
-          <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-4">
+          <p className="text-xs md:text-sm font-normal mb-4">
             Idea Rouhijoiden perustamisesta syntyi Raisiossa sijaitsevassa kodassa.
           </p>
           <div className="mb-8">
-            <div className="flex gap-2 items-center text-neutral-700 dark:text-neutral-300 text-xs md:text-sm">
+            <div className="flex gap-2 items-center text-xs md:text-sm">
               Tällöin perustajat päättivät, että heidän on aika tehdä jotain suurempaa.
               Ensimmäisiä kiinnityksiä joukkueeseen alettin jo tekemään ja juttu lensi.
             </div>

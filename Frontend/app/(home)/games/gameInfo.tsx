@@ -9,7 +9,7 @@ interface Props {
 
 const GameInfo = ({ game }: Props) => {  
   const content = (
-    <div className="mb-2 grid grid-cols-1 md:grid-cols-3 gap-2 bg-gray-800 py-2 md:py-4 rounded-md">
+    <div className="mb-2 grid grid-cols-1 md:grid-cols-3 gap-2 bg-primary py-2 md:py-4 rounded-md">
       <div className="flex justify-between md:block ml-2">
         <div>
           {getDateAndWeekday(game.gameDate)}
