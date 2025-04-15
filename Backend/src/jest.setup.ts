@@ -46,7 +46,6 @@ export const setupTestDatabase = async () => {
     env: { ...process.env, DATABASE_URL: uniqueDbName },
   });
 
-  execSync(`npx prisma generate --schema=prisma/schema.test.prisma`);
   
   //@ts-ignore: Prisma Client is generated dynamically
   const { PrismaClient } = await import("../prisma/app/generated/prisma/test");
