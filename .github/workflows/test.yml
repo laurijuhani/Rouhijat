@@ -55,5 +55,10 @@ jobs:
         cd Backend
         npm run type-check  
 
+     - name: Jest tests for backend
+       run: |
+        cd Backend
+        npm run test
+
 
 # Make tests for the backend 
