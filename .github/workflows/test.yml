@@ -1,7 +1,14 @@
-name: Lint test
+name: Tests 
 
 on: 
   workflow_call:
+  pull_request:
+    branches: 
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
     
 
 jobs: 
@@ -47,6 +54,11 @@ jobs:
        run: |
         cd Backend
         npm run type-check  
+
+     - name: Jest tests for backend
+       run: |
+        cd Backend
+        npm run test
 
 
 # Make tests for the backend 

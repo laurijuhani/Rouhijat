@@ -44,7 +44,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className={`navbar fixed top-0 w-full bg-primary text-white flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
+      <div className={`navbar fixed top-0 w-full bg-primary flex items-center justify-between px-4 ${scrollDown ? "hidden-navbar" : ""}`}>
         <div className="flex items-center">
           <Link href="/">
             <Image 
@@ -89,7 +89,7 @@ const Navbar = () => {
             <Link href={item.path}>
               <div
                 className={`py-2 ${
-                  pathname === item.path ? "text-[#0f9cd8]" : "text-white"
+                  pathname === item.path ? "text-accent" : ""
                 } hover:text-[#0f9cd8]`}
                 onClick={() => setIsOpen(false)}
               >

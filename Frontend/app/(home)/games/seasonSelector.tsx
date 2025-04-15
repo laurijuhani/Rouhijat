@@ -75,16 +75,16 @@ const SeasonSelector = ({ seasons }: SelectorProps) => {
       <div className="*:not-first:mt-2">
         <Select defaultValue={defaultSeason(seasons)} onValueChange={handleSeasonChange}>
           <SelectTrigger
-            className="bg-muted border-transparent shadow-none"
+            className="bg-primary border-transparent shadow-none"
             >
             <SelectValue placeholder="Valitse kausi" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-primary border-transparent shadow-none">
             {seasons.map((season) => (
               <SelectItem
               key={season.id}
               value={season.id.toString()}
-              className="bg-muted border-transparent shadow-none"
+              className="bg-background border-transparent shadow-none"
               >
                 {season.name}
               </SelectItem>

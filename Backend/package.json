@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "test": "NODE_ENV=test && jest ",
+    "test": "NODE_ENV=test && npx prisma generate --schema=prisma/schema.test.prisma && jest ",
     "ts-node": "ts-node src/index.ts",
     "dev": "ts-node-dev src/index.ts",
     "start": "NODE_ENV=production node build/index.js",

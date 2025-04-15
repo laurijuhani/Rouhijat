@@ -16,7 +16,7 @@ const Footer = () => {
             </div>
 
             <div>
-                <p className="font-semibold text-gray-800 dark:text-white">Quote</p>
+                <p className="font-semibold">Quote</p>
 
                 <div className="flex flex-col items-start mt-5 space-y-2">
                     <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 italic">&quot;Täällä ei mestispullot juhli&quot;</p>
@@ -25,7 +25,7 @@ const Footer = () => {
             </div>
 
             <div>
-                <p className="font-semibold text-gray-800 dark:text-white">Sosiaalinen media</p>
+                <p className="font-semibold">Sosiaalinen media</p>
 
                 <div className="mb-6 flex items-center mt-6">
                   <a
@@ -61,7 +61,7 @@ const Footer = () => {
             </div>
 
             <div>
-                <p className="font-semibold text-gray-800 dark:text-white">Yhteystiedot</p>
+                <p className="font-semibold">Yhteystiedot</p>
 
                 <div className="flex flex-col items-start mt-5 space-y-2">
                     <a href="#" className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:text-blue-500">santapaperiosasto@rouhijat.fi</a>

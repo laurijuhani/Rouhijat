@@ -91,7 +91,6 @@ button{
   left: 0;
   width: 100%;
   background-color: hsl(var(--primary));
-  color: white;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-5rem);
@@ -119,7 +118,6 @@ button{
 
 .link-5 {
   transition: 0.4s;
-  color: #ffffff;
   font-size: 1rem;
   text-decoration: none;
   padding: 6px 12px;
@@ -133,7 +131,7 @@ button{
   height: 2px;
   bottom: 0;
   left: 50%;
-  background-color: #ffffff;
+  background-color: hsl(var(--foreground));
   transition: all 0.4s;
 }
 .link-5:hover::before {

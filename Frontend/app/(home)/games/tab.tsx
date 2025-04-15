@@ -29,7 +29,7 @@ export default function Tab({ games }: Props) {
 
 
   return (
-    <Tabs defaultValue="tab-1" className="items-center">
+    <Tabs defaultValue="tab-1" className="items-center mt-3">
       <TabsList className="gap-1 bg-transparent">
         <TabsTrigger
           value="tab-1"
@@ -55,7 +55,7 @@ export default function Tab({ games }: Props) {
       </TabsList>
 
 
-      <div className="mt-6">
+      <div className="mt-4">
         {filteredGames.map((game) => (
           <GameInfo game={game} key={game.id}/>
         ))}
