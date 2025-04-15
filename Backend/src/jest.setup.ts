@@ -13,6 +13,21 @@ jest.mock("./utils/redisClient", () => ({
   },
 }));
 
+jest.mock("./controllers/authenticate", () => {
+  const express: typeof import("express") = jest.requireActual("express");
+  const mockRouter = express.Router();
+
+  // Mock the Google authentication routes
+  mockRouter.get("/google", (_req, res) => {
+    res.status(200).send("Mock Google Auth");
+  });
+
+  mockRouter.get("/google/callback", (_req, res) => {
+    res.status(200).send("Mock Google Callback");
+  });
+
+  return mockRouter;
+});
 
 jest.mock("./utils/token", () => {
   const originalModule: typeof import("./utils/token") = jest.requireActual("./utils/token");
