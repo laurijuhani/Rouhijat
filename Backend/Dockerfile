@@ -23,6 +23,7 @@ RUN npm install --omit=dev && npm cache clean --force
 
 COPY --from=build /app/build ./build
 COPY --from=build /app/prisma ./prisma
+COPY src/utils/logo /app/build/utils/logo
 
 EXPOSE 3003
 
