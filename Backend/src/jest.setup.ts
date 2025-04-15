@@ -13,6 +13,13 @@ jest.mock("./utils/redisClient", () => ({
   },
 }));
 
+jest.mock("./utils/mailer", () => ({
+  __esModule: true,
+  default: {
+    sendInviteEmail: jest.fn(() => Promise.resolve()),
+  },
+}));
+
 jest.mock("./controllers/authenticate", () => {
   const express: typeof import("express") = jest.requireActual("express");
   const mockRouter = express.Router();
