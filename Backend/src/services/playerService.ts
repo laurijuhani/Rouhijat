@@ -16,6 +16,11 @@ const aggregatePoints = (points: Points[]): Points => {
 }; 
 
 
+const getAllPlayers = async () => {
+  return await prisma.player.findMany();
+};
+
+
 const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
   const cachedPlayers = await redisClient.get(cacheKey + "/season/" + seasonId);
   if (cachedPlayers) {
@@ -190,4 +195,5 @@ export default {
   getPlayerStatsBySeason,
   getAllPlayersStatsBySeason,
   getPlayerStatsFromAllSeasons,
+  getAllPlayers,
 };

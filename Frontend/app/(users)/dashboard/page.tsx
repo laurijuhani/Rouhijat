@@ -25,15 +25,15 @@ const Page = ({ user }: { user: User }) => {
         <UserNavBar user={user} />
 
 
-        <div className="dark bg-muted text-foreground px-4 py-3 mb-4 mx-auto lg:w-[1024px] rounded-xl gap-3 flex items-center">
+        <div className="dark bg-primary text-foreground px-4 py-3 mb-4 mx-auto lg:w-[1024px] rounded-xl gap-3 flex items-center">
         <InfoIcon className="w-5 h-5" />
           <p className="text-center flex-grow text-base">
             Muutoksilla voi mennä 10 minuuttia, ennen kuin ne näkyy muille käyttäjille
           </p>
         </div>
 
-        <Tabs defaultValue="users" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="users" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 bg-primary">
           <TabsTrigger value="users">Käyttäjät</TabsTrigger>
           <TabsTrigger value="players">Pelaajat</TabsTrigger>
           <TabsTrigger value="games">Pelit</TabsTrigger>

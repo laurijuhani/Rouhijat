@@ -72,6 +72,23 @@ playersRouter.post('/', authenticateToken, async (req, res) => {
   }
 });
 
+playersRouter.get('/', authenticateToken, async (_req, res) => {
+  try {
+    const players = await playerService.getAllPlayers();
+    if (!players) {
+      res.status(404).json({ error: 'players not found' });
+      return;
+    }
+
+    res.status(200).json(players);
+  }
+  catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    console.log(error);
+  }
+});
+
+
 playersRouter.delete('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
 
