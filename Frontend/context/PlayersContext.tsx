@@ -23,13 +23,7 @@ export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const fetchPlayers = useCallback(() => {
     if (!hasFetched.current) {
-      fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/players', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/players')
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to fetch data');

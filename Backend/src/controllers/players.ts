@@ -72,7 +72,7 @@ playersRouter.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-playersRouter.get('/', authenticateToken, async (_req, res) => {
+playersRouter.get('/', async (_req, res) => {
   try {
     const players = await playerService.getAllPlayers();
     if (!players) {

@@ -34,7 +34,7 @@ const UserPic = () => {
             <AvatarFallback>{user.name?.charAt(0) || "?"}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="bg-primary">
           <DropdownMenuLabel>Käyttäjäni</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
