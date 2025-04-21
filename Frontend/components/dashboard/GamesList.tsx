@@ -81,7 +81,7 @@ const GamesList = () => {
     <div>
 
       <div className='flex justify-between items-center ml-3 mr-3'>
-        <Button className='h-[fit-content]' onClick={() => setModify(!modify)}>{modify ? 'Peruuta' : 'Muokkaa'}</Button>
+        <Button variant='outline' className='h-[fit-content]' onClick={() => setModify(!modify)}>{modify ? 'Peruuta' : 'Muokkaa'}</Button>
         <SeasonSelector 
           seasons={seasons}
           selectedSeason={selectedSeason}

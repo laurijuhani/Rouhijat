@@ -58,7 +58,9 @@ const PlayersList = ({ user }: { user: User }) => {
       </Table>
       {(user.role === 'admin' || user.role === 'owner') && (
         <Suspense fallback={<div>Ladataan...</div>}>
-          <AddPlayer setPlayers={setPlayers}/>
+          <div className="flex justify-center mt-4 md:justify-start md:ml-4">
+            <AddPlayer setPlayers={setPlayers}/>
+          </div>
         </Suspense>
       )}
     </>

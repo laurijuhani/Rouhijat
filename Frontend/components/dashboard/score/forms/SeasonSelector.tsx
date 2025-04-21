@@ -23,8 +23,8 @@ const SeasonSelector = ({ seasons, selectedSeason, setSelectedSeason }: SeasonSe
   };
   return (
     <div className="*:not-first:mt-2">
-      <Select defaultValue={selectedSeason?.id.toString()} onValueChange={handleSeasonChange} >
-        <SelectTrigger id="seasons">
+      <Select defaultValue={selectedSeason?.id.toString()} onValueChange={handleSeasonChange}>
+        <SelectTrigger id="seasons" >
         {selectedSeason ? (
             <span>{selectedSeason.name}</span> 
           ) : (
@@ -33,7 +33,7 @@ const SeasonSelector = ({ seasons, selectedSeason, setSelectedSeason }: SeasonSe
         </SelectTrigger>
         <SelectContent>
           {seasons.map((season) => (
-            <SelectItem key={season.id} value={season.id.toString()} onClick={() => setSelectedSeason(season)}>
+            <SelectItem key={season.id} value={season.id.toString()} onClick={() => setSelectedSeason(season)} className="bg-background hover:bg-accent hover:text-accent-foreground">
               {season.name}
             </SelectItem>
           ))}

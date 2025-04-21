@@ -262,7 +262,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
             </div>
             <DialogFooter className="flex flex-row gap-3 justify-end border-t py-4">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={isLoading} className="max-w-[fit-content]">
+                <Button type="button" variant='default' disabled={isLoading} className="max-w-[fit-content] text-foreground">
                   Sulje
                 </Button>
               </DialogClose>
@@ -270,6 +270,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
                 type="submit" 
                 disabled={isLoading}
                 data-loading={isLoading}
+                variant="outline"
                 className="max-w-[fit-content] group relative disabled:opacity-100"
               >
                 <span className="group-data-[loading=true]:text-transparent">Tallenna muutokset</span>

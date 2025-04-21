@@ -6,7 +6,7 @@ import { User } from "@/hooks/useSession";
 
 const UserNavBar = ({ user}: { user: User}) => {
   return (
-    <div className="mb-4 flex justify-between w-full bg-gray-800 p-4 rounded-b-lg p-b-4">
+    <div className="mb-4 flex justify-between w-full bg-primary p-4 rounded-b-lg p-b-4">
         <BackButton />
         <div className="flex items-center ">
           <UserPic />

@@ -146,7 +146,7 @@ const UsersList = ({ user }: { user: User }) => {
           <form onSubmit={handleSubmit} className="mt-4 grid grid-cols-3 gap-4 mr-2 ml-2">
             <Label htmlFor="email" className="col-span-4">Kutsu käyttäjä</Label>
             <Input type="email" id="email" name="email" required className="col-span-3 h-10" />
-            <Button type="submit" className="col-span-1 h-10">Lisää käyttäjä</Button>
+            <Button type="submit" className="col-span-1 h-10" variant='outline'>Lisää käyttäjä</Button>
           </form>
 
           {invites.length === 0 ? (

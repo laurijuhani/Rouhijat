@@ -46,6 +46,7 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
         <Checkbox id={`player-${player.id}-checkbox`} 
           checked={isChecked} 
           onCheckedChange={(checked) => handleCheckboxChange(checked as boolean)} 
+          className="data-[state=checked]:bg-accent"
         />
         <Input
           id={`player-${player.id}-goals`}
@@ -53,7 +54,7 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
           value={playerPoints[player.id]?.[0] || ''}
           onChange={(e) => handlePointsChange(e, 0)}
           disabled={!isChecked}
-          className="col-span-1"
+          className="col-span-1 enabled:border-foreground"
         />
         <Input
           id={`player-${player.id}-assists`}
@@ -61,7 +62,7 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
           value={playerPoints[player.id]?.[1] || ''}
           onChange={(e) => handlePointsChange(e, 1)}
           disabled={!isChecked}
-          className="col-span-1"
+          className="col-span-1 enabled:border-foreground"
         />
         <Input
           id={`player-${player.id}-pm`}
@@ -69,7 +70,7 @@ const PlayerPoints = ({ player, playerPoints, setPlayerPoints }: PlayerPointsPro
           value={playerPoints[player.id]?.[2] || ''}
           onChange={(e) => handlePointsChange(e, 2)}
           disabled={!isChecked}
-          className="col-span-1"
+          className="col-span-1 enabled:border-foreground"
         />
       </div>
     </div>
