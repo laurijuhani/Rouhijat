@@ -1,29 +1,18 @@
 'use client';
 
 import Spinner from "@/components/basics/Spinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Game, Season } from "@/types/database_types";
 import { useEffect, useState } from "react";
 import Tab from "./tab";
 import Fetch from "@/utils/fetch";
+import SeasonSelector from "@/components/basics/SeasonSelector";
 
 interface SelectorProps {
   seasons: Season[];
 }
 
-const defaultSeason = (seasons: Season[]) => {
-  const currentSeason = seasons.find((season) => season.active);
-  return currentSeason ? currentSeason.id.toString() : "";
-}; 
 
-
-const SeasonSelector = ({ seasons }: SelectorProps) => {
+const Selector = ({ seasons }: SelectorProps) => {
   const [gameCache, setgameCache] = useState<Record<string, Game[]>>({});
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(false);
@@ -72,27 +61,11 @@ const SeasonSelector = ({ seasons }: SelectorProps) => {
 
   return (
     <>
-      <div className="*:not-first:mt-2">
-        <Select defaultValue={defaultSeason(seasons)} onValueChange={handleSeasonChange}>
-          <SelectTrigger
-            className="bg-primary border-transparent shadow-none"
-            >
-            <SelectValue placeholder="Valitse kausi" />
-          </SelectTrigger>
-          <SelectContent className="bg-primary border-transparent shadow-none">
-            {seasons.map((season) => (
-              <SelectItem
-              key={season.id}
-              value={season.id.toString()}
-              className="bg-background border-transparent shadow-none"
-              >
-                {season.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
+      <SeasonSelector 
+        seasons={seasons}
+        handleSeasonChange={handleSeasonChange}
+      />
+      
       {loading ? (
         <Spinner className="flex justify-center items-center mt-3" />
       ) : (
@@ -108,4 +81,4 @@ const SeasonSelector = ({ seasons }: SelectorProps) => {
   );
 };
 
-export default SeasonSelector;
+export default Selector;
