@@ -6,23 +6,47 @@ import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 const fetchGames = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/season/current`, {
-    next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, 
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch games");
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/season/current`, {
+      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, // Use revalidate for successful fetch
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch games");
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching games:", error);
+    // Retry immediately on the next load by forcing a fresh fetch
+    const retryRes = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/season/current`, {
+      cache: 'no-store', // Force fresh fetch
+    });
+    if (!retryRes.ok) {
+      throw new Error("Failed to fetch games on retry");
+    }
+    return retryRes.json();
   }
-  return res.json();
 };
 
 const fetchActiveSeason = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/seasons/current`, {
-    next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, 
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch active season");
-  }  
-  return res.json();
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/seasons/current`, {
+      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, // Use revalidate for successful fetch
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch active season");
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching active season:", error);
+    // Retry immediately on the next load by forcing a fresh fetch
+    const retryRes = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/seasons/current`, {
+      cache: 'no-store', // Force fresh fetch
+    });
+    if (!retryRes.ok) {
+      throw new Error("Failed to fetch active season on retry");
+    }
+    return retryRes.json();
+  }
 };
 
 
