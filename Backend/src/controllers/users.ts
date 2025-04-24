@@ -3,13 +3,11 @@ import { authenticateToken } from "../utils/middleware";
 import prisma from "../utils/client";
 import { CustomRequest } from "../utils/types";
 import logger from "../utils/logger";
+import redisClient from "../utils/redisClient";
 import dotenv from 'dotenv';
 dotenv.config();
 
 const usersRouter = Router();
-
-
-
 
 
 usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res) => {
@@ -70,6 +68,22 @@ usersRouter.get('/', authenticateToken, async (req: CustomRequest, res) => {
   }
 });
 
+
+usersRouter.get('/resetredis', authenticateToken, async (req: CustomRequest, res) => {
+  const user = req.userData?.item;
+  if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
+    res.status(403).json({ error: 'Unauthorized' });
+    return;
+  }
+
+  try {
+    await redisClient.flushAll();
+    res.status(200).json({ message: 'Redis cache cleared' });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
 
 
 export default usersRouter;
