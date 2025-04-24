@@ -1,4 +1,5 @@
 import prisma from "../utils/client";
+import logger from "../utils/logger";
 import { SignIn } from "../utils/types";
 
 const logIn = async (email: string) => {
@@ -25,7 +26,7 @@ const signUp = async (details: SignIn): Promise<boolean> => {
 
       return true;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       return false;
     }
   } else return false;

@@ -3,6 +3,7 @@ import gameService from "../services/gameService";
 import { authenticateToken } from "../utils/middleware";
 import { GameRequest, CustomRequest } from "../utils/types";
 import seasonService from "../services/seasonService";
+import logger from "../utils/logger";
 
 const gamesRouter = Router();
 
@@ -28,7 +29,7 @@ gamesRouter.get('/season/current', async (_req, res) => {
     res.json(games);
     } catch (error) {
       res.status(500).json({ error: 'Something went wrong' });
-      console.log(error);
+      logger.error(error);
     }
 
 });
@@ -47,7 +48,7 @@ gamesRouter.get('/season/:id', async (req, res) => {
     res.json(games);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -66,7 +67,7 @@ gamesRouter.get('/:id', async (req, res) => {
     res.json(game);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -84,7 +85,7 @@ gamesRouter.post('/', authenticateToken, async (req, res) => {
     res.status(201).json(game);
   } catch (error) {    
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -105,7 +106,7 @@ gamesRouter.put('/score/:id', authenticateToken, async (req: CustomRequest, res)
 
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -132,7 +133,7 @@ gamesRouter.put('/:id', authenticateToken, async (req: CustomRequest, res) => {
 
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -150,7 +151,7 @@ gamesRouter.delete('/:id', authenticateToken, async (req: CustomRequest, res) =>
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 
 });

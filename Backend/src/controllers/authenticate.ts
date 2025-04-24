@@ -5,6 +5,7 @@ import { VerifyCallback } from "passport-google-oauth20";
 import { generateToken } from "../utils/token";
 import authenticationService from "../services/authenticationService";
 import { GoogleUser } from "../utils/types";
+import logger from "../utils/logger";
 
 const authenticateRouter = Router();
 
@@ -31,9 +32,9 @@ const handleLogin = async (accessToken: string, _refreshToken: string, profile: 
       return done(null, false, { message: 'Sign up failed' });
     }
 
-    console.log('accessToken', accessToken);
+    logger.info('accessToken', accessToken);
     // maybe save the accessToken to the user
-    console.log('profile', profile);
+    logger.info('profile', profile);
     done(null, profile);
   } catch (error) {
     done(error, false);

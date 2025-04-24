@@ -14,6 +14,8 @@ import seasonsRouter from './controllers/seasons';
 import authenticateRouter from './controllers/authenticate';
 import clientIp from './utils/clientIp';
 import redisClient from './utils/redisClient';
+import logger from './utils/logger';
+
 
 const app = express();
 
@@ -49,13 +51,13 @@ if (process.env.NODE_ENV !== 'test') {
     try {
       await redisClient.flushAll(); 
     } catch (error) {
-      console.error('Failed to connect to Redis:', error);
+      logger.error('Failed to flush Redis cache:', error);
     }
   })().catch((error) => {
-    console.error('Unexpected error:', error);
+    logger.error('Unexpected error:', error);
   });
 
   app.listen(process.env.PORT, () => {
-    console.log(`Server running on port ${process.env.PORT}`);
+    logger.info(`Server running on port ${process.env.PORT}`);
   });
 }

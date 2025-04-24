@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticateToken } from "../utils/middleware";
 import prisma from "../utils/client";
 import { CustomRequest } from "../utils/types";
+import logger from "../utils/logger";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -45,7 +46,7 @@ usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res
     await prisma.user.update({ where: { id }, data: { role } });
     res.status(200).json({ message: 'Role updated' });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
 
@@ -64,7 +65,7 @@ usersRouter.get('/', authenticateToken, async (req: CustomRequest, res) => {
     const users = await prisma.user.findMany();
     res.status(200).json(users);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
