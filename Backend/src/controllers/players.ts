@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticateToken } from "../utils/middleware";
 import playerService from "../services/playerService";
 import seasonService from "../services/seasonService";
+import logger from "../utils/logger";
 
 
 const playersRouter = Router();
@@ -26,7 +27,7 @@ playersRouter.get('/season/:id', async (req, res) => {
     res.status(200).json(players);
     } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -50,7 +51,7 @@ playersRouter.get('/:id', async (req, res) => {
     res.status(200).json(player);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -68,7 +69,7 @@ playersRouter.post('/', authenticateToken, async (req, res) => {
     res.status(201).json(player.id);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -84,7 +85,7 @@ playersRouter.get('/', async (_req, res) => {
   }
   catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -109,7 +110,7 @@ playersRouter.delete('/:id', authenticateToken, async (req, res) => {
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -135,7 +136,7 @@ playersRouter.put('/:id', authenticateToken, async (req, res) => {
     res.status(204).json(player);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 

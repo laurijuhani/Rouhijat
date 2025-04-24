@@ -3,6 +3,7 @@ import { authenticateToken } from "../utils/middleware";
 import pointService from "../services/pointService";
 import gameService from "../services/gameService";
 import { PlayerData } from "../utils/types";
+import logger from "../utils/logger";
 
 const pointsRouter = Router();
 
@@ -26,7 +27,7 @@ pointsRouter.post('/:id', authenticateToken, async (req, res) => {
     res.status(201).json({ message: 'points added' });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -61,7 +62,7 @@ pointsRouter.put('/:id', authenticateToken, async (req, res) => {
     res.status(200).json({ message: 'points updated' });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -80,7 +81,7 @@ pointsRouter.get('/:id', authenticateToken, async (req, res) => {
     res.json(points);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 
 });

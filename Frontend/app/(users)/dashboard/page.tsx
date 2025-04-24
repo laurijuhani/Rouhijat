@@ -13,6 +13,7 @@ import Spinner from "@/components/basics/Spinner";
 import { PlayersProvider } from "@/context/PlayersContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { InfoIcon } from "lucide-react";
+import RedisReset from "@/components/dashboard/RedisReset";
 
 const UsersList = lazy(() => import("@/components/dashboard/UsersList"));
 const PlayersList = lazy(() => import("@/components/dashboard/PlayersList"));
@@ -32,30 +33,35 @@ const Page = ({ user }: { user: User }) => {
           </p>
         </div>
 
-      <Tabs defaultValue="users" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-primary">
-          <TabsTrigger value="users">Käyttäjät</TabsTrigger>
-          <TabsTrigger value="players">Pelaajat</TabsTrigger>
-          <TabsTrigger value="games">Pelit</TabsTrigger>
-        </TabsList>
-        <TabsContent value="users">
-          <Suspense fallback={<Spinner className="flex justify-center mt-4"/>}>
-            <UsersList user={user} />     
-          </Suspense>
-        </TabsContent>
-        <TabsContent value="players">
-          <Suspense fallback={<Spinner className="flex justify-center mt-4"/>}>
-            <PlayersList user={user} />
-          </Suspense>
-        </TabsContent>
-        <TabsContent value="games">
-          <Suspense fallback={<Spinner className="flex justify-center mt-4"/>}>
-            <GamesList />
-          </Suspense>
-        </TabsContent>
-      </Tabs>
 
-      
+        {(user.role === "admin" || user.role === "owner") && (
+          <div className="my-4 justify-center flex">
+            <RedisReset />
+          </div>
+          )}
+
+        <Tabs defaultValue="users" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 bg-primary">
+            <TabsTrigger value="users">Käyttäjät</TabsTrigger>
+            <TabsTrigger value="players">Pelaajat</TabsTrigger>
+            <TabsTrigger value="games">Pelit</TabsTrigger>
+          </TabsList>
+          <TabsContent value="users">
+            <Suspense fallback={<Spinner className="flex justify-center mt-4"/>}>
+              <UsersList user={user} />     
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="players">
+            <Suspense fallback={<Spinner className="flex justify-center mt-4"/>}>
+              <PlayersList user={user} />
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="games">
+            <Suspense fallback={<Spinner className="flex justify-center mt-4"/>}>
+             <GamesList />
+            </Suspense>
+          </TabsContent>
+        </Tabs>
     </ToastProvider>
   </PlayersProvider>
   );

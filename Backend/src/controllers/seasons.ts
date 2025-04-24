@@ -2,6 +2,7 @@ import { Router } from "express";
 import seasonService from "../services/seasonService";
 import settingsService from "../services/settingsService";
 import { authenticateToken } from "../utils/middleware";
+import logger from "../utils/logger";
 
 const seasonsRouter = Router();
 
@@ -13,7 +14,7 @@ seasonsRouter.get('/', async (_req, res) => {
     res.json(seasons);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);  
+    logger.error(error);  
   }
 });
 
@@ -34,7 +35,7 @@ seasonsRouter.get('/current', async (_req, res) => {
     res.json(season);    
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -57,7 +58,7 @@ seasonsRouter.post('/current', authenticateToken, async (req, res) => {
     res.json(season);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -76,7 +77,7 @@ seasonsRouter.delete('/current', authenticateToken, async (_req, res) => {
   }
   catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -96,7 +97,7 @@ seasonsRouter.get('/:id', async (req, res) => {
     res.json(season);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -112,7 +113,7 @@ seasonsRouter.post('/', authenticateToken, async (req, res) => {
     res.status(201).json(season);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -130,7 +131,7 @@ seasonsRouter.delete('/:id', authenticateToken, async (req, res) => {
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -148,7 +149,7 @@ seasonsRouter.put('/:id', authenticateToken, async (req, res) => {
     res.status(200).json(season);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 

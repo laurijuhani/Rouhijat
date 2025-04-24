@@ -1,31 +1,40 @@
-import { Player } from "@/types/database_types";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
+import { Season } from "@/types/database_types";
+import Body from "./body";
 
 
-const fetchPlayers = async () => {
+const fetchSeasons = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/players`, {
-      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, 
+    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/seasons`, {
+      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') },
     });
     if (!res.ok) {
-      return [];
+      throw new Error("Failed to fetch seasons");
     }
-    return res.json();
+    return res.json(); 
   } catch (error) {
-    console.error("Error fetching players:", error);
+    console.error("Error fetching seasons:", error);
     return [];
   }
-};
+}; 
 
 
 const Stats = async () => {
-  const players: Player[] = await fetchPlayers();
-  players.sort((a, b) => a.number - b.number);
+  let seasons: Season[] = [];
+    
+  try {
+    seasons = await fetchSeasons();
+  } catch (error) {
+    console.error("Error fetching seasons:", error);
+    return (
+      <div className="w-3/4 h-3 mx-auto">
+        <p className="text-center text-2xl">Failed to load games</p>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-4">
-      <DataTable columns={columns} data={players} />
+      <Body seasons={seasons} />
     </div>
   );
 };

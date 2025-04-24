@@ -3,6 +3,7 @@ import prisma from "../utils/client";
 import { authenticateToken } from "../utils/middleware";
 import { CustomRequest } from "../utils/types";
 import mailer from "../utils/mailer";
+import logger from "../utils/logger";
 
 
 const invitesRouter = Router();
@@ -35,7 +36,7 @@ invitesRouter.post('/', authenticateToken, async (req: CustomRequest, res) => {
     res.status(201).json({ message: 'Invitation sent' });
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 
@@ -60,7 +61,7 @@ invitesRouter.delete('/:email', authenticateToken, async (req: CustomRequest, re
     res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
-    console.log(error);
+    logger.error(error);
   }
 });
 

@@ -2,13 +2,12 @@ import { Router } from "express";
 import { authenticateToken } from "../utils/middleware";
 import prisma from "../utils/client";
 import { CustomRequest } from "../utils/types";
+import logger from "../utils/logger";
+import redisClient from "../utils/redisClient";
 import dotenv from 'dotenv';
 dotenv.config();
 
 const usersRouter = Router();
-
-
-
 
 
 usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res) => {
@@ -45,7 +44,7 @@ usersRouter.put('/changerole', authenticateToken, async (req: CustomRequest, res
     await prisma.user.update({ where: { id }, data: { role } });
     res.status(200).json({ message: 'Role updated' });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
 
@@ -64,11 +63,27 @@ usersRouter.get('/', authenticateToken, async (req: CustomRequest, res) => {
     const users = await prisma.user.findMany();
     res.status(200).json(users);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
 
+
+usersRouter.get('/resetredis', authenticateToken, async (req: CustomRequest, res) => {
+  const user = req.userData?.item;
+  if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
+    res.status(403).json({ error: 'Unauthorized' });
+    return;
+  }
+
+  try {
+    await redisClient.flushAll();
+    res.status(200).json({ message: 'Redis cache cleared' });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
 
 
 export default usersRouter;

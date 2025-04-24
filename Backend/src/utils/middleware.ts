@@ -4,13 +4,14 @@ dotenv.config();
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { CustomRequest } from "./types";
 import { verifyToken } from "./token";
+import logger from "./logger";
 
 const unknownEndpoint = (_req: Request, res: Response): void => {
   res.status(404).send({ error: "unknown endpoint" });
 };
 
 const errorHandler = (error: Error, _request: Request, response: Response) => {
-  console.log(error.message);
+  logger.error(error.message);
   
   if (error instanceof Error) {
     if (error.name === 'CastError') {
@@ -43,7 +44,7 @@ const authenticateToken = (req: CustomRequest, res: Response, next: NextFunction
       next();
     } catch (error) {
       res.status(401).json({ error: 'Unauthorized' });
-      console.log(error);
+      logger.error(error);
     }
   } else {
     res.status(401).json({ error: 'Unauthorized' });
