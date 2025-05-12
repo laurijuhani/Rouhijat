@@ -67,7 +67,7 @@ const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
 const getPlayerStatsFromAllSeasons = async (id: number): Promise<PlayerPointsBySeason | null> => {
   const seasons = await seasonService.getSeasons();
 
-  const seasonStats: {seasonId: number, games: number, points: Points}[] = [];
+  const seasonStats: {seasonName: string, games: number, points: Points}[] = [];
   let playerBase: BasePlayer | null = null;
   for (const season of seasons) {
     const player = await getPlayerStatsBySeason(id, season.id);
@@ -82,7 +82,7 @@ const getPlayerStatsFromAllSeasons = async (id: number): Promise<PlayerPointsByS
       }
 
       seasonStats.push({
-        seasonId: season.id,
+        seasonName: season.name,
         games: player.games,
         points: player.points,
       });

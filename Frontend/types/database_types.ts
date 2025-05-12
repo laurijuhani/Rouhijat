@@ -61,3 +61,21 @@ export type PlayerPointsData = {
   assists: number;
   pm: number;
 };
+
+
+
+export interface PlayerStats {
+  id: number;
+  name: string;
+  nickname: string | null;
+  number: number;
+  seasons: {
+    seasonName: string;
+    games: number;
+    points: {
+      goals: number;
+      assists: number;
+      pm: number;
+    };
+  }[];
+}; 

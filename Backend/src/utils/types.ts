@@ -78,7 +78,7 @@ export interface Player extends BasePlayer {
 
 export interface PlayerPointsBySeason extends BasePlayer {
   seasons: {
-    seasonId: number;
+    seasonName: string;
     games: number;
     points: Points;
   }[];
