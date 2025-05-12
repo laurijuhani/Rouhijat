@@ -90,3 +90,10 @@ export interface PlayerData {
   assists: number;
   pm: number;
 }
+
+export interface Goalie {
+  id: number;
+  name: string;
+  nickname: string | null;
+  number: number | null;
+}

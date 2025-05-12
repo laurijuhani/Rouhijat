@@ -50,7 +50,7 @@ describe("Players Router", () => {
       expect(response.body.nickname).toBe("B");
       expect(response.body.number).toBe(11);
       expect(response.body.seasons.length).toBe(4);
-      expect(response.body.seasons[0].seasonId).toBe(1);
+      expect(response.body.seasons[0].seasonName).toBe("Spring");
       expect(response.body.seasons[0].games).toBe(2);
       expect(response.body.seasons[0].points.goals).toBe(1);
       expect(response.body.seasons[0].points.pm).toBe(2);
