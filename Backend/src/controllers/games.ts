@@ -73,7 +73,7 @@ gamesRouter.get('/:id', async (req, res) => {
 
 
 gamesRouter.post('/', authenticateToken, async (req, res) => {
-  const { homeTeam, awayTeam, homeScore, awayScore, gameDate, seasonId } = req.body as GameRequest;
+  const { homeTeam, awayTeam, homeScore, awayScore, gameDate, seasonId, goalieId } = req.body as GameRequest;
 
   if (!homeTeam || !awayTeam || !gameDate || !seasonId) {
     res.status(400).json({ error: 'missing required fields' });
@@ -81,7 +81,7 @@ gamesRouter.post('/', authenticateToken, async (req, res) => {
   }
 
   try {
-    const game = await gameService.createGame(homeTeam, awayTeam, homeScore, awayScore, new Date(gameDate), seasonId);    
+    const game = await gameService.createGame(homeTeam, awayTeam, homeScore, awayScore, new Date(gameDate), seasonId, goalieId);    
     res.status(201).json(game);
   } catch (error) {    
     res.status(500).json({ error: 'Something went wrong' });
@@ -113,7 +113,7 @@ gamesRouter.put('/score/:id', authenticateToken, async (req: CustomRequest, res)
 
 
 gamesRouter.put('/:id', authenticateToken, async (req: CustomRequest, res) => {
-  const { homeTeam, awayTeam, homeScore, awayScore, gameDate, seasonId } = req.body as GameRequest;
+  const { homeTeam, awayTeam, homeScore, awayScore, gameDate, seasonId, goalieId } = req.body as GameRequest;
   const { id } = req.params;
 
   if (!homeTeam || !awayTeam || !gameDate || !seasonId) {
@@ -127,7 +127,7 @@ gamesRouter.put('/:id', authenticateToken, async (req: CustomRequest, res) => {
       return; 
     }
 
-    await gameService.updateGame(parseInt(id), homeTeam, awayTeam, homeScore, awayScore, new Date(gameDate), seasonId);
+    await gameService.updateGame(parseInt(id), homeTeam, awayTeam, homeScore, awayScore, new Date(gameDate), seasonId, goalieId);
 
     res.status(204).end();
 

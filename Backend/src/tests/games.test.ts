@@ -38,6 +38,7 @@ describe("Games Router", () => {
       expect(response.body.points[0].goals).toBe(2);
       expect(response.body.points[0].assists).toBe(1);
       expect(response.body.points[0].pm).toBe(3);
+      expect(response.body.goalie.name).toBe("Goalie A");
     });
 
     it("should return 404 if the game does not exist", async () => {
@@ -82,6 +83,7 @@ describe("Games Router", () => {
         awayScore: 2,
         gameDate: "2023-01-09T00:00:00.000Z",
         seasonId: 1,
+        goalieId: 1,
       };
 
       const response: Response = await request(app)

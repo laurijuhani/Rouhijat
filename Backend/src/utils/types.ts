@@ -42,6 +42,7 @@ export interface GameRequest {
   awayScore?: number;
   gameDate: string; // Date object as string
   seasonId: number;
+  goalieId?: number;
 }
 
 export interface SignIn {

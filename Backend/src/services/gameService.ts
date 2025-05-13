@@ -55,12 +55,18 @@ const getGameById = async (id: number) => {
           assists: true,
           pm: true,
         }
+      },
+      goalie: {
+        select: {
+          name: true,
+          number: true,
       }
     }
+  }
   });
 };
 
-const createGame = async (homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number | undefined, gameDate: Date, seasonId: number) => {
+const createGame = async (homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number | undefined, gameDate: Date, seasonId: number, goalieId: number | undefined) => {
   void redisClient.del(cacheKey + "/season/" + seasonId);
   void redisClient.del("players/season/" + seasonId); 
   void deleteCacheForPattern(cacheKey + "/*");
@@ -73,6 +79,7 @@ const createGame = async (homeTeam: string, awayTeam: string, homeScore: number 
       awayScore: awayScore || null,
       gameDate,
       seasonId,
+      goalieId: goalieId || null,
     },
   });
 };
@@ -96,7 +103,7 @@ const updateScore = async (id: number, homeScore: number, awayScore: number) => 
 };
 
 
-const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date, seasonId: number) => {
+const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date, seasonId: number, goalieId: number | undefined) => {
   void redisClient.del(cacheKey + "/season/" + seasonId);
   void redisClient.del("players/season/" + seasonId); 
   void deleteCacheForPattern(cacheKey + "/*");
@@ -126,6 +133,7 @@ const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeSc
       awayScore,
       gameDate,
       seasonId,
+      goalieId: goalieId || null,
     },
   });
 };
