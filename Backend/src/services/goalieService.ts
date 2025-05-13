@@ -11,7 +11,11 @@ const getAllGoalies = async () => {
     return JSON.parse(cachedGoalies) as Goalie[];
   }
 
-  const goalies = await prisma.goalie.findMany();
+  const goalies = await prisma.goalie.findMany({
+    include: {
+      games: true,
+    }
+  });
 
   await redisClient.set(cacheKey, JSON.stringify(goalies));
 
@@ -33,6 +37,9 @@ const getGoalieById = async (id: number) => {
     where: {
       id,
     },
+    include: {
+      games: true,
+    }
   });
   if (!goalie) {
     return null;

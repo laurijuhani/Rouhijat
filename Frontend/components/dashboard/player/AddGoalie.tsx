@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useToast } from "@/context/ToastContext";
-import { Player } from "@/types/database_types";
+import { Goalie } from "@/types/database_types";
 import Fetch from "@/utils/fetch";
 import AddForm from "./AddForm";
 
-interface AddPlayerProps {
-  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
+interface AddGoalieProps {
+  setGoalies: React.Dispatch<React.SetStateAction<Goalie[]>>;
 }
 
-const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
+const AddGoalie = ({ setGoalies }: AddGoalieProps) => {
   const [name, setName] = useState(''); 
   const [nickname, setNickname] = useState('');
   const [number, setNumber] = useState('');
@@ -32,12 +32,12 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
     }
 
 
-    if (window.confirm('Lisätäänkö pelaaja?')) {
+    if (window.confirm('Lisätäänkö Maalivahti?')) {
       console.log('Lisätään');
 
       try {
         const { json } = await Fetch.post<number>(
-          process.env.NEXT_PUBLIC_BACKEND_URL + '/players',
+          process.env.NEXT_PUBLIC_BACKEND_URL + '/goalies',
           { name, nickname, number: parseInt(number) },
           {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -45,15 +45,15 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
         );
         const id = await json;
 
-        setPlayers((prevPlayers) => {
-          return [...prevPlayers, { name, nickname, number: parseInt(number), id, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
+        setGoalies((prevGoalies) => {
+          return [...prevGoalies, { id, name, nickname, number: parseInt(number), games: []}];
         });
-        showToast('success', 'Pelaaja lisätty', '');
+        showToast('success', 'Maalivahti lisätty', '');
         setIsDialogOpen(false);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
-        showToast('error', 'Pelaajan lisääminen epäonnistui', '');
+        showToast('error', 'Maalivahdin lisääminen epäonnistui', '');
         setIsDialogOpen(false);
         setIsLoading(false);
       }
@@ -62,7 +62,7 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
 
 
   return <AddForm 
-    type="Pelaaja"
+    type="Maalivahti"
     setNickname={setNickname}
     setName={setName}
     setNumber={setNumber}
@@ -73,4 +73,4 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
   />;
 };
 
-export default AddPlayer;
+export default AddGoalie;

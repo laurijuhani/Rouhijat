@@ -11,13 +11,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import AddGoalie from "./player/AddGoalie";
 
 const EditPlayer = lazy(() => import('./player/EditPlayer'));
+const EditGoalie = lazy(() => import('./player/EditGoalie'));
 const AddPlayer = lazy(() => import('./player/AddPlayer'));
 
 
 const PlayersList = ({ user }: { user: User }) => {
-  const { players, fetchPlayers, setPlayers } = usePlayers();
+  const { players, fetchPlayers, setPlayers, goalies, setGoalies } = usePlayers();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -63,6 +65,49 @@ const PlayersList = ({ user }: { user: User }) => {
           </div>
         </Suspense>
       )}
+
+      <h2 className="text-xl font-bold ml-2 mt-8 mb-4">Maalivahdit:</h2>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nimi</TableHead>
+            <TableHead>Lempinimi</TableHead>
+            <TableHead>Numero</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {goalies.map((goalie) => (
+            <TableRow key={goalie.id}>
+              <TableCell>{goalie.name}</TableCell>
+              <TableCell>{goalie.nickname || "-"}</TableCell>
+              <TableCell>{goalie.number}</TableCell>
+              {(user.role === 'admin' || user.role === 'owner') && (
+                <TableCell>
+                  <Suspense fallback={<div>Ladataan...</div>}>
+                    <EditGoalie 
+                      goalie={goalie} 
+                      setGoalies={setGoalies}
+                      isLoading={isLoading}
+                      setIsLoading={setIsLoading}
+                    />       
+                  </Suspense>
+                </TableCell>
+              )}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {(user.role === 'admin' || user.role === 'owner') && (
+        <Suspense fallback={<div>Ladataan...</div>}>
+          <div className="flex justify-center mt-4 md:justify-start md:ml-4">
+            <AddGoalie setGoalies={setGoalies}/>
+          </div>
+        </Suspense>
+      )}
+
+
+
     </>
   );
 };

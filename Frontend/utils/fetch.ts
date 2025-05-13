@@ -53,8 +53,12 @@ class Fetch {
       throw new Error(`Error: ${response.status}`);
     }
 
+    const contentLength = response.headers.get('Content-Length');
+    const contentType = response.headers.get('Content-Type');
+    const hasBody = contentLength !== '0' && contentType && contentType.includes('application/json');
+
     return {
-      json: response.json(),
+      json: hasBody ? response.json() : Promise.resolve(null),
       response,
     };
   }

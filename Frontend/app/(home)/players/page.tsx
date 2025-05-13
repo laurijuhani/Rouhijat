@@ -1,4 +1,4 @@
-import { Player } from "@/types/database_types";
+import { Goalie, Player } from "@/types/database_types";
 import List from "./list";
 
 const fetchPlayers = async () => {
@@ -16,13 +16,30 @@ const fetchPlayers = async () => {
   }
 }; 
 
+const fetchGoalies = async () => {
+  try {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/goalies`, {
+      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch players");
+    }
+    return res.json(); 
+  } catch (error) {
+    console.error("Error fetching players:", error);
+    return [];
+  }
+}; 
+
 
 
 const Page = async () => {
   let players: Player[] = [];
+  let goalies: Goalie[] = [];
   
     try {
       players = await fetchPlayers();
+      goalies = await fetchGoalies();
     } catch (error) {
       console.error("Error fetching players:", error);
       return (
@@ -34,7 +51,9 @@ const Page = async () => {
   return (
     <div className="p-4">
       <h1 className="text-3xl font-bold mb-2">Pelaajat</h1>
-      <List players={players} />  
+      <List players={players} isGoalie={false} />  
+      <h1 className="text-3xl font-bold mb-2 mt-4">Maalivahdit</h1>
+      <List players={goalies} isGoalie={true} />
     </div>
   );
 };

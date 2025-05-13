@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, useRef, useCallback } from 'react';
-import { Player } from '@/types/database_types';
+import { Goalie, Player } from '@/types/database_types';
 
 interface PlayersContextProps {
   players: Player[];
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
+  goalies: Goalie[];
+  setGoalies: React.Dispatch<React.SetStateAction<Goalie[]>>;
   fetchPlayers: () => void;
 }
 
@@ -19,19 +21,23 @@ export const usePlayers = () => {
 
 export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [goalies, setGoalies] = useState<Goalie[]>([]); 
   const hasFetched = useRef(false);
 
   const fetchPlayers = useCallback(() => {
     if (!hasFetched.current) {
-      fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/players')
-        .then((response) => {
-          if (!response.ok) {
+      Promise.all([
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/players'),
+        fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/goalies'),
+      ])
+        .then(async ([playersResponse, goaliesResponse]) => {
+          if (!playersResponse.ok || !goaliesResponse.ok) {
             throw new Error('Failed to fetch data');
           }
-          return response.json();
-        })
-        .then((data) => {
-          setPlayers(data);
+          const playersData = await playersResponse.json();
+          const goaliesData = await goaliesResponse.json();
+          setPlayers(playersData);
+          setGoalies(goaliesData);
           hasFetched.current = true;
         })
         .catch((error) => {
@@ -41,7 +47,7 @@ export const PlayersProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   return (
-    <PlayersContext.Provider value={{ players, setPlayers, fetchPlayers }}>
+    <PlayersContext.Provider value={{ players, setPlayers, goalies, setGoalies, fetchPlayers }}>
       {children}
     </PlayersContext.Provider>
   );

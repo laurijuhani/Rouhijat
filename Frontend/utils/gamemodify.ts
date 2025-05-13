@@ -29,6 +29,10 @@ const checkGamesEqual = (a: Game, b: Game): boolean => {
     return false;
   }
 
+  if (a.goalieId !== b.goalieId) {
+    return false;
+  }
+
   return true;
 };
 

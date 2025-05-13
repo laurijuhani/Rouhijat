@@ -1,18 +1,18 @@
 import { useToast } from "@/context/ToastContext";
-import { Player } from "@/types/database_types";
+import { Goalie } from "@/types/database_types";
 import React, { useState } from "react";
 import Fetch from "@/utils/fetch";
 import EditForm from "./EditForm";
 
-interface EditPlayerProps {
-  player: Player;
-  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
+interface EditGoalieProps {
+  goalie: Goalie;
+  setGoalies: React.Dispatch<React.SetStateAction<Goalie[]>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
-const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerProps) => {
+const EditGoalie = ({ goalie, setGoalies, isLoading, setIsLoading }: EditGoalieProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { showToast } = useToast();
 
@@ -27,17 +27,17 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
     const number = form.number.value;
 
     if (
-      name === player.name &&
-      nickname === player.nickname &&
-      number === player.number.toString()
+      name === goalie.name &&
+      nickname === goalie.nickname &&
+      number === goalie.number?.toString()
     ) {
       setIsDialogOpen(false);
       setIsLoading(false);
       return;
     }
     
-    if (!name || !number || isNaN(parseInt(number))) {
-      showToast('error', 'Virheelliset tiedot', 'Tarkista pelaajan nimi ja numero');
+    if (!name || ( number && isNaN(parseInt(number)))) {
+      showToast('error', 'Virheelliset tiedot', 'Tarkista maalivahdin nimi ja numero');
       setIsLoading(false);
       return;
     }
@@ -45,47 +45,47 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
 
     try {
       await Fetch.put(
-        process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
+        process.env.NEXT_PUBLIC_BACKEND_URL + `/goalies/${goalie.id}`,
         { name, nickname, number: parseInt(number) },
         {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
       );
 
-      setPlayers((prevPlayers) =>
-        prevPlayers.map((p) => {
-          if (p.id === player.id) {
+      setGoalies((prevGoalies) =>
+        prevGoalies.map((p) => {
+          if (p.id === goalie.id) {
             return { ...p, name, nickname, number: parseInt(number) };
           }
           return p;
         })
       );
       setIsDialogOpen(false);
-      showToast('success', 'Pelaaja muokattu', 'Pelaajan tiedot on muokattu onnistuneesti');
+      showToast('success', 'Maalivahti muokattu', 'Maalivahdin tiedot on muokattu onnistuneesti');
     } catch  {
-      showToast('error', 'Pelaajan muokkaaminen epäonnistui', 'Yritä myöhemmin uudelleen');
+      showToast('error', 'Maalivahdin muokkaaminen epäonnistui', 'Yritä myöhemmin uudelleen');
     }
     setIsLoading(false);
   };
 
   
   const handleDelete = async () => {
-    if (window.confirm('Haluatko varmasti poistaa pelaajan?')) {
+    if (window.confirm('Haluatko varmasti poistaa Maalivahdin?')) {
       console.log('poistetaan');
       setIsLoading(true);
 
       try {
         await Fetch.delete(
-          process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
+          process.env.NEXT_PUBLIC_BACKEND_URL + `/goalies/${goalie.id}`,
           {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           }
         );
-        setPlayers((prevPlayers) => prevPlayers.filter((p) => p.id !== player.id));
+        setGoalies((prevGoalies) => prevGoalies.filter((p) => p.id !== goalie.id));
         setIsDialogOpen(false);
-        showToast('success', 'Pelaaja poistettu', 'Pelaaja on poistettu onnistuneesti');
+        showToast('success', 'Maalivahti poistettu', 'Maalivahti on poistettu onnistuneesti');
       } catch {
-        showToast('error', 'Pelaajan poistaminen epäonnistui', 'Yritä myöhemmin uudelleen');
+        showToast('error', 'Maalivahdin poistaminen epäonnistui', 'Yritä myöhemmin uudelleen');
       }
       setIsLoading(false);
     }
@@ -94,8 +94,8 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
 
 
   return <EditForm 
-    type="Pelaaja"
-    player={player}
+    type="Maalivahti"
+    player={goalie}
     isLoading={isLoading}
     handleDelete={handleDelete}
     handleSubmit={handleSubmit}
@@ -104,4 +104,4 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
   />; 
 };
 
-export default EditPlayer;
+export default EditGoalie;

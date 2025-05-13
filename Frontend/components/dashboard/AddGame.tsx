@@ -141,6 +141,7 @@ const AddGame = ({ setGames, season }: AddGameProps) => {
     homeScore: null,
     awayScore: null,
     seasonId: season?.id || 1, // TODO: change this to actually excpect season
+    goalieId: null,
   };
 
   return (
@@ -160,7 +161,7 @@ const AddGame = ({ setGames, season }: AddGameProps) => {
           <div className="grid gap-4 py-4">
           <GameDetails 
                 game={game}
-                played={Date.now() > (date?.getTime() || Infinity)}
+                played={Date.now() > (getCombinedDateTime()?.getTime() || Infinity)}
                 inputDate={inputDate}
                 inputTime={inputTime}
                 date={date}

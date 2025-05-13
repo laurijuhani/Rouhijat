@@ -131,9 +131,9 @@ playersRouter.put('/:id', authenticateToken, async (req, res) => {
       return;
     }
 
-    const player = await playerService.updatePlayer(id_number, name, nickname, number);
+    await playerService.updatePlayer(id_number, name, nickname, number);
 
-    res.status(204).json(player);
+    res.status(204).end();
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
     logger.error(error);
