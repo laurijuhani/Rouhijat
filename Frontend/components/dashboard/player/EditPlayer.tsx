@@ -29,14 +29,14 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
     if (
       name === player.name &&
       nickname === player.nickname &&
-      number === player.number.toString()
+      number === player.number?.toString()
     ) {
       setIsDialogOpen(false);
       setIsLoading(false);
       return;
     }
     
-    if (!name || !number || isNaN(parseInt(number))) {
+    if (!name || (number && isNaN(parseInt(number)))) {
       showToast('error', 'Virheelliset tiedot', 'Tarkista pelaajan nimi ja numero');
       setIsLoading(false);
       return;
@@ -46,7 +46,7 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
     try {
       await Fetch.put(
         process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
-        { name, nickname, number: parseInt(number) },
+        { name, nickname, number: parseInt(number) || null },
         {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
@@ -55,7 +55,7 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
       setPlayers((prevPlayers) =>
         prevPlayers.map((p) => {
           if (p.id === player.id) {
-            return { ...p, name, nickname, number: parseInt(number) };
+            return { ...p, name, nickname, number: parseInt(number) || null };
           }
           return p;
         })

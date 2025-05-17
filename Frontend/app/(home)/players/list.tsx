@@ -14,7 +14,7 @@ const List = ({ players, isGoalie }: { players: BaseInfo[], isGoalie: boolean })
       </div>
       {players.map((player) => (
         <div key={player.id} className="grid grid-cols-3 gap-4 p-2 border-gray-300 border-b">
-          <div>{player.number}</div>
+          <div>{player.number || '-'}</div>
           <Link href={`/players/${isGoalie ? "goalie/" : ""}${player.id}`} className="hover:text-accent">
             <div>{player.name}</div>
           </Link>

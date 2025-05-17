@@ -55,7 +55,6 @@ export interface BaseInfo {
 };
 
 export interface Player extends BaseInfo {
-  number: number;
   games: number;
   points: {
     goals: number;

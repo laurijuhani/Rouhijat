@@ -10,6 +10,7 @@ import Link from "next/link";
 export const columns: ColumnDef<Player>[] = [
   {
     accessorKey: "number",
+    cell : ({ row }) => { return row.original.number || "-"; },
     header: ({ column }) => {      
       return (
         <Button

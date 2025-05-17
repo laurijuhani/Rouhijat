@@ -41,7 +41,7 @@ const PlayersList = ({ user }: { user: User }) => {
             <TableRow key={player.id}>
               <TableCell>{player.name}</TableCell>
               <TableCell>{player.nickname || "-"}</TableCell>
-              <TableCell>{player.number}</TableCell>
+              <TableCell>{player.number || '-'}</TableCell>
               {(user.role === 'admin' || user.role === 'owner') && (
                 <TableCell>
                   <Suspense fallback={<div>Ladataan...</div>}>
@@ -81,7 +81,7 @@ const PlayersList = ({ user }: { user: User }) => {
             <TableRow key={goalie.id}>
               <TableCell>{goalie.name}</TableCell>
               <TableCell>{goalie.nickname || "-"}</TableCell>
-              <TableCell>{goalie.number}</TableCell>
+              <TableCell>{goalie.number || '-'}</TableCell>
               {(user.role === 'admin' || user.role === 'owner') && (
                 <TableCell>
                   <Suspense fallback={<div>Ladataan...</div>}>

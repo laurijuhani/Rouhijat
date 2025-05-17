@@ -19,26 +19,24 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
   const handleSubmit = async () => {
     setIsLoading(true);
 
-    if (!name || !number) {
-      showToast('error', 'Nimi ja numero ovat pakollisia', '');
+    if (!name) {
+      showToast('error', 'Nimi on pakollinen', '');
       setIsLoading(false);
       return;
     }
 
-    if (isNaN(parseInt(number))) {
-      showToast('error', 'Numero on pakollinen ja sen tulee olla numero', '');
+    if (number && isNaN(parseInt(number))) {
+      showToast('error', 'Virheellinen numero', '');
       setIsLoading(false);
       return;
     }
 
 
     if (window.confirm('Lisätäänkö pelaaja?')) {
-      console.log('Lisätään');
-
       try {
         const { json } = await Fetch.post<number>(
           process.env.NEXT_PUBLIC_BACKEND_URL + '/players',
-          { name, nickname, number: parseInt(number) },
+          { name, nickname, number: parseInt(number) || null },
           {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           }
@@ -46,7 +44,7 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
         const id = await json;
 
         setPlayers((prevPlayers) => {
-          return [...prevPlayers, { name, nickname, number: parseInt(number), id, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
+          return [...prevPlayers, { name, nickname, number: parseInt(number) || null, id, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
         });
         showToast('success', 'Pelaaja lisätty', '');
         setIsDialogOpen(false);

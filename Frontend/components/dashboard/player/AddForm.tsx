@@ -61,7 +61,7 @@ const AddForm = ({
             <Label htmlFor="number" className="text-right">
               Numero
             </Label>
-            <Input id="number" placeholder='Pakollinen' type='number' className="col-span-3" onChange={(e) => setNumber(e.target.value)} />
+            <Input id="number" type='number' className="col-span-3" onChange={(e) => setNumber(e.target.value)} />
           </div>
         </div>
         <DialogFooter className="flex flex-row gap-3 justify-end">
