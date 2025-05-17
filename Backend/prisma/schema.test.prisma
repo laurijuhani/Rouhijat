@@ -60,7 +60,7 @@ model Player {
   id       Int     @id @default(autoincrement())
   name     String
   nickname String?
-  number   Int
+  number   Int?
   points   Point[]
   @@map("players")
 }

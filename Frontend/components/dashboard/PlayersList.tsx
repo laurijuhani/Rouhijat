@@ -27,7 +27,7 @@ const PlayersList = ({ user }: { user: User }) => {
   }, [fetchPlayers]);
   
   return (
-    <>
+    <div className="mb-16">
       <Table>
         <TableHeader>
           <TableRow>
@@ -105,10 +105,7 @@ const PlayersList = ({ user }: { user: User }) => {
           </div>
         </Suspense>
       )}
-
-
-
-    </>
+    </div>
   );
 };
 

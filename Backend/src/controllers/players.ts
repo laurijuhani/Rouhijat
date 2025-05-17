@@ -56,9 +56,9 @@ playersRouter.get('/:id', async (req, res) => {
 });
 
 playersRouter.post('/', authenticateToken, async (req, res) => {
-  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number };
+  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number | null };
 
-  if (!name || !number) {
+  if (!name) {
     res.status(400).json({ error: 'missing required fields' });
     return;
   }
@@ -115,7 +115,7 @@ playersRouter.delete('/:id', authenticateToken, async (req, res) => {
 });
 
 playersRouter.put('/:id', authenticateToken, async (req, res) => {
-  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number };
+  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number | null };
   const { id } = req.params;
 
   if (!name || !id) {

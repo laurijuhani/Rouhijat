@@ -69,7 +69,7 @@ export interface BasePlayer {
   id: number;
   name: string;
   nickname: string | null;
-  number: number;
+  number: number | null;
 }
 
 export interface Player extends BasePlayer {
@@ -92,9 +92,4 @@ export interface PlayerData {
   pm: number;
 }
 
-export interface Goalie {
-  id: number;
-  name: string;
-  nickname: string | null;
-  number: number | null;
-}
+export interface Goalie extends BasePlayer {}

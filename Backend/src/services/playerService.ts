@@ -142,7 +142,7 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
 };
 
 
-const createPlayer = async (name: string, nickname: string, number: number) => {
+const createPlayer = async (name: string, nickname: string, number: number | null) => {
   void deleteCacheForPattern("games/*");
   void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.create({
@@ -154,7 +154,7 @@ const createPlayer = async (name: string, nickname: string, number: number) => {
   });
 };
 
-const updatePlayer = async (id: number, name: string, nickname: string, number: number) => {
+const updatePlayer = async (id: number, name: string, nickname: string, number: number | null) => {
   void deleteCacheForPattern("games/*");
   void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.update({
