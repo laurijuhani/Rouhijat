@@ -5,10 +5,12 @@ import { Player } from "@/types/database_types";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import "@/css/columns.css";
+import Link from "next/link";
 
 export const columns: ColumnDef<Player>[] = [
   {
     accessorKey: "number",
+    cell : ({ row }) => { return row.original.number || "-"; },
     header: ({ column }) => {      
       return (
         <Button
@@ -32,6 +34,16 @@ export const columns: ColumnDef<Player>[] = [
   {
     accessorKey: "name",
     header: "Pelaaja",
+    cell: ({ row }) => {
+      return (
+        <Link
+          href={`/players/${row.original.id}`}
+          className="hover:text-accent"
+        >
+          {row.original.name}
+        </Link>   
+      );
+  },
   },
   {
     accessorKey: "games",

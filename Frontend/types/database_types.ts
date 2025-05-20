@@ -18,6 +18,7 @@ export interface Game {
   awayScore: number | null;
   gameDate: string;
   seasonId: number; 
+  goalieId: number | null;
 }
 
 export interface Season {
@@ -40,13 +41,20 @@ export interface GamePoints {
 
 export interface GameAndPoints extends Game {
   points: GamePoints[];
+  goalie: {
+    name: string;
+    number: number;
+  } | null;
 }
 
-export interface Player {
+export interface BaseInfo {
   id: number;
   name: string;
   nickname: string | null;
-  number: number;
+  number: number | null;
+};
+
+export interface Player extends BaseInfo {
   games: number;
   points: {
     goals: number;
@@ -55,9 +63,31 @@ export interface Player {
   };
 }
 
+export interface Goalie extends BaseInfo {
+  games: Game[];
+}
+
 export type PlayerPointsData = {
   playerId: number;
   goals: number;
   assists: number;
   pm: number;
 };
+
+
+
+export interface PlayerStats {
+  id: number;
+  name: string;
+  nickname: string | null;
+  number: number;
+  seasons: {
+    seasonName: string;
+    games: number;
+    points: {
+      goals: number;
+      assists: number;
+      pm: number;
+    };
+  }[];
+}; 

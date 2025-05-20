@@ -44,6 +44,14 @@ const GamePage = async ({ params }: { params: Params }) => {
       </div>
 
       <ShowPoints gamePoints={game.points} />
+
+      {game.goalie && (
+        <div className="flex flex-col items-center mt-8 mb-8">
+          <h2 className="text-xl">Maalivahti:</h2>
+          <p>#{game.goalie.number} {game.goalie.name}</p>
+        </div>
+      )}
+
     </div>
   );
 };

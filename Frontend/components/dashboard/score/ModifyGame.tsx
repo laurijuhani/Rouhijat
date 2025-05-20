@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { format, parse } from "date-fns";
-import { Game, PlayerPointsData, Season } from "@/types/database_types";
+import { Game, Goalie, PlayerPointsData, Season } from "@/types/database_types";
 import { parseDateString, parseTime } from "@/utils/dateparser";
 import { usePlayers } from "@/context/PlayersContext";
 import PlayerPoints from "./PlayerPoints";
@@ -24,6 +24,7 @@ import { checkGamesEqual, modifiedPoints } from "@/utils/gamemodify";
 import GameDetails from "./forms/GameDetails";
 import SeasonSelector from "./forms/SeasonSelector";
 import Fetch from "@/utils/fetch";
+import GoalieSelector from "./forms/GoalieSelector";
 
 interface ModifyGameProps {
   game: Game; 
@@ -33,7 +34,7 @@ interface ModifyGameProps {
 
 
 const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
-  const { players, fetchPlayers } = usePlayers();
+  const { players, fetchPlayers, goalies } = usePlayers();
   const [date, setDate] = useState<Date | undefined>(new Date(game.gameDate));
   const [inputTime, setInputTime] = useState<string>(parseTime(game.gameDate));
   const [inputDate, setInputDate] = useState<string>(parseDateString(game.gameDate));
@@ -42,19 +43,20 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
   const [originalPoints, setOriginalPoints] = useState<PlayerPointsData[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(seasons.find((season) => season.id === game.seasonId) || null);
   const [played, setPlayed] = useState(false);
+  const [selectedGoalie, setSelectedGoalie] = useState<Goalie | null>(null); 
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { showToast } = useToast();
 
-  useEffect(() => {
+  useEffect(() => {  
       setPlayed(Date.now() > (date?.getTime() || Infinity));
       if (played) {
         fetchPlayers();
       }
   }, [date, fetchPlayers, played]);
 
-  useEffect(() => {
+  useEffect(() => {    
     const fetchPlayerPoints = async () => {
       setIsFetching(true);
       try {        
@@ -72,6 +74,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
         });
         setPlayerPoints(points);     
         setOriginalPoints(data);   
+        setSelectedGoalie(goalies.find((goalie) => goalie.id === game.goalieId) || null);
       } catch (error) {
         console.error('Error fetching player points:', error);
       } finally {
@@ -82,7 +85,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
     if (isDialogOpen) {
       fetchPlayerPoints();
     }
-  }, [isDialogOpen, game.id]);
+  }, [isDialogOpen, game.id, game.goalieId, goalies]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -120,9 +123,10 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
       awayScore: awayScore ? parseInt(awayScore) : null,
       gameDate: combinedDateTime?.toISOString() || game.gameDate,
       seasonId: selectedSeason?.id || game.seasonId,
+      goalieId: selectedGoalie?.id || null,
     };
 
-    if (!checkGamesEqual(game, newGame)) {
+    if (!checkGamesEqual(game, newGame)) {      
       try {
         await Fetch.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games/${game.id}`, newGame, {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -254,6 +258,14 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
                         /> 
                       </div>
                     ))}
+
+                    <div className="col-span-4">
+                      <GoalieSelector
+                        goalies={goalies}
+                        selectedGoalie={selectedGoalie}
+                        setSelectedGoalie={setSelectedGoalie}
+                      />
+                    </div>
                     </>
                   )}
                     </div>

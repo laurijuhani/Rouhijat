@@ -33,7 +33,7 @@ const ShowPoints = ({ gamePoints }: { gamePoints: GamePoints[]}) => {
         <TableBody>
           {sortedPoints.map((point, index) => (
             <TableRow key={index}>
-              <TableCell className="py-2">{point.player.number}</TableCell>
+              <TableCell className="py-2">{point.player.number || '-'}</TableCell>
               <TableCell className="py-2">{point.player.name}</TableCell>
               <TableCell className="py-2">{point.goals} + {point.assists} = {point.goals + point.assists}</TableCell>
               <TableCell className="py-2">{point.pm}</TableCell>

@@ -42,6 +42,7 @@ export interface GameRequest {
   awayScore?: number;
   gameDate: string; // Date object as string
   seasonId: number;
+  goalieId?: number;
 }
 
 export interface SignIn {
@@ -68,7 +69,7 @@ export interface BasePlayer {
   id: number;
   name: string;
   nickname: string | null;
-  number: number;
+  number: number | null;
 }
 
 export interface Player extends BasePlayer {
@@ -78,7 +79,7 @@ export interface Player extends BasePlayer {
 
 export interface PlayerPointsBySeason extends BasePlayer {
   seasons: {
-    seasonId: number;
+    seasonName: string;
     games: number;
     points: Points;
   }[];
@@ -90,3 +91,5 @@ export interface PlayerData {
   assists: number;
   pm: number;
 }
+
+export interface Goalie extends BasePlayer {}

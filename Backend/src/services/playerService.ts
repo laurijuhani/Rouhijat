@@ -67,7 +67,7 @@ const getPlayerStatsBySeason = async (playerId: number, seasonId: number) => {
 const getPlayerStatsFromAllSeasons = async (id: number): Promise<PlayerPointsBySeason | null> => {
   const seasons = await seasonService.getSeasons();
 
-  const seasonStats: {seasonId: number, games: number, points: Points}[] = [];
+  const seasonStats: {seasonName: string, games: number, points: Points}[] = [];
   let playerBase: BasePlayer | null = null;
   for (const season of seasons) {
     const player = await getPlayerStatsBySeason(id, season.id);
@@ -82,7 +82,7 @@ const getPlayerStatsFromAllSeasons = async (id: number): Promise<PlayerPointsByS
       }
 
       seasonStats.push({
-        seasonId: season.id,
+        seasonName: season.name,
         games: player.games,
         points: player.points,
       });
@@ -142,7 +142,7 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
 };
 
 
-const createPlayer = async (name: string, nickname: string, number: number) => {
+const createPlayer = async (name: string, nickname: string, number: number | null) => {
   void deleteCacheForPattern("games/*");
   void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.create({
@@ -154,7 +154,7 @@ const createPlayer = async (name: string, nickname: string, number: number) => {
   });
 };
 
-const updatePlayer = async (id: number, name: string, nickname: string, number: number) => {
+const updatePlayer = async (id: number, name: string, nickname: string, number: number | null) => {
   void deleteCacheForPattern("games/*");
   void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.update({

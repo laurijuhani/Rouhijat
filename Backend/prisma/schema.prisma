@@ -49,6 +49,8 @@ model Game {
   awayScore Int? @map("away_score")
   gameDate  DateTime @map("game_date")
   seasonId  Int     @map("seasonid")
+  goalieId  Int?    @map("goalieid")
+  goalie    Goalie? @relation(fields: [goalieId], references: [id])
   season    Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
   points    Point[]
   @@map("games")
@@ -58,9 +60,18 @@ model Player {
   id       Int     @id @default(autoincrement())
   name     String
   nickname String?
-  number   Int
+  number   Int?
   points   Point[]
   @@map("players")
+}
+
+model Goalie {
+  id      Int     @id @default(autoincrement())
+  name    String
+  nickname String?
+  number  Int?
+  games   Game[] 
+  @@map("goalies")
 }
 
 model Point {
