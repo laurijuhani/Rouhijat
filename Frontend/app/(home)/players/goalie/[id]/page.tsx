@@ -53,7 +53,9 @@ const Page = async ({ params }: { params: Params }) => {
         {goalie.nickname && (
           <p className="text-xl">Lempinimi: {goalie.nickname}</p>
         )}
-        <p className="text-xl">Pelinumero: {goalie.number}</p>
+        {goalie.number && (
+          <p className="text-xl">Pelinumero: {goalie.number}</p>
+        )}
       </div>
 
       <div className="flex flex-col items-center mt-8 mb-8">

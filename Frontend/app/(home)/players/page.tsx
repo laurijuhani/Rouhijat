@@ -9,7 +9,16 @@ const fetchPlayers = async () => {
     if (!res.ok) {
       throw new Error("Failed to fetch players");
     }
-    return res.json(); 
+
+    const data: Player[] = await res.json();
+
+
+    return data.sort((a, b) => {
+      if (a.number === null && b.number === null) return 0;
+      if (a.number === null) return 1;
+      if (b.number === null) return -1;
+      return a.number - b.number;
+    }); 
   } catch (error) {
     console.error("Error fetching players:", error);
     return [];
@@ -24,7 +33,14 @@ const fetchGoalies = async () => {
     if (!res.ok) {
       throw new Error("Failed to fetch players");
     }
-    return res.json(); 
+
+    const data: Goalie[] = await res.json();
+    return data.sort((a, b) => {
+      if (a.number === null && b.number === null) return 0;
+      if (a.number === null) return 1;
+      if (b.number === null) return -1;
+      return a.number - b.number;
+    });
   } catch (error) {
     console.error("Error fetching players:", error);
     return [];
