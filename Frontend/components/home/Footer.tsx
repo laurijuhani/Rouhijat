@@ -64,7 +64,7 @@ const Footer = () => {
                 <p className="font-semibold">Yhteystiedot</p>
 
                 <div className="flex flex-col items-start mt-5 space-y-2">
-                    <a href="#" className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:text-blue-500">santapaperiosasto@rouhijat.fi</a>
+                    <a href="mailto:santapaperiosasto@rouhijat.fi" className="transition-colors duration-300 text-gray-300 hover:underline hover:text-accent">santapaperiosasto@rouhijat.fi</a>
                 </div>
             </div>
         </div>

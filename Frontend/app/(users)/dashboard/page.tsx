@@ -14,6 +14,7 @@ import { PlayersProvider } from "@/context/PlayersContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { InfoIcon } from "lucide-react";
 import RedisReset from "@/components/dashboard/RedisReset";
+import ManualFetch from "@/components/dashboard/ManualFetch";
 
 const UsersList = lazy(() => import("@/components/dashboard/UsersList"));
 const PlayersList = lazy(() => import("@/components/dashboard/PlayersList"));
@@ -35,8 +36,9 @@ const Page = ({ user }: { user: User }) => {
 
 
         {(user.role === "admin" || user.role === "owner") && (
-          <div className="my-4 justify-center flex">
+          <div className="my-4 justify-center flex gap-4">
             <RedisReset />
+            <ManualFetch />
           </div>
           )}
 

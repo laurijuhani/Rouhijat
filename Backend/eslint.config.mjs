@@ -25,6 +25,7 @@ export default [
         require: 'readonly',
         global: 'readonly',
         jest: 'readonly',
+        fetch: 'readonly',
       },
     },
     plugins: {

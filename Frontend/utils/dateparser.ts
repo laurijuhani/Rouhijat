@@ -59,3 +59,14 @@ export const parseTime = (date: string): string => {
   const minutes = dateObj.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 };
+
+export const formatInstagramDate = (timestamp: number): string => {
+   const date = new Date(timestamp.toString().length === 10 ? timestamp * 1000 : timestamp);
+  return date.toLocaleString("fi-FI", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};

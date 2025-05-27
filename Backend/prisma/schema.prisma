@@ -85,3 +85,49 @@ model Point {
   @@id([playerId, gameId])
   @@map("points")
 }
+
+model Profile {
+  id       String   @id 
+  username String   @unique
+  full_name String
+  profile_pic_url String @map("profile_pic_url")
+  profile_pic_url_hd String @map("profile_pic_url_hd")
+  biography String
+  category_name String @map("category_name")
+  followers Int
+  following Int
+  number_of_posts Int @map("number_of_posts")
+  @@map("ig_profiles")
+}
+
+
+model Post {
+  id       String    @id
+  taken_at_timestamp Int @map("taken_at_timestamp")
+  comment_count Int @map("comment_count")
+  likes Int
+  caption String
+  pictures Picture[]
+  videos Video[]
+  @@map("ig_posts")
+}
+
+
+model Picture {
+  id      String   @id
+  display_url      String @map("display_url")
+  order   Int
+  postId   String  @map("post_id")
+  post     Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@map("ig_pictures")
+}
+
+model Video {
+  id      String   @id
+  display_url      String @map("display_url")
+  video_url      String @map("video_url")
+  order   Int
+  postId   String  @map("post_id")
+  post     Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@map("ig_videos")
+}
