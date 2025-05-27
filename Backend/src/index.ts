@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { unknownEndpoint, errorHandler } from './utils/middleware';
 
-import './utils/cronJobs'; // Import cron jobs to start them
 import { generalRateLimiter, loginRateLimiter } from './utils/rateLimiter';
 import gamesRouter from './controllers/games';
 import invitesRouter from './controllers/invites';
@@ -48,13 +47,16 @@ app.use((err: Error, req: express.Request, res: express.Response) => {
   errorHandler(err, req, res);
 });
 
-export { app }; 
+export { app };
 
 if (process.env.NODE_ENV !== 'test') {
+  // Import cron jobs only when not in test mode
+  require('./utils/cronJobs');
+
   // Flush Redis cache on startup
   (async () => {
     try {
-      await redisClient.flushAll(); 
+      await redisClient.flushAll();
     } catch (error) {
       logger.error('Failed to flush Redis cache:', error);
     }
