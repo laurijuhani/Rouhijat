@@ -91,3 +91,39 @@ export interface PlayerStats {
     };
   }[];
 }; 
+
+export interface Profile  {
+  id: string; 
+  username: string;
+  full_name: string;
+  profile_pic_url: string;
+  profile_pic_url_hd: string;
+  biography: string;
+  category_name: string;
+  number_of_posts: number;
+  followers: number; 
+  following: number; 
+};
+
+export interface IGPost {
+  id: string;
+  taken_at_timestamp: number; 
+  comment_count: number;
+  caption: string; 
+  likes: number;
+  pictures: Picture[];
+  videos: Video[];
+}
+
+export interface Picture {
+  id: string; 
+  display_url: string;
+  order: number; // order in the post 
+}
+
+export interface Video {
+  id: string; 
+  display_url: string;
+  video_url: string;
+  order: number; // order in the post 
+}

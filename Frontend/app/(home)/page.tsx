@@ -2,6 +2,7 @@ import Games from "@/components/home/Games";
 import Image from "next/image";
 import { Suspense } from "react";
 import Loading from "../loading";
+import Feed from "@/components/instagram/Feed";
 
 export default function Home() {
   return (
@@ -21,6 +22,9 @@ export default function Home() {
       <div className="pt-8">
         <Suspense fallback={<Loading />}>
           <Games />
+        </Suspense>
+        <Suspense fallback={<Loading />}>
+          <Feed />
         </Suspense>
       </div>
   

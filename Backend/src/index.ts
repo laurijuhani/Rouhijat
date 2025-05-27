@@ -16,6 +16,7 @@ import authenticateRouter from './controllers/authenticate';
 import clientIp from './utils/clientIp';
 import redisClient from './utils/redisClient';
 import logger from './utils/logger';
+import postsRouter from './controllers/posts';
 
 
 const app = express();
@@ -36,6 +37,7 @@ apiRouter.use('/players', playersRouter);
 apiRouter.use('/points', pointsRouter);
 apiRouter.use('/seasons', seasonsRouter);
 apiRouter.use('/goalies', goaliesRouter);
+apiRouter.use('/posts', postsRouter);
 
 app.use('/api/v1', apiRouter);
 
@@ -45,13 +47,16 @@ app.use((err: Error, req: express.Request, res: express.Response) => {
   errorHandler(err, req, res);
 });
 
-export { app }; 
+export { app };
 
 if (process.env.NODE_ENV !== 'test') {
+  // Import cron jobs only when not in test mode
+  require('./utils/cronJobs');
+
   // Flush Redis cache on startup
   (async () => {
     try {
-      await redisClient.flushAll(); 
+      await redisClient.flushAll();
     } catch (error) {
       logger.error('Failed to flush Redis cache:', error);
     }

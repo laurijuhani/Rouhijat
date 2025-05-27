@@ -93,3 +93,91 @@ export interface PlayerData {
 }
 
 export interface Goalie extends BasePlayer {}
+
+
+export interface PictureEdge {
+  node: {
+    id: string;
+    display_url: string;
+    is_video: boolean; 
+    video_url?: string; 
+  }
+}
+
+export interface PictureParseData {
+  node: {
+    id: string;
+    shortcode: string;
+    display_url: string;
+    is_video: boolean;
+    video_url?: string;
+    taken_at_timestamp: number;
+    edge_media_to_comment: {
+      count: number;
+    };
+    edge_liked_by: {
+      count: number;
+    }
+    edge_media_to_caption: {
+      edges: {
+        node: {
+          text: string
+        };
+      }[];
+    };
+    edge_sidecar_to_children?: {
+      edges: PictureEdge[];
+    };
+  };
+}
+
+export interface BaseProfile {
+  id: string; 
+  username: string;
+  full_name: string;
+  profile_pic_url: string;
+  profile_pic_url_hd: string;
+  biography: string;
+  category_name: string; 
+  
+}
+
+export interface Profile extends BaseProfile {
+  number_of_posts: number;
+  followers: number; 
+  following: number; 
+};
+export interface ProfileData extends BaseProfile {
+  edge_owner_to_timeline_media: {
+    count: number;
+    edges: PictureParseData[];
+  };
+  edge_followed_by: {
+    count: number;
+  };
+  edge_follow: {
+    count: number;
+  };
+}
+export interface IGPost {
+  id: string;
+  taken_at_timestamp: number; 
+  comment_count: number;
+  caption: string; 
+  likes: number;
+  pictures: Picture[];
+  videos: Video[];
+}
+
+export interface Picture {
+  id: string; 
+  display_url: string;
+  order: number; // order in the post 
+}
+
+export interface Video {
+  id: string; 
+  display_url: string;
+  video_url: string;
+  order: number; // order in the post 
+}
