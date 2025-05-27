@@ -13,6 +13,7 @@ const ProfileView = ({ profile }: { profile: Profile }) => {
             alt={`${profile.username}'s profile picture`}
             width={80}
             height={80}
+            unoptimized
             />
         </Link>
 

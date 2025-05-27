@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
         hostname: 'instagram.*.fbcdn.net',
         pathname: '/**',
       },
-    ]
+    ],
   },
   output: "standalone",
 };
