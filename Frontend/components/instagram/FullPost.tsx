@@ -60,13 +60,19 @@ const FullPost = ({ pictures, videos, likes, comment_count, caption }: FullPostP
           {mediaItems.map((item) => (
             <CarouselItem key={item.id} className="flex items-center justify-center">
               {item.type === "picture" ? (
-                <Image src={item.display_url} alt="" width={500} height={500} className="rounded"  unoptimized/>
+                <Image 
+                  src={process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL + item.display_url} 
+                  alt="" 
+                  width={500} 
+                  height={500} 
+                  className="rounded" 
+                />
               ) : (
                 <video
                   controls
                   autoPlay
                   muted
-                  src={(item as Video).video_url}
+                  src={process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL +  (item as Video).video_url}
                   className="w-full rounded"
                 />
               )}

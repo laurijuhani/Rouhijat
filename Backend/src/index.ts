@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 import { unknownEndpoint, errorHandler } from './utils/middleware';
@@ -38,6 +39,8 @@ apiRouter.use('/points', pointsRouter);
 apiRouter.use('/seasons', seasonsRouter);
 apiRouter.use('/goalies', goaliesRouter);
 apiRouter.use('/posts', postsRouter);
+
+apiRouter.use('/media', express.static(path.join(__dirname, '..', 'media')));
 
 app.use('/api/v1', apiRouter);
 
