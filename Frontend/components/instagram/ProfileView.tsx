@@ -2,18 +2,17 @@ import { Profile } from "@/types/database_types";
 import Image from "next/image";
 import Link from "next/link";
 
-const ProfileView = ({ profile }: { profile: Profile }) => {
+const ProfileView = ({ profile }: { profile: Profile }) => {  
   return (
     <div className="flex flex-col w-fit mx-auto">
       <div className="flex flex-row mt-8 justify-center">
         <Link href={`https://www.instagram.com/${profile.username}`} target="_blank" rel="noopener noreferrer">
           <Image
             className="rounded-full h-20 w-20 mt-4"
-            src={profile.profile_pic_url_hd || profile.profile_pic_url}
+            src={process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL + (profile.profile_pic_url_hd || profile.profile_pic_url)}
             alt={`${profile.username}'s profile picture`}
             width={80}
             height={80}
-            unoptimized
             />
         </Link>
 

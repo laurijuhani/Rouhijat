@@ -14,6 +14,12 @@ const nextConfig: NextConfig = {
         hostname: 'instagram.*.fbcdn.net',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3003',
+        pathname: '/**',
+      }
     ],
   },
   output: "standalone",
