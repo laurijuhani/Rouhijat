@@ -15,12 +15,20 @@ const Post = ({ post }: { post: IGPost }) => {
     return post.videos && post.videos.length > 0 ? post.videos[0].display_url : "";
   };
 
+  if (!post || !post.pictures || post.pictures.length === 0) {
+    return null; // Don't render anything if there's no post or pictures
+  }
+
+  if (!firstImageUrl()) {
+    return null; // Don't render if there's no valid image URL
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <div className="relative group cursor-pointer">
           <Image
-            src={process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL + firstImageUrl()}
+            src={process.env.NEXT_PUBLIC_PRIVATE_BACKEND_URL + firstImageUrl()}
             alt="Instagram post image"
             width={400}
             height={400}

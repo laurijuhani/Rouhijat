@@ -18,7 +18,7 @@ describe("Invites Router", () => {
   describe("GET /invites", () => {
     it("should return all invites", async () => {
       const response: Response = await request(app)
-        .get("/api/v1/invites")
+        .get("/api/v1/public/invites")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(200);
@@ -27,7 +27,7 @@ describe("Invites Router", () => {
 
     it("should return 401 if unauthorized", async () => {
       const response: Response = await request(app)
-        .get("/api/v1/invites");
+        .get("/api/v1/public/invites");
 
       expect(response.status).toBe(401);
     });
@@ -41,7 +41,7 @@ describe("Invites Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/invites")
+        .post("/api/v1/public/invites")
         .set("Authorization", "bearer admin")
         .send(newInvite);
       expect(response.status).toBe(201);
@@ -55,7 +55,7 @@ describe("Invites Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/invites")
+        .post("/api/v1/public/invites")
         .send(newInvite);
 
       expect(response.status).toBe(401);
@@ -72,7 +72,7 @@ describe("Invites Router", () => {
       });
       
       const response: Response = await request(app)
-        .delete("/api/v1/invites/test@test.com")
+        .delete("/api/v1/public/invites/test@test.com")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(204);
@@ -80,7 +80,7 @@ describe("Invites Router", () => {
 
     it("should return 401 if unauthorized", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/invites/test@test.com");
+        .delete("/api/v1/public/invites/test@test.com");
 
       expect(response.status).toBe(401);
     });
