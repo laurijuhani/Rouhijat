@@ -17,7 +17,7 @@ import authenticateRouter from './controllers/authenticate';
 import clientIp from './utils/clientIp';
 import redisClient from './utils/redisClient';
 import logger from './utils/logger';
-import postsRouter from './controllers/posts';
+import { internalPostsRouter, postsRouter} from './controllers/posts';
 
 
 const app = express();
@@ -29,6 +29,7 @@ app.use(clientIp);
 app.use(generalRateLimiter);
 
 const apiRouter = express.Router();
+const internalRouter = express.Router();
 
 apiRouter.use('/games', gamesRouter);
 apiRouter.use('/invites', invitesRouter);
@@ -40,9 +41,12 @@ apiRouter.use('/seasons', seasonsRouter);
 apiRouter.use('/goalies', goaliesRouter);
 apiRouter.use('/posts', postsRouter);
 
-apiRouter.use('/media', express.static(path.join(__dirname, '..', 'media')));
+app.use('/api/v1/public', apiRouter);
 
-app.use('/api/v1', apiRouter);
+internalRouter.use('/media', express.static(path.join(__dirname, '..', 'media')));
+internalRouter.use('/posts', internalPostsRouter);
+
+app.use('/api/v1/internal', internalRouter);
 
 app.use(unknownEndpoint);
 

@@ -7,9 +7,10 @@ import { CustomRequest } from "../utils/types";
 
 
 const postsRouter = Router();
+const internalPostsRouter = Router();
 
 
-postsRouter.get('/', async (_req, res) => {
+internalPostsRouter.get('/', async (_req, res) => {
   try {
     const profile = await postsService.getProfileData();
     const posts = await postsService.getPostsData();
@@ -46,4 +47,4 @@ postsRouter.post('/fetch', authenticateToken, async (req: CustomRequest, res) =>
 
 
 
-export default postsRouter;
+export { postsRouter, internalPostsRouter };

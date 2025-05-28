@@ -5,7 +5,7 @@ import Post from "./Post";
 
 const fetchInstagramData = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/posts`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_PRIVATE_BACKEND_URL}/posts`, {
       next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, // Use revalidate for successful fetch
     });
     
@@ -16,7 +16,7 @@ const fetchInstagramData = async () => {
   } catch (error) {
     console.error("Error fetching Instagram data:", error);
     // Retry immediately on the next load by forcing a fresh fetch
-    const retryRes = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/posts`, {
+    const retryRes = await fetch(`${process.env.NEXT_PUBLIC_PRIVATE_BACKEND_URL}/posts`, {
       cache: 'no-store', // Force fresh fetch
     });
     if (!retryRes.ok) {
@@ -35,6 +35,8 @@ const Feed = async () => {
   } catch {
     return; // Don't render anything if there's an error
   }
+
+ 
   return (
     <div>
       <h1 className="text-2xl font-bold text-center mt-4">Instagram</h1>
