@@ -21,14 +21,14 @@ describe("Games Router", () => {
 
   describe("GET /games", () => {
     it("should return all games", async () => {
-      const response: Response = await request(app).get("/api/v1/games");
+      const response: Response = await request(app).get("/api/v1/public/games");
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(8);
     });
 
     it("should return 200 and the correct game if it exists", async () => {
-      const response: Response = await request(app).get("/api/v1/games/1");
+      const response: Response = await request(app).get("/api/v1/public/games/1");
       
       expect(response.status).toBe(200);
       expect(response.body.homeTeam).toBe("Team A");
@@ -42,7 +42,7 @@ describe("Games Router", () => {
     });
 
     it("should return 404 if the game does not exist", async () => {
-      const response: Response = await request(app).get("/api/v1/games/999");
+      const response: Response = await request(app).get("/api/v1/public/games/999");
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe("game not found");
@@ -52,21 +52,21 @@ describe("Games Router", () => {
 
   describe("GET /games/season/:id", () => {
     it("should return all games for a specific season", async () => {
-      const response: Response = await request(app).get("/api/v1/games/season/1");
+      const response: Response = await request(app).get("/api/v1/public/games/season/1");
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(2);
     });
 
     it("should return 404 if the season does not exist", async () => {
-      const response: Response = await request(app).get("/api/v1/games/season/999");
+      const response: Response = await request(app).get("/api/v1/public/games/season/999");
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe("game not found");
     });
 
     it("should return all games for the current season", async () => {
-      const response: Response = await request(app).get("/api/v1/games/season/current");
+      const response: Response = await request(app).get("/api/v1/public/games/season/current");
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(2);
@@ -87,7 +87,7 @@ describe("Games Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/games")
+        .post("/api/v1/public/games")
         .set("Authorization", "bearer admin")
         .send(newGame);
 
@@ -106,7 +106,7 @@ describe("Games Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/games")
+        .post("/api/v1/public/games")
         .send(newGame);
 
       expect(response.status).toBe(401);
@@ -126,7 +126,7 @@ describe("Games Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/games/1")
+        .put("/api/v1/public/games/1")
         .set("Authorization", "bearer admin")
         .send(updatedGame);
 
@@ -144,7 +144,7 @@ describe("Games Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/games/999")
+        .put("/api/v1/public/games/999")
         .set("Authorization", "bearer admin")
         .send(updatedGame);
 
@@ -157,7 +157,7 @@ describe("Games Router", () => {
   describe("DELETE /games/:id", () => {
     it("should delete an existing game", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/games/1")
+        .delete("/api/v1/public/games/1")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(204);
@@ -165,7 +165,7 @@ describe("Games Router", () => {
 
     it("should return 404 if the game does not exist", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/games/999")
+        .delete("/api/v1/public/games/999")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(404);

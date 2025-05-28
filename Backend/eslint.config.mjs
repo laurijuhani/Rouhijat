@@ -8,6 +8,7 @@ export default [
       '**/generated/**', 
       '**/node_modules/**',
       'src/jest.setup.ts',
+      'build/**',
     ],
   },
   {

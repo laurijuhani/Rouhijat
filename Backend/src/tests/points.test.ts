@@ -21,7 +21,7 @@ describe("Points Router", () => {
 
   describe("GET /points/:id", () => {
     it("should return all points for a specific game", async () => {
-      const response: Response = await request(app).get("/api/v1/points/1")
+      const response: Response = await request(app).get("/api/v1/public/points/1")
       .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(200);
@@ -33,7 +33,7 @@ describe("Points Router", () => {
     });
 
     it("should return 404 if the game does not exist", async () => {
-      const response: Response = await request(app).get("/api/v1/points/999")
+      const response: Response = await request(app).get("/api/v1/public/points/999")
       .set("Authorization", "bearer admin"); 
 
       expect(response.status).toBe(404);
@@ -62,7 +62,7 @@ describe("Points Router", () => {
       ];
 
       const response: Response = await request(app)
-        .post("/api/v1/points/10")
+        .post("/api/v1/public/points/10")
         .set("Authorization", "bearer admin")
         .send({ playerData });
 
@@ -78,7 +78,7 @@ describe("Points Router", () => {
 
     it("should return 400 if playerData is missing", async () => {
       const response: Response = await request(app)
-        .post("/api/v1/points/1")
+        .post("/api/v1/public/points/1")
         .set("Authorization", "bearer admin")
         .send({});
 
@@ -93,7 +93,7 @@ describe("Points Router", () => {
       ];
 
       const response: Response = await request(app)
-        .post("/api/v1/points/1")
+        .post("/api/v1/public/points/1")
         .send({ playerData });
 
       expect(response.status).toBe(401);
@@ -106,7 +106,7 @@ describe("Points Router", () => {
       ];
 
       const response: Response = await request(app)
-        .post("/api/v1/points/999")
+        .post("/api/v1/public/points/999")
         .set("Authorization", "bearer admin")
         .send({ playerData });
 
@@ -123,7 +123,7 @@ describe("Points Router", () => {
       ];
 
       const response: Response = await request(app)
-        .put("/api/v1/points/1")
+        .put("/api/v1/public/points/1")
         .set("Authorization", "bearer admin")
         .send({ playerData });
 
@@ -139,7 +139,7 @@ describe("Points Router", () => {
 
     it("should return 400 if playerData is missing", async () => {
       const response: Response = await request(app)
-        .put("/api/v1/points/1")
+        .put("/api/v1/public/points/1")
         .set("Authorization", "bearer admin")
         .send({});
 
@@ -154,7 +154,7 @@ describe("Points Router", () => {
       ];
 
       const response: Response = await request(app)
-        .put("/api/v1/points/1")
+        .put("/api/v1/public/points/1")
         .send({ playerData });
 
       expect(response.status).toBe(401);
@@ -167,7 +167,7 @@ describe("Points Router", () => {
       ];
 
       const response: Response = await request(app)
-        .put("/api/v1/points/999")
+        .put("/api/v1/public/points/999")
         .set("Authorization", "bearer admin")
         .send({ playerData });
 

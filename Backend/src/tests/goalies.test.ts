@@ -21,7 +21,7 @@ describe("Goalies Router", () => {
 
   describe("GET /goalies", () => {
     it("should return all goalies", async () => {
-      const response: Response = await request(app).get("/api/v1/goalies");
+      const response: Response = await request(app).get("/api/v1/public/goalies");
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(3);
@@ -33,7 +33,7 @@ describe("Goalies Router", () => {
 
   describe("GET /goalies/:id", () => {
     it("should return a goalie by id", async () => {
-      const response: Response = await request(app).get("/api/v1/goalies/2");
+      const response: Response = await request(app).get("/api/v1/public/goalies/2");
 
       expect(response.status).toBe(200);
       expect(response.body.name).toBe("Goalie B");
@@ -42,14 +42,14 @@ describe("Goalies Router", () => {
     });
 
     it("should return 404 if the goalie does not exist", async () => {
-      const response: Response = await request(app).get("/api/v1/goalies/999");
+      const response: Response = await request(app).get("/api/v1/public/goalies/999");
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe("goalie not found");
     });
 
     it("should return 400 if the id is not a number", async () => {
-      const response: Response = await request(app).get("/api/v1/goalies/abc");
+      const response: Response = await request(app).get("/api/v1/public/goalies/abc");
 
       expect(response.status).toBe(400);
       expect(response.body.error).toBe("malformatted id");
@@ -66,7 +66,7 @@ describe("Goalies Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/goalies")
+        .post("/api/v1/public/goalies")
         .set("Authorization", "bearer admin")
         .send(newGoalie);
 
@@ -81,7 +81,7 @@ describe("Goalies Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/goalies")
+        .post("/api/v1/public/goalies")
         .set("Authorization", "bearer admin")
         .send(newGoalie);
 
@@ -97,7 +97,7 @@ describe("Goalies Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/goalies")
+        .post("/api/v1/public/goalies")
         .send(newGoalie);
 
       expect(response.status).toBe(401);
@@ -113,7 +113,7 @@ describe("Goalies Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/goalies/1")
+        .put("/api/v1/public/goalies/1")
         .set("Authorization", "bearer admin")
         .send(updatedGoalie);
 
@@ -131,7 +131,7 @@ describe("Goalies Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/goalies/999")
+        .put("/api/v1/public/goalies/999")
         .set("Authorization", "bearer admin")
         .send(updatedGoalie);
 
@@ -147,7 +147,7 @@ describe("Goalies Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/goalies/abc")
+        .put("/api/v1/public/goalies/abc")
         .set("Authorization", "bearer admin")
         .send(updatedGoalie);
 
@@ -163,7 +163,7 @@ describe("Goalies Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/goalies/1")
+        .put("/api/v1/public/goalies/1")
         .send(updatedGoalie);
 
       expect(response.status).toBe(401);
@@ -173,7 +173,7 @@ describe("Goalies Router", () => {
   describe("DELETE /goalies/:id", () => {
     it("should delete a goalie", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/goalies/2")
+        .delete("/api/v1/public/goalies/2")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(204);
@@ -181,7 +181,7 @@ describe("Goalies Router", () => {
 
     it("should return 404 if the goalie does not exist", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/goalies/999")
+        .delete("/api/v1/public/goalies/999")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(404);
@@ -190,7 +190,7 @@ describe("Goalies Router", () => {
 
     it("should return 400 if the id is not a number", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/goalies/abc")
+        .delete("/api/v1/public/goalies/abc")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(400);
@@ -200,7 +200,7 @@ describe("Goalies Router", () => {
   describe("DELETE /goalies/:id without authentication", () => {
     it("should return 401 if not authenticated", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/goalies/2");
+        .delete("/api/v1/public/goalies/2");
 
       expect(response.status).toBe(401);
     });

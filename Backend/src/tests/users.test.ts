@@ -18,7 +18,7 @@ describe("Users Router", () => {
   describe("PUT /changerole", () => {
     it("should return 401 if the user is not authorized", async () => {
       const response: Response = await request(app)
-        .put("/api/v1/users/changerole")
+        .put("/api/v1/public/users/changerole")
         .send({ id: "1", role: "admin" });
 
       expect(response.status).toBe(401);
@@ -27,7 +27,7 @@ describe("Users Router", () => {
 
     it("should return 400 if parameters are missing", async () => {
       const response = await request(app)
-        .put("/api/v1/users/changerole")
+        .put("/api/v1/public/users/changerole")
         .set("Authorization", "bearer admin")
         .send({}); // Missing `id` and `role`
 
@@ -37,7 +37,7 @@ describe("Users Router", () => {
 
     it("should return 404 if the user to modify is not found", async () => {
       const response = await request(app)
-        .put("/api/v1/users/changerole")
+        .put("/api/v1/public/users/changerole")
         .set("Authorization", "bearer admin")
         .send({ id: "nonexistent-id", role: "admin" });
 
@@ -58,7 +58,7 @@ describe("Users Router", () => {
       });
 
       const response = await request(app)
-        .put("/api/v1/users/changerole")
+        .put("/api/v1/public/users/changerole")
         .set("Authorization", "bearer admin")
         .send({ id: testUser.id, role: "admin" });
 
@@ -73,7 +73,7 @@ describe("Users Router", () => {
 
   describe("GET /", () => {
     it("should return 401 if the user is not authenticated", async () => {
-      const response = await request(app).get("/api/v1/users");
+      const response = await request(app).get("/api/v1/public/users");
 
       expect(response.status).toBe(401);
       expect(response.body.error).toBe("Unauthorized");
@@ -89,7 +89,7 @@ describe("Users Router", () => {
       });
 
       const response = await request(app)
-                              .get("/api/v1/users")
+                              .get("/api/v1/public/users")
                               .set("Authorization", "bearer admin");
       expect(response.status).toBe(200);
       expect(response.body).toEqual([

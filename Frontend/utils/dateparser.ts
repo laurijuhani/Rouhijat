@@ -55,9 +55,12 @@ export const parseDateString = (date: string): string => {
 
 export const parseTime = (date: string): string => {
   const dateObj = new Date(date);
-  const hours = dateObj.getHours().toString().padStart(2, '0');
-  const minutes = dateObj.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
+  return dateObj.toLocaleTimeString("fi-FI", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Europe/Helsinki",
+  });
 };
 
 export const formatInstagramDate = (timestamp: number): string => {

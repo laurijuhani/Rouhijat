@@ -21,7 +21,7 @@ describe("Players Router", () => {
 
   describe("GET /players/season/:id", () => {
     it("should return all players for a specific season", async () => {
-      const response: Response = await request(app).get("/api/v1/players/season/1");
+      const response: Response = await request(app).get("/api/v1/public/players/season/1");
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(4);
@@ -34,7 +34,7 @@ describe("Players Router", () => {
     });
 
     it("should return 404 if the season does not exist", async () => {
-      const response: Response = await request(app).get("/api/v1/players/season/999");
+      const response: Response = await request(app).get("/api/v1/public/players/season/999");
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe("season not found");
@@ -43,7 +43,7 @@ describe("Players Router", () => {
 
   describe("GET /players/:id", () => {
     it("should return a player with all seasons stats", async () => {
-      const response: Response = await request(app).get("/api/v1/players/2");
+      const response: Response = await request(app).get("/api/v1/public/players/2");
 
       expect(response.status).toBe(200);
       expect(response.body.name).toBe("Player B");
@@ -57,7 +57,7 @@ describe("Players Router", () => {
     });
 
     it("should return 404 if the player does not exist", async () => {
-      const response: Response = await request(app).get("/api/v1/players/999");
+      const response: Response = await request(app).get("/api/v1/public/players/999");
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe("player not found");
@@ -73,7 +73,7 @@ describe("Players Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/players")
+        .post("/api/v1/public/players")
         .set("Authorization", "bearer admin")
         .send(newPlayer);
 
@@ -88,7 +88,7 @@ describe("Players Router", () => {
         number: 99,
       };
       const response: Response = await request(app)
-        .post("/api/v1/players")
+        .post("/api/v1/public/players")
         .send(newPlayer);
       expect(response.status).toBe(401);
     });
@@ -100,7 +100,7 @@ describe("Players Router", () => {
       };
 
       const response: Response = await request(app)
-        .post("/api/v1/players")
+        .post("/api/v1/public/players")
         .set("Authorization", "bearer admin")
         .send(newPlayer);
 
@@ -114,7 +114,7 @@ describe("Players Router", () => {
   describe("DELETE /players/:id", () => {
     it("should delete a player", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/players/2")
+        .delete("/api/v1/public/players/2")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(204);
@@ -122,14 +122,14 @@ describe("Players Router", () => {
 
     it("should return 401 if not authenticated", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/players/2");
+        .delete("/api/v1/public/players/2");
 
       expect(response.status).toBe(401);
     });
 
     it("should return 404 if the player does not exist", async () => {
       const response: Response = await request(app)
-        .delete("/api/v1/players/999")
+        .delete("/api/v1/public/players/999")
         .set("Authorization", "bearer admin");
 
       expect(response.status).toBe(404);
@@ -147,7 +147,7 @@ describe("Players Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/players/2")
+        .put("/api/v1/public/players/2")
         .set("Authorization", "bearer admin")
         .send(updatedPlayer);
 
@@ -162,7 +162,7 @@ describe("Players Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/players/2")
+        .put("/api/v1/public/players/2")
         .send(updatedPlayer);
 
       expect(response.status).toBe(401);
@@ -176,7 +176,7 @@ describe("Players Router", () => {
       };
 
       const response: Response = await request(app)
-        .put("/api/v1/players/999")
+        .put("/api/v1/public/players/999")
         .set("Authorization", "bearer admin")
         .send(updatedPlayer);
 
