@@ -14,9 +14,9 @@ const GameCard = ({ game }: { game: Game} ) => {
       <CardContent className="absolute top-[5.5rem] left-1/2 transform -translate-x-1/2 w-full">
         <div className="flex flex-col items-center justify-center">
           <div className="flex flex-row gap-1">
-            <p>{game.homeTeam}</p>
-            -
-            <p>{game.awayTeam}</p>
+            <p className="flex items-center">{game.homeTeam}</p>
+            <p className="flex items-center">-</p>
+            <p className="">{game.awayTeam}</p>
           </div>
           {new Date(game.gameDate) < new Date() && (            
             <div className="text-center mt-4">

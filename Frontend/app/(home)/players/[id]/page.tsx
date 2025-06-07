@@ -69,7 +69,6 @@ const Page = async ({ params }: { params: Params }) => {
               <p>Ottelut: {season.games}</p>
               <p>Maalit: {season.points.goals}</p>
               <p>Syötöt: {season.points.assists}</p>
-              <p>+/-: {season.points.pm}</p>
             </div>
           ))}
         </div>
