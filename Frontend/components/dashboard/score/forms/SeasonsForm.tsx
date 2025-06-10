@@ -5,6 +5,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { Season } from "@/types/database_types";
 import ModifySeason from "./ModifySeason";
 import Fetch from "@/utils/fetch";
+import Cookies from "js-cookie";
 
 
 interface SeasonsFormProps {
@@ -27,7 +28,7 @@ const SeasonsForm = ({ seasons, setSeasons }: SeasonsFormProps) => {
             process.env.NEXT_PUBLIC_BACKEND_URL + '/seasons',
             { name: seasonName },
             {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${Cookies.get('token')}`,
             }
           );
           const newSeason = await json;
@@ -49,7 +50,7 @@ const SeasonsForm = ({ seasons, setSeasons }: SeasonsFormProps) => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/seasons/current`,
           { id: season.id },
           {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${Cookies.get('token')}`,
           }
         );
         setSeasons(seasons.map(s => ({ ...s, active: s.id === season.id })));

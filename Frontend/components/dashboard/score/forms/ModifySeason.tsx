@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Season } from "@/types/database_types";
 import Fetch from "@/utils/fetch";
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 interface ModifySeasonProps {
   season: Season;
@@ -26,7 +27,7 @@ const ModifySeason = ({ season, handleActiveSeasonChange, setSeasons }: ModifySe
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/seasons/${season.id}`,
           { name: seasonName },
           {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${Cookies.get('token')}`,
           }
         );
         setSeasonName(seasonName);

@@ -3,6 +3,7 @@ import { useToast } from "@/context/ToastContext";
 import { Goalie } from "@/types/database_types";
 import Fetch from "@/utils/fetch";
 import AddForm from "./AddForm";
+import Cookies from "js-cookie";
 
 interface AddGoalieProps {
   setGoalies: React.Dispatch<React.SetStateAction<Goalie[]>>;
@@ -40,7 +41,7 @@ const AddGoalie = ({ setGoalies }: AddGoalieProps) => {
           process.env.NEXT_PUBLIC_BACKEND_URL + '/goalies',
           { name, nickname, number: parseInt(number) },
           {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${Cookies.get('token')}`,
           }
         );
         const id = await json;

@@ -10,9 +10,7 @@ const GamePage = async ({ params }: { params: Params }) => {
   let game: GameAndPoints | null = null;
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/${id}`, {
-      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, 
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/${id}`);
 
     if (!res.ok) {
       throw new Error("Failed to fetch game data");

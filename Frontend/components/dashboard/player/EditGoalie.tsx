@@ -3,6 +3,7 @@ import { Goalie } from "@/types/database_types";
 import React, { useState } from "react";
 import Fetch from "@/utils/fetch";
 import EditForm from "./EditForm";
+import Cookies from "js-cookie";
 
 interface EditGoalieProps {
   goalie: Goalie;
@@ -48,7 +49,7 @@ const EditGoalie = ({ goalie, setGoalies, isLoading, setIsLoading }: EditGoalieP
         process.env.NEXT_PUBLIC_BACKEND_URL + `/goalies/${goalie.id}`,
         { name, nickname, number: parseInt(number) },
         {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${Cookies.get('token')}`,
         }
       );
 
@@ -78,7 +79,7 @@ const EditGoalie = ({ goalie, setGoalies, isLoading, setIsLoading }: EditGoalieP
         await Fetch.delete(
           process.env.NEXT_PUBLIC_BACKEND_URL + `/goalies/${goalie.id}`,
           {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${Cookies.get('token')}`,
           }
         );
         setGoalies((prevGoalies) => prevGoalies.filter((p) => p.id !== goalie.id));

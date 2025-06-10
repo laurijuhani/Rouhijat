@@ -17,6 +17,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { TrashIcon } from "lucide-react";
 import { useToast } from "@/context/ToastContext";
+import Cookies from "js-cookie";
 
 
 const UsersList = ({ user }: { user: User }) => {
@@ -27,7 +28,7 @@ const UsersList = ({ user }: { user: User }) => {
   useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/users', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${Cookies.get('token')}`
       }
     })
       .then((response) => {
@@ -46,7 +47,7 @@ const UsersList = ({ user }: { user: User }) => {
       if (user.role === 'admin' || user.role === 'owner') { 
         fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/invites', {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${Cookies.get('token')}`
           }
         }).then((response) => {
           if (!response.ok) {
@@ -74,7 +75,7 @@ const UsersList = ({ user }: { user: User }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${Cookies.get('token')}`
       },
       body: JSON.stringify({ email }),
     });
@@ -95,7 +96,7 @@ const UsersList = ({ user }: { user: User }) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         },
       });
 

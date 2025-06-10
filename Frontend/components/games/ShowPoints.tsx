@@ -27,7 +27,6 @@ const ShowPoints = ({ gamePoints }: { gamePoints: GamePoints[]}) => {
             <TableHead className="h-9 py-2">#</TableHead>
             <TableHead className="h-9 py-2">Pelaaja</TableHead>
             <TableHead className="h-9 py-2">Pisteet</TableHead>
-            <TableHead className="h-9 py-2">+/-</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -36,7 +35,6 @@ const ShowPoints = ({ gamePoints }: { gamePoints: GamePoints[]}) => {
               <TableCell className="py-2">{point.player.number || '-'}</TableCell>
               <TableCell className="py-2">{point.player.name}</TableCell>
               <TableCell className="py-2">{point.goals} + {point.assists} = {point.goals + point.assists}</TableCell>
-              <TableCell className="py-2">{point.pm}</TableCell>
             </TableRow>
           ))}
         </TableBody>

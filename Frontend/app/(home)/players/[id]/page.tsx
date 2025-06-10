@@ -19,9 +19,7 @@ const Page = async ({ params }: { params: Params }) => {
   }
   
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/players/${playerId}`, {
-      next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') },
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/players/${playerId}`);
 
     if (!res.ok) {
       throw new Error("Failed to fetch player data");
@@ -69,7 +67,6 @@ const Page = async ({ params }: { params: Params }) => {
               <p>Ottelut: {season.games}</p>
               <p>Maalit: {season.points.goals}</p>
               <p>Syötöt: {season.points.assists}</p>
-              <p>+/-: {season.points.pm}</p>
             </div>
           ))}
         </div>

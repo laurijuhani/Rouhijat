@@ -17,6 +17,7 @@ import { Game, Season } from "@/types/database_types";
 import { useToast } from "@/context/ToastContext";
 import GameDetails from "./score/forms/GameDetails";
 import Fetch from "@/utils/fetch";
+import Cookies from "js-cookie";
 
 interface AddGameProps {
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
@@ -75,7 +76,7 @@ const AddGame = ({ setGames, season }: AddGameProps) => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/games`,
         gameData,
         {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get('token')}`,
         }
       );
       const data = await json;

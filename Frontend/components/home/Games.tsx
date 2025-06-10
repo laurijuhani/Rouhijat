@@ -53,9 +53,15 @@ const fetchActiveSeason = async () => {
 const Games = async () => {
   let games: Game[] = [];
   let activeSeason: Season | null = null;
+  let startIndex = 0; 
 
   try {
     games = await fetchGames();
+    games = games.sort((a, b) => new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime());
+    startIndex = games.findIndex(game => new Date(game.gameDate) > new Date());
+    if (startIndex === -1) {
+      startIndex = games.length - 1; // If no future games, start from the last game
+    }
     activeSeason = await fetchActiveSeason();
   } catch (error) {
     console.error("Error fetching games:", error);
@@ -79,9 +85,13 @@ const Games = async () => {
       <div className="text-center md:text-left text-2xl mb-4">
         {activeSeason?.name}
       </div>
-      <Carousel className="w-full">
+      <Carousel className="w-full" 
+        opts={{ loop: false, startIndex: startIndex }}
+        
+        
+      >
           <CarouselContent>
-            {games.sort((a, b) => new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime()).map((game) => (
+            {games.map((game) => (
               <CarouselItem key={game.id} className="flex items-center justify-center basis-4/7 sm:basis-3/7 md:basis-2/7 lg:basis-1/4">
                 <GameCard game={game} />
               </CarouselItem>

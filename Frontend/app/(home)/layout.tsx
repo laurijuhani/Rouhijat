@@ -1,6 +1,6 @@
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
-import DevelopmentPopup from "@/components/home/DevelopmentPopup";
+//import DevelopmentPopup from "@/components/home/DevelopmentPopup";
 
 
 export default function HomeLayout({
@@ -12,8 +12,8 @@ export default function HomeLayout({
     <div className="min-h-screen flex flex-col">
         <Navbar />
 
-        <DevelopmentPopup />
-
+        {/* <DevelopmentPopup /> */}
+        
         <main className="mt-16 flex-grow">
           {children}
         </main>

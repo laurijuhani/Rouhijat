@@ -25,6 +25,7 @@ import GameDetails from "./forms/GameDetails";
 import SeasonSelector from "./forms/SeasonSelector";
 import Fetch from "@/utils/fetch";
 import GoalieSelector from "./forms/GoalieSelector";
+import Cookies from "js-cookie";
 
 interface ModifyGameProps {
   game: Game; 
@@ -61,7 +62,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
       setIsFetching(true);
       try {        
         const data = await Fetch.get<PlayerPointsData[]>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/points/${game.id}`, {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         });
 
         const points: { [key: number]: [number, number, number] } = {};
@@ -112,6 +113,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setIsLoading(false);
       return;
     }
 
@@ -129,7 +131,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
     if (!checkGamesEqual(game, newGame)) {      
       try {
         await Fetch.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games/${game.id}`, newGame, {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         });
 
         setGames((prev) => prev.map((g) => (g.id === game.id ? newGame : g)));
@@ -146,7 +148,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
     if (newPoints.length > 0) {
       try {
         await Fetch.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/points/${game.id}`, { playerData: newPoints }, {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         });
       } catch (error) {
         console.error('Error updating player points:', error);

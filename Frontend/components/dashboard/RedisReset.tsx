@@ -2,6 +2,7 @@
 import Fetch from "@/utils/fetch";
 import { Button } from "../ui/button";
 import { useToast } from "@/context/ToastContext";
+import Cookies from "js-cookie";
 
 
 const RedisReset = () => {
@@ -10,7 +11,7 @@ const RedisReset = () => {
     if (window.confirm("Oletko varma, että haluat nollata Redis tietokannan?")) {
       try {
         await Fetch.get(process.env.NEXT_PUBLIC_BACKEND_URL + "/users/resetredis", {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get('token')}`,
         });
         
         showToast('success', 'Redis tietokanta nollattu', '');

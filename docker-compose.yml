@@ -10,6 +10,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    volumes:
+      - ./Backend/media:/app/media
     restart: unless-stopped
 
 

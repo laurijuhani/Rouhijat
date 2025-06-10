@@ -17,6 +17,7 @@ import { usePlayers } from "@/context/PlayersContext";
 import PlayerPoints from "./PlayerPoints";
 import { useToast } from "@/context/ToastContext";
 import { LoaderCircleIcon } from "lucide-react";
+import Cookies from "js-cookie";
 
 interface AddScoreProps {
   game: Game
@@ -64,7 +65,7 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         },
         body: JSON.stringify({
           homeScore: parseInt(homeScore),
@@ -83,7 +84,7 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         },
         body: JSON.stringify({
           playerData
