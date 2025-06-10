@@ -26,6 +26,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.5.2",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.474.0",
     "motion": "^12.4.7",
     "next": "^15.2.4",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

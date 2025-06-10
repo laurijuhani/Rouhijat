@@ -20,6 +20,7 @@ import { useToast } from "@/context/ToastContext";
 import SeasonSelector from './score/forms/SeasonSelector';
 import SeasonsForm from './score/forms/SeasonsForm';
 import Fetch from '@/utils/fetch';
+import Cookies from 'js-cookie';
 
 const GamesList = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -59,7 +60,7 @@ const GamesList = () => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         }
       });
   

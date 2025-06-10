@@ -3,6 +3,7 @@ import { useToast } from "@/context/ToastContext";
 import { Player } from "@/types/database_types";
 import Fetch from "@/utils/fetch";
 import AddForm from "./AddForm";
+import Cookies from "js-cookie";
 
 interface AddPlayerProps {
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
@@ -38,7 +39,7 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
           process.env.NEXT_PUBLIC_BACKEND_URL + '/players',
           { name, nickname, number: parseInt(number) || null },
           {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${Cookies.get('token')}`,
           }
         );
         const id = await json;

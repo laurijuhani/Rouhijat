@@ -11,6 +11,7 @@ import {
 import { DBUser } from "@/types/database_types";
 import Fetch from "@/utils/fetch";
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 type Role = 'user' | 'admin' | 'owner';
 
@@ -37,7 +38,7 @@ const RoleChange = ({ role, id, setUsers }: RoleChangeProps) => {
         process.env.NEXT_PUBLIC_BACKEND_URL + '/users/changerole',
         { id, role: selectedRole },
         {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${Cookies.get('token')}`
         }
       );
       setUsers((prev) => prev.map((user) => {

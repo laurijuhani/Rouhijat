@@ -3,6 +3,7 @@ import { Player } from "@/types/database_types";
 import React, { useState } from "react";
 import Fetch from "@/utils/fetch";
 import EditForm from "./EditForm";
+import Cookies from "js-cookie";
 
 interface EditPlayerProps {
   player: Player;
@@ -48,7 +49,7 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
         process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
         { name, nickname, number: parseInt(number) || null },
         {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${Cookies.get('token')}`,
         }
       );
 
@@ -78,7 +79,7 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
         await Fetch.delete(
           process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
           {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${Cookies.get('token')}`,
           }
         );
         setPlayers((prevPlayers) => prevPlayers.filter((p) => p.id !== player.id));

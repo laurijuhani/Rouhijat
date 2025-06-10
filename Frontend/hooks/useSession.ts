@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 export interface User {
   id: string;
@@ -17,7 +18,7 @@ interface Session {
 const useSession = (): Session => {
   const [user] = useState<User | null>(() => {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token'); 
       if (token) {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

@@ -16,10 +16,10 @@ const GameCard = ({ game }: { game: Game} ) => {
           <div className="flex flex-row gap-1">
             <p className="flex items-center">{game.homeTeam}</p>
             <p className="flex items-center">-</p>
-            <p className="">{game.awayTeam}</p>
+            <p className="flex items-center">{game.awayTeam}</p>
           </div>
           {new Date(game.gameDate) < new Date() && (            
-            <div className="text-center mt-4">
+            <div className="text-center mt-2">
               {((game.homeScore !== null) ? `${game.homeScore} - ${game.awayScore}`: "Tulosta ei saatavilla")}
             </div>
           )}
