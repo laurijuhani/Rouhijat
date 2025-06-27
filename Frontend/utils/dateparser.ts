@@ -60,7 +60,8 @@ export const parseTime = (date: string): string => {
     minute: "2-digit",
     hour12: false,
     timeZone: "Europe/Helsinki",
-  });
+  })
+  .replace(".", ":"); 
 };
 
 export const formatInstagramDate = (timestamp: number): string => {
