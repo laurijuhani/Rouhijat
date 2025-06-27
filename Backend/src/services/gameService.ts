@@ -14,10 +14,10 @@ const getGamesBySeason = async (seasonId: number) => {
   const cachedGames = await redisClient.get(cacheKey + "/season/" + seasonId);
   if (cachedGames) return JSON.parse(cachedGames) as Game[];    
 
-const season = await prisma.season.findUnique({
-    where: {
-      id: seasonId,
-    },
+  const season = await prisma.season.findUnique({
+      where: {
+        id: seasonId,
+      },
   });
   
   if (!season) {
@@ -30,11 +30,15 @@ const season = await prisma.season.findUnique({
     },
   });
 
-  void redisClient.set(cacheKey + "/season/" + seasonId, JSON.stringify(games), {
+  const sortedGames = games.sort((a, b) => {
+    return new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime();
+  });
+
+  void redisClient.set(cacheKey + "/season/" + seasonId, JSON.stringify(sortedGames), {
     EX: 3600,
   });
 
-  return games;
+  return sortedGames;
 };
 
 const getGameById = async (id: number) => {
@@ -68,7 +72,8 @@ const getGameById = async (id: number) => {
 
 const createGame = async (homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number | undefined, gameDate: Date, seasonId: number, goalieId: number | undefined) => {
   void redisClient.del(cacheKey + "/season/" + seasonId);
-  void redisClient.del("players/season/" + seasonId); 
+  void redisClient.del("players/season/" + seasonId);
+  void redisClient.del("goalies"); 
   void deleteCacheForPattern(cacheKey + "/*");
 
   return await prisma.game.create({
@@ -97,6 +102,7 @@ const updateScore = async (id: number, homeScore: number, awayScore: number) => 
 
   void redisClient.del(cacheKey + "/season/" + game.seasonId);
   void redisClient.del("players/season/" + game.seasonId); 
+  void redisClient.del("goalies");
   void deleteCacheForPattern(cacheKey + "/*");
 
   return game;
@@ -106,6 +112,7 @@ const updateScore = async (id: number, homeScore: number, awayScore: number) => 
 const updateGame = async (id: number, homeTeam: string, awayTeam: string, homeScore: number | undefined, awayScore: number |undefined, gameDate: Date, seasonId: number, goalieId: number | undefined) => {
   void redisClient.del(cacheKey + "/season/" + seasonId);
   void redisClient.del("players/season/" + seasonId); 
+  void redisClient.del("goalies");
   void deleteCacheForPattern(cacheKey + "/*");
   const game = await prisma.game.findUnique({
     where: {
@@ -150,6 +157,7 @@ const deleteGame = async (id: number) => {
 
   void redisClient.del(cacheKey + "/season/" + game.seasonId);
   void redisClient.del("players/season/" + game.seasonId); 
+  void redisClient.del("goalies");
   void deleteCacheForPattern(cacheKey + "/*");
 
   await prisma.$transaction(async (prisma) => {

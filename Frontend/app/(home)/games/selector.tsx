@@ -30,7 +30,7 @@ const Selector = ({ seasons }: SelectorProps) => {
       const fetchedGames = await Fetch.get<Game[]>(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/games/season/${seasonId}`,
       );
-
+      
       setgameCache((prev) => ({ ...prev, [seasonId]: fetchedGames }));
       setGames(fetchedGames);
       setLoading(false);

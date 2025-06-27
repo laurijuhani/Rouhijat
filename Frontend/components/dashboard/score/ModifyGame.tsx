@@ -195,7 +195,8 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
 
   const getCombinedDateTime = (): Date | null => {
     if (!date || !inputTime) return null;
-    const [hours, minutes] = inputTime.split(':').map(Number);
+    const normalizedTime = inputTime.replace('.', ':');
+    const [hours, minutes] = normalizedTime.split(':').map(Number);
     if (isNaN(hours) || isNaN(minutes)) return null;
     const combinedDate = new Date(date);
     combinedDate.setHours(hours, minutes);

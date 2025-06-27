@@ -32,7 +32,6 @@ const Body = ({ seasons }: BodyProps) => {
       const fetchedPlayers = await Fetch.get<Player[]>(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/players/season/${seasonId}`,
       );
-      fetchedPlayers.sort((a, b) => (a.number || 0) - (b.number || 0));
       setPlayersCache((prev) => ({ ...prev, [seasonId]: fetchedPlayers }));
       setPlayers(fetchedPlayers);
       setLoading(false);

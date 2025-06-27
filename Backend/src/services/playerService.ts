@@ -133,12 +133,23 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
       games: points.length,
       points: aggregatePoints(points),
     };
-  }
-  );
-  void redisClient.set(cacheKey + "/season/" + seasonId, JSON.stringify(aggregatedPlayers), {
+  });
+
+  const sortedPlayers = aggregatedPlayers.sort((a, b) => {
+    const aPoints = a.points.goals + a.points.assists;
+    const bPoints = b.points.goals + b.points.assists;
+
+    if (aPoints !== bPoints) {
+      return bPoints - aPoints; 
+    }
+    return b.points.goals - a.points.goals; 
+  });
+
+
+  void redisClient.set(cacheKey + "/season/" + seasonId, JSON.stringify(sortedPlayers), {
     EX: 3600,
   });
-  return aggregatedPlayers;
+  return sortedPlayers;
 };
 
 

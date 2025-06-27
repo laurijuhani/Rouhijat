@@ -1,8 +1,6 @@
 services:
   backend:
-    build:
-      context: ./Backend
-      dockerfile: Dockerfile
+    image: ${BACKEND_IMAGE}
     env_file:
       - ./Backend/.env
     depends_on:
@@ -12,13 +10,12 @@ services:
         condition: service_started
     volumes:
       - ./Backend/media:/app/media
+      - ./Backend/prisma:/app/prisma
     restart: unless-stopped
 
 
   frontend:
-    build:
-      context: ./Frontend
-      dockerfile: Dockerfile
+    image: ${FRONTEND_IMAGE}
     restart: unless-stopped
     env_file:
       - ./Frontend/.env
