@@ -42,7 +42,6 @@ jobs:
             --build-arg REVALIDATE=${{ env.REVALIDATE }} \
             --build-arg INTERNAL_BACKEND_URL=${{ secrets.INTERNAL_BACKEND_URL }} \
             --build-arg PRIVATE_BACKEND_URL=${{ secrets.PRIVATE_BACKEND_URL }} \
-
             -t ghcr.io/${{ github.repository_owner }}/frontend:${{ github.sha }} .
           docker push ghcr.io/${{ github.repository_owner }}/frontend:${{ github.sha }}
 
