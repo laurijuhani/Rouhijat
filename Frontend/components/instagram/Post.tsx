@@ -28,7 +28,7 @@ const Post = ({ post }: { post: IGPost }) => {
       <DialogTrigger asChild>
         <div className="relative group cursor-pointer">
           <Image
-            src={process.env.NEXT_PUBLIC_PRIVATE_BACKEND_URL + firstImageUrl()}
+            src={process.env.PRIVATE_BACKEND_URL + firstImageUrl()}
             alt="Instagram post image"
             width={400}
             height={400}

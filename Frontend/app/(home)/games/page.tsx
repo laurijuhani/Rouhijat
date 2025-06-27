@@ -4,7 +4,7 @@ import { Season } from "@/types/database_types";
 
 const fetchSeasons = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/seasons`, {
+    const res = await fetch(`${process.env.INTERNAL_BACKEND_URL}/seasons`, {
       next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') },
     });
     if (!res.ok) {
