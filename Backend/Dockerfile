@@ -2,10 +2,10 @@ FROM node:23-alpine AS build
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package*.json ./
 COPY tsconfig.json ./
 COPY prisma ./prisma
-RUN npm install
+RUN npm ci
 
 RUN npx prisma generate
 
@@ -18,8 +18,8 @@ WORKDIR /app
 
 RUN apk add --no-cache postgresql-client
 
-COPY package.json ./
-RUN npm install --omit=dev && npm cache clean --force
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/build ./build
 COPY --from=build /app/prisma ./prisma
