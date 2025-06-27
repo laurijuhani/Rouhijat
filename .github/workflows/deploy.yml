@@ -28,7 +28,7 @@ jobs:
       - name: Build and push backend image
         run: |
           cd Backend
-          docker build -t ghcr.io/${{ github.repository_owner }}/backend:${{ github.sha }} .
+          docker build --platform linux/arm64/v8 -t ghcr.io/${{ github.repository_owner }}/backend:${{ github.sha }} .
           docker push ghcr.io/${{ github.repository_owner }}/backend:${{ github.sha }}
 
       - name: Build and push frontend image
@@ -38,6 +38,7 @@ jobs:
         run: |
           cd Frontend
           docker build \
+            --platform linux/arm64/v8 \
             --build-arg BACKEND_URL=${{ env.BACKEND_URL }} \
             --build-arg REVALIDATE=${{ env.REVALIDATE }} \
             --build-arg INTERNAL_BACKEND_URL=${{ secrets.INTERNAL_BACKEND_URL }} \
