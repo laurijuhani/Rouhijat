@@ -20,7 +20,7 @@ const Page = async ({ params }: { params: Params }) => {
   }
   
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/goalies/${goalieId}`);
+    const res = await fetch(`${process.env.INTERNAL_BACKEND_URL}/goalies/${goalieId}`);
 
     if (!res.ok) {
       throw new Error("Failed to fetch player data");

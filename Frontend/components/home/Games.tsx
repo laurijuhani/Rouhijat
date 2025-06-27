@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const fetchGames = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/season/current`, {
+    const res = await fetch(`${process.env.INTERNAL_BACKEND_URL}/games/season/current`, {
       next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, // Use revalidate for successful fetch
     });
     if (!res.ok) {
@@ -17,7 +17,7 @@ const fetchGames = async () => {
   } catch (error) {
     console.error("Error fetching games:", error);
     // Retry immediately on the next load by forcing a fresh fetch
-    const retryRes = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/games/season/current`, {
+    const retryRes = await fetch(`${process.env.INTERNAL_BACKEND_URL}/games/season/current`, {
       cache: 'no-store', // Force fresh fetch
     });
     if (!retryRes.ok) {
@@ -29,7 +29,7 @@ const fetchGames = async () => {
 
 const fetchActiveSeason = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/seasons/current`, {
+    const res = await fetch(`${process.env.INTERNAL_BACKEND_URL}/seasons/current`, {
       next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') }, // Use revalidate for successful fetch
     });
     if (!res.ok) {
@@ -39,7 +39,7 @@ const fetchActiveSeason = async () => {
   } catch (error) {
     console.error("Error fetching active season:", error);
     // Retry immediately on the next load by forcing a fresh fetch
-    const retryRes = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/seasons/current`, {
+    const retryRes = await fetch(`${process.env.INTERNAL_BACKEND_URL}/seasons/current`, {
       cache: 'no-store', // Force fresh fetch
     });
     if (!retryRes.ok) {

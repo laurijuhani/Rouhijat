@@ -3,7 +3,7 @@ import List from "./list";
 
 const fetchPlayers = async () => {
   try {
-   const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/players`, {
+   const res = await fetch(`${process.env.INTERNAL_BACKEND_URL}/players`, {
       next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') },
     });
     if (!res.ok) {
@@ -27,7 +27,7 @@ const fetchPlayers = async () => {
 
 const fetchGoalies = async () => {
   try {
-   const res = await fetch(`${process.env.NEXT_PUBLIC_INTERNAL_BACKEND_URL}/goalies`, {
+   const res = await fetch(`${process.env.INTERNAL_BACKEND_URL}/goalies`, {
       next: { revalidate: parseInt(process.env.NEXT_PUBLIC_REVALIDATE || '600') },
     });
     if (!res.ok) {
