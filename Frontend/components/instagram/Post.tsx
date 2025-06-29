@@ -5,7 +5,8 @@ import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } 
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { formatInstagramDate } from "@/utils/dateparser";
-import FullPost from "./FullPost";
+const LazyFullPost = lazy(() => import("./FullPost"));
+import { lazy } from "react";
 
 const Post = ({ post }: { post: IGPost }) => {
   const firstImageUrl = () => {
@@ -65,7 +66,7 @@ const Post = ({ post }: { post: IGPost }) => {
           Julkaistu: {formatInstagramDate(post.taken_at_timestamp)}
         </DialogDescription>
        
-        <FullPost
+        <LazyFullPost
           pictures={post.pictures}
           videos={post.videos}
           likes={post.likes}
