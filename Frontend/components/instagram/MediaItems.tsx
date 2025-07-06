@@ -29,7 +29,7 @@ const MediaItems = ({ mediaItems }: MediaItemsProps) => {
                   controls
                   autoPlay
                   muted
-                  src={process.env.PRIVATE_BACKEND_URL +  (item as Video).video_url}
+                  src={process.env.NEXT_PUBLIC_BACKEND_URL + (item as Video).video_url}
                   className="w-full rounded"
                 />
               )}
