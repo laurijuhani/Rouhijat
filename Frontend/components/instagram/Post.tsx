@@ -16,7 +16,7 @@ const Post = ({ post }: { post: IGPost }) => {
     return post.videos && post.videos.length > 0 ? post.videos[0].display_url : "";
   };
 
-  if (!post || !post.pictures || post.pictures.length === 0) {
+  if (!post || ((!post.pictures || post.pictures.length === 0) && (!post.videos || post.videos.length === 0))) {
     return null; // Don't render anything if there's no post or pictures
   }
 
@@ -33,7 +33,7 @@ const Post = ({ post }: { post: IGPost }) => {
             alt="Instagram post image"
             width={400}
             height={400}
-            className="w-full h-auto object-cover rounded-lg"
+            className="w-[350px] h-[350px] object-cover rounded-lg"
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
             <div className="flex items-center space-x-4 text-white">
