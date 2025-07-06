@@ -41,6 +41,8 @@ apiRouter.use('/seasons', seasonsRouter);
 apiRouter.use('/goalies', goaliesRouter);
 apiRouter.use('/posts', postsRouter);
 
+apiRouter.use('/media/videos', express.static(path.join(__dirname, '..', 'media', 'videos')));
+
 app.use('/api/v1/public', apiRouter);
 
 internalRouter.use('/media', express.static(path.join(__dirname, '..', 'media')));
