@@ -37,25 +37,31 @@ const MediaCarousel = ({ itemsLength, items }: MediaCarouselProps) => {
   const scrollToIndex = (index: number) => {
     carouselApi?.scrollTo(index);
   }; 
+
+  
   return (
     <>
       <Carousel setApi={setCarouselApi}>
         {items}
 
-        <CarouselPrevious
-            className="
-            hidden md:flex
-            absolute md:-left-9 lg:left-0 top-1/2 -translate-y-1/2
-            z-10 bg-black/40 hover:bg-black/80 rounded-full w-7 h-7 items-center justify-center
-            "
+      {itemsLength > 1 && (
+        <>
+          <CarouselPrevious
+              className="
+              hidden md:flex
+              absolute md:-left-9 lg:left-0 top-1/2 -translate-y-1/2
+              z-10 bg-black/40 hover:bg-black/80 rounded-full w-7 h-7 items-center justify-center
+              "
             />
-          <CarouselNext
-            className="
-            hidden md:flex
-            absolute md:-right-9 lg:right-0 top-1/2 -translate-y-1/2
-            z-10 bg-black/40 hover:bg-black/80 rounded-full w-7 h-7 items-center justify-center
-            "
+            <CarouselNext
+              className="
+              hidden md:flex
+              absolute md:-right-9 lg:right-0 top-1/2 -translate-y-1/2
+              z-10 bg-black/40 hover:bg-black/80 rounded-full w-7 h-7 items-center justify-center
+              "
             />
+        </>
+      )}
       </Carousel>
         {itemsLength > 1 && (
           <div className="mt-1 flex justify-center space-x-2 z-20">
