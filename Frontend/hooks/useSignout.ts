@@ -1,6 +1,8 @@
+import Cookies from "js-cookie";
+
 const useSignout = () => {
   const signout = () => {
-    localStorage.removeItem('token');
+    Cookies.remove('token'); 
 
     window.location.href = '/';
   };
