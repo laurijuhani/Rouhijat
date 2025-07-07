@@ -36,7 +36,7 @@ const parseData = async () => {
 
 const parseProfileData = async (profile: ProfileData): Promise<Profile> => {
 
-  const profilePic = await downloadMedia(profile.profile_pic_url_hd, 'profile_pic.jpg');
+  const profilePic = await downloadMedia(profile.profile_pic_url_hd, 'profile_pic.jpg', false);
 
   return {
     id: profile.id,
@@ -94,10 +94,10 @@ const parsePosts = async (profile: ProfileData): Promise<IGPost[]> => {
 
 
 const sortPictureAndVideo = async (data: PictureParseData | PictureEdge, order = 1): Promise<Picture | Video> => {
-  const media = await downloadMedia(data.node.display_url, `${data.node.id}.jpg`);
+  const media = await downloadMedia(data.node.display_url, `${data.node.id}.jpg`, false);
 
   if (data.node.is_video) {
-    const video = await downloadMedia(data.node.video_url!, `${data.node.id}.mp4`);
+    const video = await downloadMedia(data.node.video_url!, `${data.node.id}.mp4`, true);
     return {
       id: data.node.id,
       display_url: media || data.node.display_url,
@@ -113,12 +113,14 @@ const sortPictureAndVideo = async (data: PictureParseData | PictureEdge, order =
   }
 };
 
-const downloadMedia = async (url: string, filename: string) => {
+const downloadMedia = async (url: string, filename: string, isVideo: boolean) => {
   const streamPipeline = promisify(pipeline); 
-  const dirPath = path.join(__dirname, "..", "..", "media");
+  let dirPath = path.join(__dirname, "..", "..", "media");
+  if (isVideo) dirPath = path.join(dirPath, "videos");
   const filePath = path.join(dirPath, filename);
 
   if (fs.existsSync(filePath)) {
+    if (isVideo) return `/media/videos/${filename}`;
     return `/media/${filename}`;
   }
 
@@ -133,6 +135,7 @@ const downloadMedia = async (url: string, filename: string) => {
   const nodeStream = readableWebStream(res.body); 
   await streamPipeline(nodeStream, fs.createWriteStream(filePath));
   
+  if (isVideo) return `/media/videos/${filename}`;
   return `/media/${filename}`;
 };
 
