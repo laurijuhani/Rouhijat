@@ -13,10 +13,10 @@ const GameCard = ({ game }: { game: Game} ) => {
       </CardHeader>
       <CardContent className="absolute top-[5.5rem] left-1/2 transform -translate-x-1/2 w-full">
         <div className="flex flex-col items-center justify-center">
-          <div className="flex flex-row gap-1">
-            <p className="flex items-center">{game.homeTeam}</p>
-            <p className="flex items-center">-</p>
-            <p className="flex items-center">{game.awayTeam}</p>
+          <div className="flex flex-row flex-wrap items-center justify-center w-full max-w-[160px] mx-auto">
+            <p className="flex items-center text-center break-words">{game.homeTeam}</p>
+            <p className="flex items-center text-center font-bold mx-1">-</p>
+            <p className="flex items-center text-center break-words">{game.awayTeam}</p>
           </div>
           {new Date(game.gameDate) < new Date() && (            
             <div className="text-center mt-2">
