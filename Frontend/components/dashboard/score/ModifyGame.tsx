@@ -96,8 +96,8 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
     const form = e.target as HTMLFormElement;
     const homeTeam = form.homeTeam.value;
     const awayTeam = form.awayTeam.value;
-    const homeScore = form.homeScore.value;
-    const awayScore = form.awayScore.value;
+    const homeScore = form.homeScore?.value || '';
+    const awayScore = form.awayScore?.value || '';
     setErrors({});
     const combinedDateTime = getCombinedDateTime();
     if (!combinedDateTime) {
