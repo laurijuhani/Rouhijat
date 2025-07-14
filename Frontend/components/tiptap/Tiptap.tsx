@@ -3,9 +3,11 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
-import ResizableImage from './ResizableImage';
+import { ResizableImage } from 'tiptap-extension-resizable-image';
 import MenuBar from './MenuBar';
 import { Button } from '../ui/button';
+import 'tiptap-extension-resizable-image/styles.css';
+import ImageInsert from './ImageInsert';
 
 const Tiptap = () => {
   const editor = useEditor({
@@ -25,7 +27,9 @@ const Tiptap = () => {
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
-      ResizableImage,
+      ResizableImage.configure({
+        defaultWidth: 200,
+      }),
     ],
     content: '',
     immediatelyRender: false,
@@ -43,33 +47,15 @@ const Tiptap = () => {
     }
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && editor) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const imageUrl = reader.result as string;
-        editor.chain().focus().insertContent({
-        type: 'resizableImage',
-        attrs: { src: imageUrl, width: '300px', height: 'auto' },
-      }).run();
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+ 
   return (
     <div>
       <MenuBar editor={editor} /> 
-      <EditorContent editor={editor} />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageUpload}
-        className="mt-2"
-      />
+      <EditorContent editor={editor} className='mb-5' />
+      <ImageInsert editor={editor} />
+      
       <Button 
-        className='mt-2 text-text-primary'
+        className='mt-5 text-text-primary'
         onClick={handleSubmit}
       >
         Lähetä
