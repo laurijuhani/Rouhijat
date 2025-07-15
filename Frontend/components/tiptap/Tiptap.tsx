@@ -8,8 +8,14 @@ import MenuBar from './MenuBar';
 import { Button } from '../ui/button';
 import 'tiptap-extension-resizable-image/styles.css';
 import ImageInsert from './ImageInsert';
+import Fetch from "@/utils/fetch";
+import Cookies from "js-cookie";
+import { useState } from 'react';
+import TitleInput from './TitleInput';
 
 const Tiptap = () => {
+  const [title, setTitle] = useState('');
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -40,17 +46,37 @@ const Tiptap = () => {
     }
   }); 
 
-  const handleSubmit = () => {
-    if (editor) {
-      const content = editor.getHTML();
-      console.log('Submitted content:\n', content);
+  const handleSubmit = async () => {
+    if (!editor) return;
+
+    try {
+      const content = editor.getHTML();    
+      const response = await Fetch.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/history-posts`,
+        { content, title },
+        {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        }
+      ); 
+
+      console.log(response.response);
+      const data = await response.json;
+      console.log(data);
+      
+      
+    } catch (error) {
+      console.error('Error submitting content:', error);
+      // Handle error (e.g., show notification)
     }
+
+    
   };
 
  
   return (
     <div>
-      <MenuBar editor={editor} /> 
+      <TitleInput title={title} setTitle={setTitle} />
+      <MenuBar editor={editor} />
       <EditorContent editor={editor} className='mb-5' />
       <ImageInsert editor={editor} />
       
