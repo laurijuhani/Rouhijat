@@ -19,12 +19,12 @@ import clientIp from './utils/clientIp';
 import redisClient from './utils/redisClient';
 import logger from './utils/logger';
 import { internalPostsRouter, postsRouter} from './controllers/posts';
+import { historyPostsRouter, internalHistoryPostsRouter } from './controllers/historyPost';
 
 
 const app = express();
 
 app.use(cors());
-app.use(express.json());
 app.use(helmet()); 
 
 app.use(clientIp);
@@ -32,6 +32,8 @@ app.use(generalRateLimiter);
 
 const apiRouter = express.Router();
 const internalRouter = express.Router();
+const payloadRouter = express.Router();
+payloadRouter.use(express.json({ limit: '20mb' })); // Increased limit for payloads
 
 apiRouter.use('/games', gamesRouter);
 apiRouter.use('/invites', invitesRouter);
@@ -42,16 +44,19 @@ apiRouter.use('/points', pointsRouter);
 apiRouter.use('/seasons', seasonsRouter);
 apiRouter.use('/goalies', goaliesRouter);
 apiRouter.use('/posts', postsRouter);
-
+payloadRouter.use('/history-posts', historyPostsRouter);
 apiRouter.use('/media/videos', express.static(path.join(__dirname, '..', 'media', 'videos')));
 
 app.use('/api/v1/public', apiRouter);
+app.use('/api/v1/public', payloadRouter);
 
 internalRouter.use('/media', express.static(path.join(__dirname, '..', 'media')));
 internalRouter.use('/posts', internalPostsRouter);
+internalRouter.use('/history-posts', internalHistoryPostsRouter);
 
 app.use('/api/v1/internal', internalRouter);
 
+app.use(express.json());
 app.use(unknownEndpoint);
 
 app.use((err: Error, req: express.Request, res: express.Response) => {
