@@ -10,10 +10,12 @@ import 'tiptap-extension-resizable-image/styles.css';
 import ImageInsert from './ImageInsert';
 import Fetch from "@/utils/fetch";
 import Cookies from "js-cookie";
+import { useToast } from "@/context/ToastContext";
 import { useState } from 'react';
 import TitleInput from './TitleInput';
 
 const Tiptap = () => {
+  const { showToast } = useToast();
   const [title, setTitle] = useState('');
 
   const editor = useEditor({
@@ -59,14 +61,17 @@ const Tiptap = () => {
         }
       ); 
 
-      console.log(response.response);
       const data = await response.json;
       console.log(data);
       
+      // store the data in the blogs list
       
+      editor.commands.clearContent();
+      setTitle(''); 
+      showToast('success', 'Postaus lisätty onnistuneesti', '');
     } catch (error) {
+      showToast('error', 'Postauksen lähetys epäonnistui', 'Yritä uudelleen');
       console.error('Error submitting content:', error);
-      // Handle error (e.g., show notification)
     }
 
     

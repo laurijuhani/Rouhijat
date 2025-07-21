@@ -38,7 +38,7 @@ const UserPic = () => {
           <DropdownMenuLabel>Käyttäjäni</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <a href="/profile">Profiili</a>
+            <a href="/blogs">Blogit</a>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <a href="/dashboard">Hallintapaneeli</a>
