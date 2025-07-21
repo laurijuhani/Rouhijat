@@ -127,3 +127,10 @@ export interface Video {
   video_url: string;
   order: number; // order in the post 
 }
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+}

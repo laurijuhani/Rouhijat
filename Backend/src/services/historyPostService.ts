@@ -45,8 +45,31 @@ const getHistoryPosts = async () => {
   return await prisma.historyPost.findMany({}); 
 }; 
 
+const updateHistoryPost = async (id: number, content: string, title: string) => {
+  const post = await prisma.historyPost.findUnique({ where: { id } });
+  if (!post) {
+    throw new Error('Post not found');
+  }
+
+  return await prisma.historyPost.update({
+    where: { id },
+    data: { content, title },
+  });
+};
+
+const deleteHistoryPost = async (id: number) => {
+  const post = await prisma.historyPost.findUnique({ where: { id } });
+  if (!post) {
+    throw new Error('Post not found');
+  }
+
+  await prisma.historyPost.delete({ where: { id } });
+  return post;
+};
 
 export default {
   addHistoryPost,
   getHistoryPosts,
+  updateHistoryPost,
+  deleteHistoryPost,
 };
