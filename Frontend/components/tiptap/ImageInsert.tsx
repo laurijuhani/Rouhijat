@@ -34,7 +34,7 @@ const ImageInsert = ({ editor }: { editor: Editor | null}) => {
       getInputProps,
     },
   ] = useFileUpload({
-    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
+    accept: "image/png,image/jpeg,image/jpg",
     maxSize,
     multiple: true,
     maxFiles,
@@ -104,7 +104,7 @@ const ImageInsert = ({ editor }: { editor: Editor | null}) => {
           </div>
           <p className="mb-1.5 text-sm font-medium">Tiputa kuvat tähän</p>
           <p className="text-muted-foreground text-xs">
-            SVG, PNG, JPG tai GIF (max. {maxSizeMB}MB)
+            PNG tai JPG (max. {maxSizeMB}MB)
           </p>
           <Button variant="outline" className="mt-4" onClick={openFileDialog}>
             <UploadIcon className="-ms-1 opacity-60" aria-hidden="true" />
