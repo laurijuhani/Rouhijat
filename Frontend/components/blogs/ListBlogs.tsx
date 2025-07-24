@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { BlogPost } from "@/types/database_types";
 import { useEffect, useState } from "react";
+import Blog from "./Blog";
 
 const ListBlogs = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -18,7 +19,7 @@ const ListBlogs = () => {
           throw new Error('Failed to fetch blogs');
         }
 
-        const data = await response.json();
+        const data = await response.json();        
         setBlogs(data);
       } catch (error) {
         console.error("Failed to fetch blogs:", error);
@@ -29,13 +30,9 @@ const ListBlogs = () => {
   }, []);
 
   return (
-    <div>
+    <div className="pt-4">
       {blogs.map(blog => (
-        <div key={blog.id}>
-          <p>{blog.title}</p>
-          <p>{blog.content}</p>
-          <p>Created at: {blog.createdAt}</p>
-        </div>
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   );
