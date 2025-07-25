@@ -1,4 +1,5 @@
 import RenderPost from "@/components/tiptap/RenderPost";
+import { BlogPost } from "@/types/database_types";
 import { Suspense } from "react";
 
 const fetchPosts = async () => {
@@ -15,15 +16,10 @@ const fetchPosts = async () => {
   }
 };
 
-interface Post {
-  content: string;
-  title: string;
-  createdAt: string;
-}
 
 
 const Page = async () => {
-  const posts: Post[] = await fetchPosts();
+  const posts: BlogPost[] = await fetchPosts();  
 
   if (!posts || posts.length === 0) {
     return <div>No posts available</div>;

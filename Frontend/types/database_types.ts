@@ -132,5 +132,6 @@ export interface BlogPost {
   id: number;
   title: string;
   content: string;
+  order?: number; 
   createdAt: string;
 }

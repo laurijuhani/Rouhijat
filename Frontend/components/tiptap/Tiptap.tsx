@@ -8,14 +8,14 @@ import MenuBar from './MenuBar';
 import { Button } from '../ui/button';
 import 'tiptap-extension-resizable-image/styles.css';
 import ImageInsert from './ImageInsert';
-import Fetch from "@/utils/fetch";
-import Cookies from "js-cookie";
-import { useToast } from "@/context/ToastContext";
 import { useState } from 'react';
 import TitleInput from './TitleInput';
 
-const Tiptap = () => {
-  const { showToast } = useToast();
+interface TiptapProps {
+  handleSubmit: (content: string, title: string) => Promise<boolean>;
+}
+
+const Tiptap = ({ handleSubmit }: TiptapProps) => {
   const [title, setTitle] = useState('');
 
   const editor = useEditor({
@@ -48,36 +48,19 @@ const Tiptap = () => {
     }
   }); 
 
-  const handleSubmit = async () => {
+  const handleSend = async () => {
     if (!editor) return;
+    const content = editor.getHTML();
+    const isSuccess = await handleSubmit(content, title);
 
-    try {
-      const content = editor.getHTML();    
-      const response = await Fetch.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/history-posts`,
-        { content, title },
-        {
-          Authorization: `Bearer ${Cookies.get('token')}`,
-        }
-      ); 
-
-      const data = await response.json;
-      console.log(data);
-      
-      // store the data in the blogs list
-      
+    if (isSuccess) {
       editor.commands.clearContent();
-      setTitle(''); 
-      showToast('success', 'Postaus lisätty onnistuneesti', '');
-    } catch (error) {
-      showToast('error', 'Postauksen lähetys epäonnistui', 'Yritä uudelleen');
-      console.error('Error submitting content:', error);
+      setTitle('');
+      // TODO: reset the image component
     }
+  }; 
 
-    
-  };
 
- 
   return (
     <div>
       <TitleInput title={title} setTitle={setTitle} />
@@ -87,7 +70,7 @@ const Tiptap = () => {
       
       <Button 
         className='mt-5 text-text-primary'
-        onClick={handleSubmit}
+        onClick={handleSend}
       >
         Lähetä
       </Button>
