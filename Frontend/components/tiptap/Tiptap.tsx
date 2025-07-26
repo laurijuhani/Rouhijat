@@ -13,10 +13,12 @@ import TitleInput from './TitleInput';
 
 interface TiptapProps {
   handleSubmit: (content: string, title: string) => Promise<boolean>;
+  content?: string;
+  titleInput?: string;
 }
 
-const Tiptap = ({ handleSubmit }: TiptapProps) => {
-  const [title, setTitle] = useState('');
+const Tiptap = ({ handleSubmit, content, titleInput }: TiptapProps) => {
+  const [title, setTitle] = useState(titleInput || '');
 
   const editor = useEditor({
     extensions: [
@@ -39,7 +41,7 @@ const Tiptap = ({ handleSubmit }: TiptapProps) => {
         defaultWidth: 200,
       }),
     ],
-    content: '',
+    content: content || '',
     immediatelyRender: false,
     editorProps: {
       attributes: {

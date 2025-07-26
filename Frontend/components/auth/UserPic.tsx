@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const UserPic = () => {
   const { user } = useSession();
@@ -38,10 +39,10 @@ const UserPic = () => {
           <DropdownMenuLabel>Käyttäjäni</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <a href="/blogs">Blogit</a>
+            <Link href="/blogs">Blogit</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <a href="/dashboard">Hallintapaneeli</a>
+            <Link href="/dashboard">Hallintapaneeli</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>

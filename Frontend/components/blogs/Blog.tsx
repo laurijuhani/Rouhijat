@@ -2,12 +2,7 @@ import { BlogPost } from "@/types/database_types";
 import { formatDate } from "date-fns";
 import { Button } from "../ui/button";
 import { Pencil, Trash } from "lucide-react";
-
-
-/**
- * TODO
- * - Add modify button which directs to /blogs/[id]
- */
+import Link from "next/link";
 
 interface BlogProps {
   blog: BlogPost;
@@ -20,13 +15,11 @@ const Blog = ({ blog, handleDelete }: BlogProps) => {
       <p>{blog.title}</p>
       <p>Luotu: {formatDate(blog.createdAt, "dd.MM.yyyy HH.mm")}</p>
       <div className="flex flex-row space-x-2">
-        <Button
-          onClick={() => {
-            // Navigate to the edit page
-          }}
-        >
-          <Pencil className="text-foreground" />
-        </Button>
+        <Link href={`/blogs/${blog.id}`}>
+          <Button>
+            <Pencil className="text-foreground" />
+          </Button>
+        </Link>
         <Button
           variant="destructive"
           onClick={() => handleDelete(blog.id)}
