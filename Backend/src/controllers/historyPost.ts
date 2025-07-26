@@ -39,6 +39,22 @@ historyPostsRouter.get('/', authenticateToken, async (_req, res) => {
   }
 });
 
+historyPostsRouter.get('/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await historyPostService.getHistoryPostById(Number(id));
+    if (!post) {
+      res.status(404).json({ error: 'Post not found' });
+      return;
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    logger.error(error);
+  }
+});
+
 historyPostsRouter.put('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   const { content, title } = req.body as { content: string; title: string };

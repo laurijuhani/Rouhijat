@@ -138,5 +138,6 @@ model HistoryPost {
   title String
   order Int?
   createdAt DateTime @default(now())
+  images String[]
   @@map("history_posts")
 }

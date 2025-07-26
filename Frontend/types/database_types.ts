@@ -134,4 +134,5 @@ export interface BlogPost {
   content: string;
   order?: number; 
   createdAt: string;
+  images: string[];
 }

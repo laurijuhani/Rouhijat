@@ -1,11 +1,69 @@
 import prisma from "../utils/client";
 import fs from "fs";
 import path from "path";
+import {v4 as uuidv4} from "uuid";
 
 const addHistoryPost = async (content: string, title: string) => {
+  if (!content || !title) {
+    throw new Error('Missing required fields');
+  }
+
+  const { content: updatedContent, images: replacements } = addImagesToPost(content);
+
+  await prisma.historyPost.create({
+    data: {
+      content: updatedContent,
+      title: title,
+      images: replacements,
+    },
+  });
+
+  return { content, title };
+};
+
+
+const getHistoryPosts = async () => {
+  return await prisma.historyPost.findMany({}); 
+}; 
+
+const getHistoryPostById = async (id: number) => {
+  return await prisma.historyPost.findUnique({ where: { id } });
+};
+
+const updateHistoryPost = async (id: number, content: string, title: string) => {
+  const post = await prisma.historyPost.findUnique({ where: { id } });
+  if (!post) {
+    throw new Error('Post not found');
+  }
+
+  deleteImages(post.images);
+
+  const { content: updatedContent, images: replacements } = addImagesToPost(content);
+
+  return await prisma.historyPost.update({
+    where: { id },
+    data: { content: updatedContent, title, images: replacements },
+  });
+};
+
+const deleteHistoryPost = async (id: number) => {
+  const post = await prisma.historyPost.findUnique({ where: { id } });
+  if (!post) {
+    throw new Error('Post not found');
+  }
+
+  deleteImages(post.images);
+
+  await prisma.historyPost.delete({ where: { id } });
+  return post;
+};
+
+
+const addImagesToPost = (content: string) => {
   const imgRegex = /<img[^>]+src="(data:image\/[^">]+)"/g;
   let match: RegExpExecArray | null;
   const replacements: { base64: string, url: string }[] = [];
+  const tempId = uuidv4() as string;
 
   while ((match = imgRegex.exec(content)) !== null) {
     const base64 = match[1];
@@ -15,7 +73,7 @@ const addHistoryPost = async (content: string, title: string) => {
 
     const base64Data = base64.replace(/^data:image\/\w+;base64,/, '');
 
-    const filename = `image-${Date.now()}.${ext}`;
+    const filename = `image-${tempId}-${Date.now()}.${ext}`;
     const filePath = path.join(__dirname, "..", "..", "media/posts", filename);
 
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -30,46 +88,23 @@ const addHistoryPost = async (content: string, title: string) => {
     content = content.replace(base64, url);
   });
 
-  await prisma.historyPost.create({
-    data: {
-      content: content,
-      title: title,
-    },
-  });
-
-  return { content, title };
+  return { content, images: replacements.map(r => r.url) };
 };
 
 
-const getHistoryPosts = async () => {
-  return await prisma.historyPost.findMany({}); 
-}; 
-
-const updateHistoryPost = async (id: number, content: string, title: string) => {
-  const post = await prisma.historyPost.findUnique({ where: { id } });
-  if (!post) {
-    throw new Error('Post not found');
-  }
-
-  return await prisma.historyPost.update({
-    where: { id },
-    data: { content, title },
+const deleteImages = (images: string[]) => {
+  images.forEach(image => {
+    const filePath = path.join(__dirname, "..", "..", "media/posts", image);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
   });
-};
-
-const deleteHistoryPost = async (id: number) => {
-  const post = await prisma.historyPost.findUnique({ where: { id } });
-  if (!post) {
-    throw new Error('Post not found');
-  }
-
-  await prisma.historyPost.delete({ where: { id } });
-  return post;
 };
 
 export default {
   addHistoryPost,
   getHistoryPosts,
+  getHistoryPostById,
   updateHistoryPost,
   deleteHistoryPost,
 };

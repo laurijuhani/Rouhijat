@@ -3,7 +3,6 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ListBlogs from "@/components/blogs/ListBlogs";
 import UserNavBar from "@/components/dashboard/UserNavBar";
 import Tiptap from "@/components/tiptap/Tiptap";
-import { ToastProvider } from "@/context/ToastContext";
 import { User } from "@/hooks/useSession";
 import Fetch from "@/utils/fetch";
 import { useToast } from "@/context/ToastContext";
@@ -38,11 +37,9 @@ const Page = ({ user }: { user: User }) => {
 
   return (
     <div>
-      <ToastProvider>
-        <UserNavBar user={user} />
-        <Tiptap handleSubmit={handleSubmit} />
-        <ListBlogs />
-      </ToastProvider>
+      <UserNavBar user={user} />
+      <Tiptap handleSubmit={handleSubmit} />
+      <ListBlogs />
     </div>
   );
 };
