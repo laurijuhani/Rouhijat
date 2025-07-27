@@ -7,7 +7,7 @@ import {
 } from "@/hooks/use-file-upload";
 import { Button } from "@/components/ui/button";
 import { Editor } from "@tiptap/react";
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { FileWithPreview } from "@/hooks/use-file-upload";
 
 
@@ -15,10 +15,14 @@ export interface ImageFileWithPreview extends FileWithPreview {
   actualSrc?: string; 
 }
 
-const ImageInsert = ({ editor }: { editor: Editor | null}) => {
+const ImageInsert = forwardRef(({ editor, initialImages = [] }: { editor: Editor | null, initialImages?: { src: string; alt: string }[] }, ref) => {
   const maxSizeMB = 5;
-  const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
+  const maxSize = maxSizeMB * 1024 * 1024;
   const maxFiles = 6;
+
+  useImperativeHandle(ref, () => ({
+    clearFiles,
+  }));
 
   
   const [
@@ -42,6 +46,25 @@ const ImageInsert = ({ editor }: { editor: Editor | null}) => {
   
   
   const prevFiles = useRef<string[]>([]);
+
+  useEffect(() => {
+    if (initialImages.length > 0) {
+      const newFiles = initialImages.filter(image => !prevFiles.current.includes(image.alt));
+      newFiles.forEach(image => {
+        const file: ImageFileWithPreview = {
+          id: image.alt,
+          file: new File([], image.alt),
+          preview: image.src,
+          actualSrc: image.src,
+        };
+        files.push(file);
+      });
+      prevFiles.current = files.map(file => file.id);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialImages]);
+
+
   
   useEffect(() => {
     if (!editor) return;
@@ -62,7 +85,8 @@ const ImageInsert = ({ editor }: { editor: Editor | null}) => {
       }
     });
     prevFiles.current = files.map(file => file.id);
-  }, [files, editor]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files]);
   
   if (!editor) return null; 
 
@@ -176,6 +200,8 @@ const ImageInsert = ({ editor }: { editor: Editor | null}) => {
 
     </div>
   );
-};
+});
+
+ImageInsert.displayName = "ImageInsert";
 
 export default ImageInsert;

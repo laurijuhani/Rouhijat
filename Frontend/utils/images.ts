@@ -38,3 +38,14 @@ export const convertContentToBase64 = async (content: string, imageUrls: string[
   
   return updatedContent;
 }; 
+
+
+export const extractImagesFromContent = (content: string) => {
+  const imgRegex = /<img[^>]+src="([^">]+)"[^>]*alt="([^">]*)"[^>]*>/g;
+  const images: { src: string; alt: string }[] = [];
+  let match;
+  while ((match = imgRegex.exec(content)) !== null) {
+    images.push({ src: match[1], alt: match[2] });    
+  }
+  return images;
+};
