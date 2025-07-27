@@ -10,20 +10,28 @@ const addHistoryPost = async (content: string, title: string) => {
 
   const { content: updatedContent, images: replacements } = addImagesToPost(content);
 
-  await prisma.historyPost.create({
+  return await prisma.historyPost.create({
     data: {
       content: updatedContent,
       title: title,
       images: replacements,
     },
   });
-
-  return { content, title };
 };
 
 
 const getHistoryPosts = async () => {
-  return await prisma.historyPost.findMany({}); 
+  const noOrderPosts = await prisma.historyPost.findMany({
+    where: { order: null },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const orderedPosts = await prisma.historyPost.findMany({
+    where: { NOT: { order: null } },
+    orderBy: { order: 'desc' },
+  });
+
+  return [...noOrderPosts, ...orderedPosts];
 }; 
 
 const getHistoryPostById = async (id: number) => {

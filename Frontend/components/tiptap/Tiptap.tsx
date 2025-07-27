@@ -8,8 +8,9 @@ import MenuBar from './MenuBar';
 import { Button } from '../ui/button';
 import 'tiptap-extension-resizable-image/styles.css';
 import ImageInsert from './ImageInsert';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import TitleInput from './TitleInput';
+import { extractImagesFromContent } from '@/utils/images';
 
 interface TiptapProps {
   handleSubmit: (content: string, title: string) => Promise<boolean>;
@@ -19,6 +20,7 @@ interface TiptapProps {
 
 const Tiptap = ({ handleSubmit, content, titleInput }: TiptapProps) => {
   const [title, setTitle] = useState(titleInput || '');
+  const imageInsertRef = useRef<{ clearFiles: () => void }>(null);
 
   const editor = useEditor({
     extensions: [
@@ -58,7 +60,7 @@ const Tiptap = ({ handleSubmit, content, titleInput }: TiptapProps) => {
     if (isSuccess) {
       editor.commands.clearContent();
       setTitle('');
-      // TODO: reset the image component
+      imageInsertRef.current?.clearFiles(); 
     }
   }; 
 
@@ -68,9 +70,12 @@ const Tiptap = ({ handleSubmit, content, titleInput }: TiptapProps) => {
       <TitleInput title={title} setTitle={setTitle} />
       <MenuBar editor={editor} />
       <EditorContent editor={editor} className='mb-5' />
-      <ImageInsert editor={editor} />
-      
-      <Button 
+      <ImageInsert 
+        editor={editor} 
+        ref={imageInsertRef} 
+        initialImages={content ? extractImagesFromContent(content): []}
+      />
+      <Button
         className='mt-5 text-text-primary'
         onClick={handleSend}
       >

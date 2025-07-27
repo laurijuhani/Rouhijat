@@ -56,6 +56,7 @@ const Page = () => {
           Authorization: `Bearer ${Cookies.get('token')}`,
         }
       );
+      window.location.href = '/blogs';
       return true;
     } catch (error) {
       showToast('error', 'Blogin päivittäminen epäonnistui', 'Yritä uudelleen');

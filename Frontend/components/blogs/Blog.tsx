@@ -1,7 +1,7 @@
 import { BlogPost } from "@/types/database_types";
 import { formatDate } from "date-fns";
 import { Button } from "../ui/button";
-import { Pencil, Trash } from "lucide-react";
+import { GripVertical, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 
 interface BlogProps {
@@ -11,10 +11,10 @@ interface BlogProps {
 
 const Blog = ({ blog, handleDelete }: BlogProps) => {
   return (
-    <div className="flex flex-row justify-between border border-secondary-foreground p-4 mb-4 rounded-xl shadow-sm">
+    <div className="flex flex-row justify-between border border-secondary-foreground py-4 px-2 mb-4 rounded-xl shadow-sm">
       <p>{blog.title}</p>
       <p>Luotu: {formatDate(blog.createdAt, "dd.MM.yyyy HH.mm")}</p>
-      <div className="flex flex-row space-x-2">
+      <div className="flex flex-row items-center space-x-2">
         <Link href={`/blogs/${blog.id}`}>
           <Button>
             <Pencil className="text-foreground" />
@@ -26,7 +26,7 @@ const Blog = ({ blog, handleDelete }: BlogProps) => {
         >
           <Trash />
         </Button>
-
+        <GripVertical />
       </div>
     </div>
   );

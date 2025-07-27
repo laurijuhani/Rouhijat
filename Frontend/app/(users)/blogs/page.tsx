@@ -7,9 +7,12 @@ import { User } from "@/hooks/useSession";
 import Fetch from "@/utils/fetch";
 import { useToast } from "@/context/ToastContext";
 import Cookies from "js-cookie";
+import { BlogPost } from "@/types/database_types";
+import { useState } from "react";
 
 const Page = ({ user }: { user: User }) => {
   const { showToast } = useToast();
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
 
   const handleSubmit = async (content: string, title: string) => {
     try {
@@ -21,10 +24,8 @@ const Page = ({ user }: { user: User }) => {
         }
       ); 
 
-      const data = await response.json;
-      console.log(data);
-      
-      //TODO: store the data in the blogs list
+      const data = await response.json as BlogPost;      
+      setBlogs(prevBlogs => [data, ...prevBlogs]);
       
       showToast('success', 'Postaus lisätty onnistuneesti', '');
       return true;
@@ -39,7 +40,10 @@ const Page = ({ user }: { user: User }) => {
     <div>
       <UserNavBar user={user} />
       <Tiptap handleSubmit={handleSubmit} />
-      <ListBlogs />
+      <ListBlogs 
+        blogs={blogs}
+        setBlogs={setBlogs}
+      />
     </div>
   );
 };
