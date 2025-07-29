@@ -13,7 +13,7 @@ const Blog = ({ blog, handleDelete }: BlogProps) => {
   return (
     <div className="flex flex-row justify-between border border-secondary-foreground py-4 px-2 mb-4 rounded-xl shadow-sm">
       <p>{blog.title}</p>
-      <p>Luotu: {formatDate(blog.createdAt, "dd.MM.yyyy HH.mm")}</p>
+      <p className="flex text-center mr-2">Luotu: {formatDate(blog.createdAt, "dd.MM.yyyy HH.mm")}</p>
       <div className="flex flex-row items-center space-x-2">
         <Link href={`/blogs/${blog.id}`}>
           <Button>

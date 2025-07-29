@@ -85,6 +85,18 @@ historyPostsRouter.delete('/:id', authenticateToken, async (req, res) => {
   }
 });
 
+historyPostsRouter.post('/reorder', authenticateToken, async (req, res) => {
+  const orderData = req.body as { id: number; order: number }[];
+
+  try {
+    await historyPostService.updateHistoryPostsOrder(orderData);
+    res.status(200).json({ message: 'Order updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+    logger.error(error);
+  }
+});
+
 internalHistoryPostsRouter.get('/', async (_req, res) => {
   try {
     const posts = await historyPostService.getHistoryPosts();

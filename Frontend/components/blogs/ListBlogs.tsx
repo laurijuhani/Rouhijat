@@ -2,73 +2,24 @@ import Cookies from "js-cookie";
 import { BlogPost } from "@/types/database_types";
 import { Dispatch, useEffect, SetStateAction, useState } from "react";
 import { useToast } from "@/context/ToastContext";
-import Blog from "./Blog";
+import {
+  SortableList,
+  SortableListItem,
+} from "@/components/ui/sortable-list";
+import Fetch from "@/utils/fetch";
+import { Button } from "../ui/button";
+import Spinner from "../basics/Spinner";
 
 interface ListBlogsProps {
   blogs: BlogPost[];
   setBlogs: Dispatch<SetStateAction<BlogPost[]>>;
 }
 
-/**
- * TODO:
- * - Implement drag and drop functionality for reordering blogs.
- * - Implement touch support for mobile devices.
- * - Add submit button for reordering the posts
- */
 
 const ListBlogs = ({ blogs, setBlogs }: ListBlogsProps) => {
   const { showToast } = useToast();
-  const [draggingBlog, setDraggingBlog] = useState<BlogPost | null>(null);
-  const [touchStartY, setTouchStartY] = useState<number | null>(null);
-
-  const handleDragStart = (blog: BlogPost) => {
-    setDraggingBlog(blog);
-  };
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-  const handleDrop = (e: React.DragEvent, targetBlog: BlogPost) => {
-    e.preventDefault();
-    if (draggingBlog) {
-      setBlogs((prevBlogs) => {
-        const updatedBlogs = [...prevBlogs];
-        const draggingIndex = updatedBlogs.findIndex(blog => blog.id === draggingBlog.id);
-        const targetIndex = updatedBlogs.findIndex(blog => blog.id === targetBlog.id);
-        ;[updatedBlogs[draggingIndex], updatedBlogs[targetIndex]] = 
-        [updatedBlogs[targetIndex], updatedBlogs[draggingIndex]];
-        return updatedBlogs;
-      });
-      setDraggingBlog(null);
-    }
-  };
-
-  const handleTouchStart = (e: React.TouchEvent, blog: BlogPost) => {
-    setDraggingBlog(blog);
-    setTouchStartY(e.touches[0].clientY);
-  };
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (draggingBlog) e.preventDefault();
-  };
-  const handleTouchEnd = (e: React.TouchEvent, targetBlog: BlogPost) => {
-    e.preventDefault();
-    if (draggingBlog && touchStartY !== null) {
-      const touchEndY = e.changedTouches[0].clientY;
-      const targetIndex = blogs.findIndex(blog => blog.id === targetBlog.id);
-      const draggingIndex = blogs.findIndex(blog => blog.id === draggingBlog.id);
-
-      if (draggingIndex !== -1 && targetIndex !== -1 && draggingIndex !== targetIndex) {
-       setBlogs((prevBlogs) => {
-        const updatedBlogs = [...prevBlogs];
-        [updatedBlogs[draggingIndex], updatedBlogs[targetIndex]] =
-          [updatedBlogs[targetIndex], updatedBlogs[draggingIndex]];
-        return updatedBlogs;
-      });
-    }
-    setDraggingBlog(null);
-    setTouchStartY(null);
-    }
-  };
-
+  const [savingOrder, setSavingOrder] = useState(false);
+  
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -114,26 +65,60 @@ const ListBlogs = ({ blogs, setBlogs }: ListBlogsProps) => {
     }
   };
 
+  const handleSaveOrder = async () => {
+    setSavingOrder(true);
+    try {
+      const orderData = blogs.map((blog, index) => ({
+        id: blog.id,
+        order: index + 1,
+      }));
+
+      await Fetch.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/history-posts/reorder`,
+        orderData,
+        {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        }
+      ); 
+
+      showToast('success', 'Järjestys tallennettu onnistuneesti', '');
+    } catch (error) {
+      console.error("Failed to save order:", error);
+      showToast('error', 'Järjestyksen tallennus epäonnistui', 'Yritä uudelleen');
+    } finally {
+      setSavingOrder(false);
+    }
+  };
+
 
   return (
     <div className="pt-4">
-      <ul>
-        {blogs.map(blog => (
-          <li 
-            key={blog.id}
-            draggable
-            onDragStart={() => handleDragStart(blog)}
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, blog)}
-            onTouchStart={(e) => handleTouchStart(e, blog)}
-           // onTouchMove={handleTouchMove}
-            onTouchEnd={(e) => handleTouchEnd(e, blog)}
-            className={`mb-4 rounded-xl ${draggingBlog?.id === blog.id ? 'bg-primary' : ''}`}
-          >
-            <Blog blog={blog} handleDelete={handleDelete} />
-          </li>
-        ))}
-      </ul>
+      <SortableList 
+        blogs={blogs}
+        handleDelete={handleDelete}
+        setItems={setBlogs}
+        renderItem={
+          (blog: BlogPost, index: number, onRemoveItem: (id: number) => void) => (
+            <SortableListItem
+              key={blog.id}
+              blog={blog}
+              order={index}
+              onRemoveItem={onRemoveItem}
+              handleDrag={() => {}}
+            />
+          )
+        }
+      /> 
+
+      <div className="flex justify-center mt-4">
+        <Button
+          onClick={handleSaveOrder}
+          disabled={savingOrder}
+          className="text-text-primary w-32"
+        >
+          {savingOrder ? <Spinner /> : 'Tallenna järjestys'}
+        </Button>
+      </div>
     </div>
   );
 };
