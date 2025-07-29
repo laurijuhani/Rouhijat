@@ -28,7 +28,7 @@ const getHistoryPosts = async () => {
 
   const orderedPosts = await prisma.historyPost.findMany({
     where: { NOT: { order: null } },
-    orderBy: { order: 'desc' },
+    orderBy: { order: 'asc' },
   });
 
   return [...noOrderPosts, ...orderedPosts];
@@ -52,6 +52,16 @@ const updateHistoryPost = async (id: number, content: string, title: string) => 
     where: { id },
     data: { content: updatedContent, title, images: replacements },
   });
+};
+
+const updateHistoryPostsOrder = async (orderData: { id: number; order: number }[]) => {
+  const updates = orderData.map(({ id, order }) =>
+    prisma.historyPost.update({
+      where: { id },
+      data: { order },
+    })
+  );
+  await Promise.all(updates);
 };
 
 const deleteHistoryPost = async (id: number) => {
@@ -114,5 +124,6 @@ export default {
   getHistoryPosts,
   getHistoryPostById,
   updateHistoryPost,
+  updateHistoryPostsOrder,
   deleteHistoryPost,
 };
