@@ -10,7 +10,7 @@ generator client {
 }
 
 model User {
-  id        String      @id @default(cuid())
+  id        String   @id @default(cuid())
   email     String   @unique
   name      String
   picture     String
@@ -130,4 +130,14 @@ model Video {
   postId   String  @map("post_id")
   post     Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
   @@map("ig_videos")
+}
+
+model HistoryPost {
+  id    Int   @id @default(autoincrement())
+  content String
+  title String
+  order Int?
+  createdAt DateTime @default(now())
+  images String[]
+  @@map("history_posts")
 }
