@@ -22,7 +22,8 @@ const eslintConfig = [
     rules: {
       semi: "off",
     },
+    
   },
-];
+]; 
 
 export default eslintConfig;

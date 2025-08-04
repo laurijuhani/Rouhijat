@@ -35,11 +35,12 @@ function SortableListItem({
   isExpanded,
   className,
 }: SortableListItemProps) {
-  let [ref, bounds] = useMeasure()
+  const [ref, bounds] = useMeasure()
   const [isDragging, setIsDragging] = useState(false)
-  const [isDraggable, setIsDraggable] = useState(true)
+  const isDraggable = true; 
   const dragControls = useDragControls()
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragStart = (event: any) => {
     setIsDragging(true)
     dragControls.start(event, { snapToCursor: true })
