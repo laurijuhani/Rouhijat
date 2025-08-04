@@ -26,6 +26,7 @@ const app = express();
 
 app.use(cors());
 app.use(helmet()); 
+app.use(express.json());
 
 app.use(clientIp);
 app.use(generalRateLimiter);
@@ -56,7 +57,6 @@ internalRouter.use('/history-posts', internalHistoryPostsRouter);
 
 app.use('/api/v1/internal', internalRouter);
 
-app.use(express.json());
 app.use(unknownEndpoint);
 
 app.use((err: Error, req: express.Request, res: express.Response) => {
