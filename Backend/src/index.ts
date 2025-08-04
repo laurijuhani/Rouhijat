@@ -26,7 +26,6 @@ const app = express();
 
 app.use(cors());
 app.use(helmet()); 
-app.use(express.json());
 
 app.use(clientIp);
 app.use(generalRateLimiter);
@@ -34,6 +33,9 @@ app.use(generalRateLimiter);
 const apiRouter = express.Router();
 const internalRouter = express.Router();
 const payloadRouter = express.Router();
+
+
+apiRouter.use(express.json());
 payloadRouter.use(express.json({ limit: '20mb' })); // Increased limit for payloads
 
 apiRouter.use('/games', gamesRouter);
@@ -45,11 +47,11 @@ apiRouter.use('/points', pointsRouter);
 apiRouter.use('/seasons', seasonsRouter);
 apiRouter.use('/goalies', goaliesRouter);
 apiRouter.use('/posts', postsRouter);
-payloadRouter.use('/history-posts', historyPostsRouter);
+payloadRouter.use('/', historyPostsRouter);
 apiRouter.use('/media/videos', express.static(path.join(__dirname, '..', 'media', 'videos')));
 
+app.use('/api/v1/public/history-posts', payloadRouter);
 app.use('/api/v1/public', apiRouter);
-app.use('/api/v1/public', payloadRouter);
 
 internalRouter.use('/media', express.static(path.join(__dirname, '..', 'media')));
 internalRouter.use('/posts', internalPostsRouter);
