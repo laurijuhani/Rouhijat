@@ -74,6 +74,12 @@ jobs:
             old_frontend_image=$(docker compose ps | grep frontend | awk '{print $2}')
 
             docker compose down
+
+            # Create a new migration (not recommended approach, too lazy to fix it)
+            cd Backend
+            npx prisma migrate dev --name auto-migration --create-only
+            cd .. 
+
             docker compose up -d
 
             docker rmi $old_backend_image

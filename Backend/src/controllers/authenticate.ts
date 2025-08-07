@@ -70,7 +70,15 @@ authenticateRouter.get('/google/callback', (req, res, next) => {
       return res.redirect(`${process.env.FRONTEND_URL}/login?error=401&message=${info?.message || 'Authentication failed'}`);
     }
     const token = await generateToken(user);
-    res.redirect(`${process.env.FRONTEND_URL}/authorized/?token=${token}`);
+
+    res.cookie('token', token, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    }); 
+
+    res.redirect(`${process.env.FRONTEND_URL}/authorized/`);
   })(req, res, next);
 });
 

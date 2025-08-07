@@ -136,5 +136,8 @@ model HistoryPost {
   id    Int   @id @default(autoincrement())
   content String
   title String
+  order Int?
   createdAt DateTime @default(now())
+  images Json
+  @@map("history_posts")
 }

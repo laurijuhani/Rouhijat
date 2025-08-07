@@ -65,6 +65,11 @@ historyPostsRouter.put('/:id', authenticateToken, async (req, res) => {
   }
 
   try {
+    const postExists = await historyPostService.getHistoryPostById(Number(id));
+    if (!postExists) {
+      res.status(404).json({ error: 'Post not found' });
+      return;
+    }
     const result = await historyPostService.updateHistoryPost(Number(id), content, title);
     res.status(200).json(result);
   } catch (error) {
@@ -77,6 +82,11 @@ historyPostsRouter.delete('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
+    const postExists = await historyPostService.getHistoryPostById(Number(id));
+    if (!postExists) {
+      res.status(404).json({ error: 'Post not found' });
+      return;
+    }
     const deletedPost = await historyPostService.deleteHistoryPost(Number(id));
     res.status(200).json(deletedPost);
   } catch (error) {

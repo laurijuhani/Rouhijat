@@ -10,6 +10,7 @@ services:
         condition: service_started
     volumes:
       - ./Backend/media:/app/media
+      - ./Backend/prisma/migrations:/app/prisma/migrations
     restart: unless-stopped
 
 

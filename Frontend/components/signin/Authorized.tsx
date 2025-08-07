@@ -8,9 +8,8 @@ const Authorized = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    const token = Cookies.get('token');
     if (token) {
-      Cookies.set('token', token, { secure: true, sameSite: 'strict', expires: 1 });
       router.push('/');
     } else {
       router.push('/login');
