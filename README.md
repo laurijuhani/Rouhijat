@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="Frontend/public/logo.png" alt="Rouhijat Logo" width="100"/>
+  <img src="Frontend/public/logo.png" alt="Rouhijat Logo" width="150"/>
   
   # <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="40px" /> [![Rouhijat Project](https://readme-typing-svg.demolab.com?font=Verdana&size=30&pause=2000&color=F731E1&center=true&vCenter=true&width=300&lines=Rouhijat+Page)](https://git.io/typing-svg) <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="40px" />
   
@@ -7,7 +7,7 @@
 </div>
 <hr>
 
-A modern web application built with a Next.js frontend and Node.js backend for managing player stats, blog/history posts and games
+A modern web application built with a Next.js and Node.js for managing player stats, blog/history posts and games
 
 # Table of Contents
 
@@ -24,7 +24,7 @@ Santapaperiosaston Rouhijat (Rouhijat for short) was built as a fun project for 
 
 I wanted to create a modern, scalable web application using technologies that are widely adopted in the industry. This project allowed me to deepen my experience in full-stack development, cloud deployment, and secure authentication. I learned how to integrate third-party APIs, optimize for performance, and automate deployments with CI/CD.
 
-I tackled challenging problems including secure authentication flows, optimizing image uploads and storage, implementing caching strategies with Redis, and ensuring mobile responsiveness across devices.
+I tackled challenging problems including secure authentication flows, handling image uploads and storage, implementing caching strategies with Redis, and ensuring mobile responsiveness across devices.
 
 # 🚀 Key Features 
 
