@@ -1,29 +1,26 @@
 <div align="center">
-  <table>
-    <tr>
-      <td><img src="Frontend/public/logo.png" alt="Rouhijat Logo" width="100"/></td>
-      <td><h1>Rouhijat Project</h1></td>
-    </tr>
-  </table>
-  <a href="https://www.rouhijat.fi"><h2>www.rouhijat.fi</h2></a>
+  <img src="Frontend/public/logo.png" alt="Rouhijat Logo" width="100"/>
+  
+  # <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="40px" /> [![Rouhijat Project](https://readme-typing-svg.demolab.com?font=Verdana&size=30&pause=2000&color=F731E1&center=true&vCenter=true&width=300&lines=Rouhijat+Page)](https://git.io/typing-svg) <img src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="40px" />
+  
+  [www.rouhijat.fi](https://www.rouhijat.fi)
 </div>
 <hr>
 
-
-### A modern web application built with a Next.js frontend and Node.js backend for managing player stats, blog/history posts and games
+A modern web application built with a Next.js frontend and Node.js backend for managing player stats, blog/history posts and games
 
 # Table of Contents
 
-* [Motivation](#motivation)
-* [Key Features](#key-features)
-* [Architecture](#architecture)
-* [Project Structure](#project-structure)
-* [License](#license)
+* [⚡Motivation](#motivation)
+* [🚀 Key Features](#key-features)
+* [🏗️ Architecture](#architecture)
+* [🛠️ Project Structure](#project-structure)
+* [🔑 License](#license)
 
 
 # ⚡Motivation
 
-Santapaperiosaston Rouhijat (Rouhijat for short) was built as a fun project for showcasing our team's games, stats, and "stories".
+Santapaperiosaston Rouhijat (Rouhijat for short) was built as a fun project for showcasing our team's games, stats, and *"stories"*.
 
 I wanted to create a modern, scalable web application using technologies that are widely adopted in the industry. This project allowed me to deepen my experience in full-stack development, cloud deployment, and secure authentication. I learned how to integrate third-party APIs, optimize for performance, and automate deployments with CI/CD.
 
@@ -46,6 +43,7 @@ The project follows a microservices architecture with the following technologies
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) 
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) 
+![ShadcnUI](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 
@@ -60,10 +58,11 @@ The project follows a microservices architecture with the following technologies
 
 ## Backend
 
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) 
+![Express.js](  https://img.shields.io/badge/Express%20js-000000?style=for-the-badge&logo=express&logoColor=white) 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) 
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 
 * **Framework**: [Express.js](https://expressjs.com/)
