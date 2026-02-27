@@ -61,7 +61,7 @@ goaliesRouter.post('/', authenticateToken, async (req, res) => {
 
 
 goaliesRouter.put('/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   const { name, nickname, number } = req.body as { name: string, nickname: string, number: number };
 
   try {
@@ -90,7 +90,7 @@ goaliesRouter.put('/:id', authenticateToken, async (req, res) => {
 });
 
 goaliesRouter.delete('/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
 
   try {
     const id_number = parseInt(id);

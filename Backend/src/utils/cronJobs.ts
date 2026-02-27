@@ -12,6 +12,6 @@ cron.schedule('0 * * * *', async () => {
       await postsService.saveDataToDatabase(data.profile, data.posts);
     } 
   } catch (error) {
-    logger.error('Error during scheduled Instagram data scraping:', error);
+    logger.error({ error }, 'Error during scheduled Instagram data scraping:');
   }
 });

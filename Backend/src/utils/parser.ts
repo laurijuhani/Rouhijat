@@ -29,7 +29,7 @@ const parseData = async () => {
     const data = await response.json() as { data: { user: ProfileData } };
     return data.data.user; 
   } catch (error) {
-    logger.error("Failed to parse profile data:", error);
+    logger.error({ error }, "Failed to parse profile data");
     return null; 
   }
 };

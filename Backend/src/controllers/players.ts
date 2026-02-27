@@ -91,7 +91,7 @@ playersRouter.get('/', async (_req, res) => {
 
 
 playersRouter.delete('/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
 
   try {
     const id_number = parseInt(id);
@@ -116,7 +116,7 @@ playersRouter.delete('/:id', authenticateToken, async (req, res) => {
 
 playersRouter.put('/:id', authenticateToken, async (req, res) => {
   const { name, nickname, number } = req.body as { name: string, nickname: string, number: number | null };
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
 
   if (!name || !id) {
     res.status(400).json({ error: 'missing required fields' });
@@ -125,6 +125,10 @@ playersRouter.put('/:id', authenticateToken, async (req, res) => {
 
   try {
     const id_number = parseInt(id);
+    if (isNaN(id_number)) {
+      res.status(400).json({ error: 'malformatted id' });
+      return;
+    }
 
     if (!(await playerService.getPlayerById(id_number))) {
       res.status(404).json({ error: 'player not found' });

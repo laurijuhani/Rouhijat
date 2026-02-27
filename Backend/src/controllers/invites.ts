@@ -49,7 +49,7 @@ invitesRouter.delete('/:email', authenticateToken, async (req: CustomRequest, re
     return;
   }
 
-  const { email } = req.params;
+  const { email } = req.params as { email: string };
   
   try {
     await prisma.invitedEmail.delete({

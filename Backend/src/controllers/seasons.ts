@@ -119,7 +119,7 @@ seasonsRouter.post('/', authenticateToken, async (req, res) => {
 
 
 seasonsRouter.delete('/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
 
   try {
     const deletedSeason = await seasonService.deleteSeason(parseInt(id));
@@ -136,7 +136,7 @@ seasonsRouter.delete('/:id', authenticateToken, async (req, res) => {
 });
 
 seasonsRouter.put('/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
   const { name } = req.body as { name: string };
 
   if (!name) {
