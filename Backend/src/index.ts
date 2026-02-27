@@ -76,7 +76,7 @@ if (process.env.NODE_ENV !== 'test') {
     try {
       await redisClient.flushAll();
     } catch (error) {
-      logger.error('Failed to flush Redis cache:', error);
+      logger.error({ err: error }, 'Failed to flush Redis cache');
     }
   })().catch((error) => {
     logger.error('Unexpected error:', error);

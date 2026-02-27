@@ -9,7 +9,8 @@ const pointsRouter = Router();
 
 pointsRouter.post('/:id', authenticateToken, async (req, res) => {
   const { playerData } = req.body as { playerData: PlayerData[] };
-  const gameId = parseInt(req.params.id);
+  const id = req.params.id as string;
+  const gameId = parseInt(id);
 
   const game = await gameService.getGameById(gameId);
   if (!game) {
@@ -33,7 +34,8 @@ pointsRouter.post('/:id', authenticateToken, async (req, res) => {
 
 pointsRouter.put('/:id', authenticateToken, async (req, res) => {
   const { playerData } = req.body as { playerData: PlayerData[] };
-  const gameId = parseInt(req.params.id);
+  const id = req.params.id as string;
+  const gameId = parseInt(id);
 
   const game = await gameService.getGameById(gameId);
   if (!game) {
@@ -68,7 +70,7 @@ pointsRouter.put('/:id', authenticateToken, async (req, res) => {
 
 
 pointsRouter.get('/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params as { id: string };
 
   try {
     const game_id = parseInt(id);

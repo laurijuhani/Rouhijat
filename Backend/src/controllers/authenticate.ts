@@ -32,9 +32,9 @@ const handleLogin = async (accessToken: string, _refreshToken: string, profile: 
       return done(null, false, { message: 'Sign up failed' });
     }
 
-    logger.info('accessToken', accessToken);
+    logger.info({ accessToken }, 'accessToken');
     // maybe save the accessToken to the user
-    logger.info('profile', profile);
+    logger.info({ profile }, 'profile');
     done(null, profile);
   } catch (error) {
     done(error, false);
