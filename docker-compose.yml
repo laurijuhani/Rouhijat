@@ -11,6 +11,8 @@ services:
     volumes:
       - ./Backend/media:/app/media
       - ./Backend/prisma/migrations:/app/prisma/migrations
+    networks:
+      - internal
     restart: unless-stopped
 
 
@@ -19,6 +21,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./Frontend/.env
+    networks:
+      - internal
       
 
   nginx:
@@ -32,6 +36,7 @@ services:
       - "8080"
     networks:
       - web
+      - internal
     restart: unless-stopped
 
   postgres:
@@ -43,6 +48,8 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - internal
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}"]
       interval: 5s
@@ -52,11 +59,14 @@ services:
   redis:
     image: redis:latest
     restart: unless-stopped
-    
+    networks:
+      - internal
 
 volumes:
   postgres-data:
 
 networks:
+  internal:
+    internal: true
   web:
     external: true 
