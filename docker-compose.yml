@@ -67,6 +67,6 @@ volumes:
 
 networks:
   internal:
-    internal: true
+    driver: bridge
   web:
     external: true 
