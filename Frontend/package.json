@@ -33,7 +33,7 @@
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.23.11",
     "html-react-parser": "^5.2.5",
-    "js-cookie": "^3.0.5",
+    "js-cookie": "^3.0.7",
     "lucide-react": "^0.474.0",
     "motion": "^12.4.7",
     "next": "^15.5.18",
