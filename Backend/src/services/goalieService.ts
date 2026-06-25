@@ -59,7 +59,7 @@ const createGoalie = async (goalie: Goalie) => {
   });
 };
 
-const updateGoalie = async (id: number, goalie: Goalie) => {
+const updateGoalie = async (id: number, goalie: Goalie, deleted?: boolean) => {
   void redisClient.del(cacheKey);
   return await prisma.goalie.update({
     where: {
@@ -69,6 +69,7 @@ const updateGoalie = async (id: number, goalie: Goalie) => {
       name: goalie.name,
       nickname: goalie.nickname || null,
       number: goalie.number || null,
+      deleted,
     },
   });
 };

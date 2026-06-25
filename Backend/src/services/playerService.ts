@@ -78,6 +78,7 @@ const getPlayerStatsFromAllSeasons = async (id: number): Promise<PlayerPointsByS
           name: player.name,
           nickname: player.nickname,
           number: player.number,
+          deleted: player.deleted,
         };
       }
 
@@ -104,10 +105,12 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
   const cachedPlayers = await redisClient.get(cacheKey + "/season/" + seasonId);
   if (cachedPlayers) {
     const players = JSON.parse(cachedPlayers) as Player[];
-    return players.map(player => ({
-      ...player,
-      points: player.points,
-    }));
+    return players
+      .filter(player => !player.deleted || player.games > 0)
+      .map(player => ({
+        ...player,
+        points: player.points,
+      }));
   }
 
   const players = await prisma.player.findMany({
@@ -135,7 +138,9 @@ const getAllPlayersStatsBySeason = async (seasonId: number) => {
     };
   });
 
-  const sortedPlayers = aggregatedPlayers.sort((a, b) => {
+  const visiblePlayers = aggregatedPlayers.filter(player => !player.deleted || player.games > 0);
+
+  const sortedPlayers = visiblePlayers.sort((a, b) => {
     const aPoints = a.points.goals + a.points.assists;
     const bPoints = b.points.goals + b.points.assists;
 
@@ -165,7 +170,7 @@ const createPlayer = async (name: string, nickname: string, number: number | nul
   });
 };
 
-const updatePlayer = async (id: number, name: string, nickname: string, number: number | null) => {
+const updatePlayer = async (id: number, name: string, nickname: string, number: number | null, deleted?: boolean) => {
   void deleteCacheForPattern("games/*");
   void deleteCacheForPattern(cacheKey + "/season/*");
   return await prisma.player.update({
@@ -176,6 +181,7 @@ const updatePlayer = async (id: number, name: string, nickname: string, number: 
       name,
       nickname: nickname || null,
       number,
+      deleted,
     },
   });
 };

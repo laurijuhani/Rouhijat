@@ -16,7 +16,7 @@ import { BaseInfo } from "@/types/database_types";
 import React from "react";
 
 interface EditFormProps {
-  type: 'Pelaaja' | 'Maalivahti';
+  type: "Pelaaja" | "Maalivahti";
   player: BaseInfo;
   isLoading: boolean;
   handleDelete: () => Promise<void>;
@@ -25,10 +25,15 @@ interface EditFormProps {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
-const EditForm = ({ player, isLoading, type, handleSubmit, handleDelete, isDialogOpen, setIsDialogOpen }: EditFormProps) => {
-
-
+const EditForm = ({
+  player,
+  isLoading,
+  type,
+  handleSubmit,
+  handleDelete,
+  isDialogOpen,
+  setIsDialogOpen,
+}: EditFormProps) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
@@ -38,7 +43,8 @@ const EditForm = ({ player, isLoading, type, handleSubmit, handleDelete, isDialo
         <DialogHeader>
           <DialogTitle>Muokkaa {type}a</DialogTitle>
           <DialogDescription>
-            Muokkaa {type === 'Maalivahti' ? 'maalivahdin' : 'pelaajan'} {player.name} tietoja.
+            Muokkaa {type === "Maalivahti" ? "maalivahdin" : "pelaajan"}{" "}
+            {player.name} tietoja.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -47,47 +53,94 @@ const EditForm = ({ player, isLoading, type, handleSubmit, handleDelete, isDialo
               <Label htmlFor="name" className="text-right">
                 Nimi
               </Label>
-              <Input id="playername" defaultValue={player.name} className="col-span-3"/>
+              <Input
+                id="playername"
+                defaultValue={player.name}
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="username" className="text-right">
                 Lempinimi
               </Label>
-              <Input id="nickname" defaultValue={player.nickname || ''} className="col-span-3" />
+              <Input
+                id="nickname"
+                defaultValue={player.nickname || ""}
+                className="col-span-3"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="number" className="text-right">
                 Numero
               </Label>
-              <Input id="number" type='number' defaultValue={player.number?.toString()} className="col-span-3"/>
+              <Input
+                id="number"
+                type="number"
+                defaultValue={player.number?.toString()}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="active" className="text-right">
+                Aktiivinen
+              </Label>
+              <div className="col-span-3 flex items-center">
+                <label
+                  htmlFor="active"
+                  className="relative inline-flex h-6 w-11 cursor-pointer items-center"
+                >
+                  <input
+                    id="active"
+                    type="checkbox"
+                    defaultChecked={!player.deleted}
+                    className="peer sr-only"
+                  />
+                  <span className="absolute inset-0 rounded-full bg-muted transition-colors peer-checked:bg-primary" />
+                  <span className="absolute left-0.5 h-5 w-5 rounded-full bg-background shadow transition-transform peer-checked:translate-x-5" />
+                </label>
+              </div>
             </div>
           </div>
           <DialogFooter className="flex flex-row gap-3 justify-end">
             {isLoading ? (
-                <LoaderCircleIcon className="animate-spin" size={32} aria-hidden="true" />
+              <LoaderCircleIcon
+                className="animate-spin"
+                size={32}
+                aria-hidden="true"
+              />
             ) : (
               <>
                 <DialogClose asChild>
-                  <Button type="button" variant="secondary" disabled={isLoading} className="max-w-[fit-content]">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    disabled={isLoading}
+                    className="max-w-[fit-content]"
+                  >
                     Sulje
                   </Button>
                 </DialogClose>
                 <Button
+                  type="button"
                   onClick={handleDelete}
                   disabled={isLoading}
                   data-loading={isLoading}
                   className="max-w-[fit-content] group relative disabled:opacity-100"
-                  variant='destructive'
-                  >
-                  <span className="group-data-[loading=true]:text-transparent">Poista {type}</span>
+                  variant="destructive"
+                >
+                  <span className="group-data-[loading=true]:text-transparent">
+                    Poista {type}
+                  </span>
                 </Button>
                 <Button
                   type="submit"
                   disabled={isLoading}
                   data-loading={isLoading}
                   className="max-w-[fit-content] group relative disabled:opacity-100"
-                  >
-                  <span className="group-data-[loading=true]:text-transparent">Tallenna</span>
+                >
+                  <span className="group-data-[loading=true]:text-transparent">
+                    Tallenna
+                  </span>
                 </Button>
               </>
             )}

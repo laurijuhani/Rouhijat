@@ -36,6 +36,8 @@ interface ModifyGameProps {
 
 const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
   const { players, fetchPlayers, goalies } = usePlayers();
+  const activePlayers = players.filter((player) => !player.deleted);
+  const activeGoalies = goalies.filter((goalie) => !goalie.deleted);
   const [date, setDate] = useState<Date | undefined>(new Date(game.gameDate));
   const [inputTime, setInputTime] = useState<string>(parseTime(game.gameDate));
   const [inputDate, setInputDate] = useState<string>(parseDateString(game.gameDate));
@@ -49,6 +51,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { showToast } = useToast();
+  const visibleSelectedGoalie = selectedGoalie?.deleted ? null : selectedGoalie;
 
   useEffect(() => {  
       setPlayed(Date.now() > (date?.getTime() || Infinity));
@@ -252,7 +255,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
                     <Label className="col-span-1 text-right">Maalit</Label>
                     <Label className="col-span-1 text-right">Syötöt</Label>
                     <Label className="col-span-1 text-center">+/-</Label>
-                    {players.map((player) => (
+                    {activePlayers.map((player) => (
                       <div key={player.id} className="col-span-4">
                         <PlayerPoints 
                         player={player} 
@@ -264,8 +267,8 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
 
                     <div className="col-span-4">
                       <GoalieSelector
-                        goalies={goalies}
-                        selectedGoalie={selectedGoalie}
+                        goalies={activeGoalies}
+                        selectedGoalie={visibleSelectedGoalie}
                         setSelectedGoalie={setSelectedGoalie}
                       />
                     </div>

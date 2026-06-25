@@ -70,6 +70,7 @@ export interface BasePlayer {
   name: string;
   nickname: string | null;
   number: number | null;
+  deleted: boolean;
 }
 
 export interface Player extends BasePlayer {

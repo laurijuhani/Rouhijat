@@ -144,6 +144,7 @@ describe("Players Router", () => {
         name: "Updated Player",
         nickname: "UP",
         number: 88,
+        deleted: true,
       };
 
       const response: Response = await request(app)
@@ -152,6 +153,9 @@ describe("Players Router", () => {
         .send(updatedPlayer);
 
       expect(response.status).toBe(204);
+
+      const player = await prisma.player.findUnique({ where: { id: 2 } });
+      expect(player?.deleted).toBe(true);
     });
 
     it("should return 401 if not authenticated", async () => {

@@ -110,6 +110,7 @@ describe("Goalies Router", () => {
         name: "Updated Goalie A",
         nickname: "UA",
         number: 31,
+        deleted: true,
       };
 
       const response: Response = await request(app)
@@ -121,6 +122,7 @@ describe("Goalies Router", () => {
       expect(response.body.name).toBe("Updated Goalie A");
       expect(response.body.nickname).toBe("UA");
       expect(response.body.number).toBe(31);
+      expect(response.body.deleted).toBe(true);
     });
 
     it("should return 404 if the goalie does not exist", async () => {

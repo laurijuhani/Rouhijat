@@ -11,9 +11,10 @@ const fetchPlayers = async () => {
     }
 
     const data: Player[] = await res.json();
+    const activePlayers = data.filter((player) => !player.deleted);
 
 
-    return data.sort((a, b) => {
+    return activePlayers.sort((a, b) => {
       if (a.number === null && b.number === null) return 0;
       if (a.number === null) return 1;
       if (b.number === null) return -1;
@@ -35,7 +36,8 @@ const fetchGoalies = async () => {
     }
 
     const data: Goalie[] = await res.json();
-    return data.sort((a, b) => {
+    const activeGoalies = data.filter((goalie) => !goalie.deleted);
+    return activeGoalies.sort((a, b) => {
       if (a.number === null && b.number === null) return 0;
       if (a.number === null) return 1;
       if (b.number === null) return -1;

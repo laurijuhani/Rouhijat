@@ -18,9 +18,22 @@ const EditGoalie = lazy(() => import('./player/EditGoalie'));
 const AddPlayer = lazy(() => import('./player/AddPlayer'));
 
 
+const ActiveStatus = ({ deleted }: { deleted: boolean }) => (
+  <span
+    className={`inline-flex min-w-20 justify-center rounded-full px-2 py-1 text-xs font-medium ${
+      deleted
+        ? "bg-muted text-muted-foreground"
+        : "bg-emerald-100 text-emerald-700"
+    }`}
+  >
+    {deleted ? "Ei aktiivinen" : "Aktiivinen"}
+  </span>
+);
+
 const PlayersList = ({ user }: { user: User }) => {
   const { players, fetchPlayers, setPlayers, goalies, setGoalies } = usePlayers();
   const [isLoading, setIsLoading] = useState(false);
+  const canManagePlayers = user.role === 'admin' || user.role === 'owner';
 
   useEffect(() => {
     fetchPlayers();
@@ -34,6 +47,8 @@ const PlayersList = ({ user }: { user: User }) => {
             <TableHead>Nimi</TableHead>
             <TableHead>Lempinimi</TableHead>
             <TableHead>Numero</TableHead>
+            <TableHead>Aktiivinen</TableHead>
+            {canManagePlayers && <TableHead />}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -42,7 +57,10 @@ const PlayersList = ({ user }: { user: User }) => {
               <TableCell>{player.name}</TableCell>
               <TableCell>{player.nickname || "-"}</TableCell>
               <TableCell>{player.number || '-'}</TableCell>
-              {(user.role === 'admin' || user.role === 'owner') && (
+              <TableCell>
+                <ActiveStatus deleted={player.deleted} />
+              </TableCell>
+              {canManagePlayers && (
                 <TableCell>
                   <Suspense fallback={<div>Ladataan...</div>}>
                     <EditPlayer 
@@ -58,7 +76,7 @@ const PlayersList = ({ user }: { user: User }) => {
           ))}
         </TableBody>
       </Table>
-      {(user.role === 'admin' || user.role === 'owner') && (
+      {canManagePlayers && (
         <Suspense fallback={<div>Ladataan...</div>}>
           <div className="flex justify-center mt-4 md:justify-start md:ml-4">
             <AddPlayer setPlayers={setPlayers}/>
@@ -74,6 +92,8 @@ const PlayersList = ({ user }: { user: User }) => {
             <TableHead>Nimi</TableHead>
             <TableHead>Lempinimi</TableHead>
             <TableHead>Numero</TableHead>
+            <TableHead>Aktiivinen</TableHead>
+            {canManagePlayers && <TableHead />}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -82,7 +102,10 @@ const PlayersList = ({ user }: { user: User }) => {
               <TableCell>{goalie.name}</TableCell>
               <TableCell>{goalie.nickname || "-"}</TableCell>
               <TableCell>{goalie.number || '-'}</TableCell>
-              {(user.role === 'admin' || user.role === 'owner') && (
+              <TableCell>
+                <ActiveStatus deleted={goalie.deleted} />
+              </TableCell>
+              {canManagePlayers && (
                 <TableCell>
                   <Suspense fallback={<div>Ladataan...</div>}>
                     <EditGoalie 
@@ -98,7 +121,7 @@ const PlayersList = ({ user }: { user: User }) => {
           ))}
         </TableBody>
       </Table>
-      {(user.role === 'admin' || user.role === 'owner') && (
+      {canManagePlayers && (
         <Suspense fallback={<div>Ladataan...</div>}>
           <div className="flex justify-center mt-4 md:justify-start md:ml-4">
             <AddGoalie setGoalies={setGoalies}/>
