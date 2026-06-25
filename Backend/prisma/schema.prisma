@@ -61,6 +61,7 @@ model Player {
   name     String
   nickname String?
   number   Int?
+  deleted Boolean @default(false)
   points   Point[]
   @@map("players")
 }
@@ -70,6 +71,7 @@ model Goalie {
   name    String
   nickname String?
   number  Int?
+  deleted Boolean @default(false)
   games   Game[] 
   @@map("goalies")
 }

@@ -26,11 +26,13 @@ const EditGoalie = ({ goalie, setGoalies, isLoading, setIsLoading }: EditGoalieP
     const name = form.playername.value;
     const nickname = form.nickname.value;
     const number = form.number.value;
+    const deleted = !form.active.checked;
 
     if (
       name === goalie.name &&
       nickname === goalie.nickname &&
-      number === goalie.number?.toString()
+      number === goalie.number?.toString() &&
+      deleted === goalie.deleted
     ) {
       setIsDialogOpen(false);
       setIsLoading(false);
@@ -47,7 +49,7 @@ const EditGoalie = ({ goalie, setGoalies, isLoading, setIsLoading }: EditGoalieP
     try {
       await Fetch.put(
         process.env.NEXT_PUBLIC_BACKEND_URL + `/goalies/${goalie.id}`,
-        { name, nickname, number: parseInt(number) },
+        { name, nickname, number: parseInt(number) || null, deleted },
         {
           Authorization: `Bearer ${Cookies.get('token')}`,
         }
@@ -56,7 +58,7 @@ const EditGoalie = ({ goalie, setGoalies, isLoading, setIsLoading }: EditGoalieP
       setGoalies((prevGoalies) =>
         prevGoalies.map((p) => {
           if (p.id === goalie.id) {
-            return { ...p, name, nickname, number: parseInt(number) };
+            return { ...p, name, nickname, number: parseInt(number) || null, deleted };
           }
           return p;
         })

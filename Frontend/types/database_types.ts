@@ -52,6 +52,7 @@ export interface BaseInfo {
   name: string;
   nickname: string | null;
   number: number | null;
+  deleted: boolean;
 };
 
 export interface Player extends BaseInfo {

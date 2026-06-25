@@ -26,6 +26,7 @@ interface AddScoreProps {
 
 const AddScore = ({ game, setGames }: AddScoreProps) => {
   const { players, fetchPlayers } = usePlayers();
+  const activePlayers = players.filter((player) => !player.deleted);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState<string>('');
   const [playerPoints, setPlayerPoints] = useState<{ [key: number]: [number, number, number] }>({});
@@ -145,7 +146,7 @@ const AddScore = ({ game, setGames }: AddScoreProps) => {
             <Label className="col-span-1 text-right">Syötöt</Label>
             <Label className="col-span-1 text-center">+/-</Label>
              
-            {players.map((player) => (
+            {activePlayers.map((player) => (
               <div key={player.id} className="col-span-4 flex justify-center items-center gap-2">
                 <PlayerPoints 
                   player={player} 

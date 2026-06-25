@@ -115,7 +115,7 @@ playersRouter.delete('/:id', authenticateToken, async (req, res) => {
 });
 
 playersRouter.put('/:id', authenticateToken, async (req, res) => {
-  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number | null };
+  const { name, nickname, number, deleted } = req.body as { name: string, nickname: string, number: number | null, deleted?: boolean };
   const { id } = req.params as { id: string };
 
   if (!name || !id) {
@@ -135,7 +135,7 @@ playersRouter.put('/:id', authenticateToken, async (req, res) => {
       return;
     }
 
-    await playerService.updatePlayer(id_number, name, nickname, number);
+    await playerService.updatePlayer(id_number, name, nickname, number, deleted);
 
     res.status(204).end();
   } catch (error) {

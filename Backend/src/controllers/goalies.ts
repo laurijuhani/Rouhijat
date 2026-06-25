@@ -51,7 +51,7 @@ goaliesRouter.post('/', authenticateToken, async (req, res) => {
       res.status(400).json({ error: 'name missing' });
       return;
     }
-    const goalie = await goalieService.createGoalie({ id: 1, name, nickname, number }); // Arbitrary id
+    const goalie = await goalieService.createGoalie({ id: 1, name, nickname, number, deleted: false }); // Arbitrary id
     res.status(201).json(goalie);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
@@ -62,7 +62,7 @@ goaliesRouter.post('/', authenticateToken, async (req, res) => {
 
 goaliesRouter.put('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params as { id: string };
-  const { name, nickname, number } = req.body as { name: string, nickname: string, number: number };
+  const { name, nickname, number, deleted } = req.body as { name: string, nickname: string, number: number | null, deleted?: boolean };
 
   try {
     const id_number = parseInt(id);
@@ -81,7 +81,7 @@ goaliesRouter.put('/:id', authenticateToken, async (req, res) => {
       return;
     }
 
-    const goalie = await goalieService.updateGoalie(id_number, { id: 1, name, nickname, number }); // Arbitrary id
+    const goalie = await goalieService.updateGoalie(id_number, { id: 1, name, nickname, number, deleted: deleted ?? false }, deleted); // Arbitrary id
     res.status(200).json(goalie);
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });

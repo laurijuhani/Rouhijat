@@ -26,11 +26,13 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
     const name = form.playername.value;
     const nickname = form.nickname.value;
     const number = form.number.value;
+    const deleted = !form.active.checked;
 
     if (
       name === player.name &&
       nickname === player.nickname &&
-      number === player.number?.toString()
+      number === player.number?.toString() &&
+      deleted === player.deleted
     ) {
       setIsDialogOpen(false);
       setIsLoading(false);
@@ -47,7 +49,7 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
     try {
       await Fetch.put(
         process.env.NEXT_PUBLIC_BACKEND_URL + `/players/${player.id}`,
-        { name, nickname, number: parseInt(number) || null },
+        { name, nickname, number: parseInt(number) || null, deleted },
         {
           Authorization: `Bearer ${Cookies.get('token')}`,
         }
@@ -56,7 +58,7 @@ const EditPlayer = ({ player, setPlayers, isLoading, setIsLoading }: EditPlayerP
       setPlayers((prevPlayers) =>
         prevPlayers.map((p) => {
           if (p.id === player.id) {
-            return { ...p, name, nickname, number: parseInt(number) || null };
+            return { ...p, name, nickname, number: parseInt(number) || null, deleted };
           }
           return p;
         })

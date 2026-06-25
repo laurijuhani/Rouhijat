@@ -45,7 +45,7 @@ const AddPlayer = ({ setPlayers }: AddPlayerProps) => {
         const id = await json;
 
         setPlayers((prevPlayers) => {
-          return [...prevPlayers, { name, nickname, number: parseInt(number) || null, id, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
+          return [...prevPlayers, { name, nickname, number: parseInt(number) || null, id, deleted: false, games: 0, points: { goals: 0, assists: 0, pm: 0 } }];
         });
         showToast('success', 'Pelaaja lisätty', '');
         setIsDialogOpen(false);

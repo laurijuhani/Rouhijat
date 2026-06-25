@@ -47,7 +47,7 @@ const AddGoalie = ({ setGoalies }: AddGoalieProps) => {
         const id = await json;
 
         setGoalies((prevGoalies) => {
-          return [...prevGoalies, { id, name, nickname, number: parseInt(number), games: []}];
+          return [...prevGoalies, { id, name, nickname, number: parseInt(number), deleted: false, games: []}];
         });
         showToast('success', 'Maalivahti lisätty', '');
         setIsDialogOpen(false);
