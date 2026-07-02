@@ -2,7 +2,6 @@ node_modules
 .env
 build
 rest
-prisma/migrations
 prisma/test
 prisma/app
 coverage
