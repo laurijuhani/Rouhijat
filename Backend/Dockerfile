@@ -1,4 +1,4 @@
-FROM node:26-alpine AS build 
+FROM node:22-alpine AS build 
 
 WORKDIR /app
 
@@ -7,12 +7,12 @@ COPY tsconfig.json ./
 COPY prisma ./prisma
 RUN npm ci
 
-RUN npx prisma generate
+RUN npm run prisma:generate
 
 COPY . .
 RUN npm run build
 
-FROM node:26-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
@@ -27,5 +27,4 @@ COPY src/utils/logo /app/build/utils/logo
 
 EXPOSE 3003
 
-CMD ["sh", "-c", "until pg_isready -h postgres -U $DB_USER -d $DB_NAME; do sleep 2; done && npx prisma migrate deploy && node build/index.js"]
-
+CMD ["sh", "-c", "until pg_isready -h postgres -U $DB_USER -d $DB_NAME; do sleep 2; done && npm run prisma:migrate:deploy && node build/index.js"]
