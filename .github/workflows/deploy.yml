@@ -62,7 +62,14 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd Rouhijat/
-            git pull
+            git fetch origin main
+
+            if ! git ls-files --error-unmatch Backend/prisma/migrations >/dev/null 2>&1 && [ -d Backend/prisma/migrations ]; then
+              mv Backend/prisma/migrations "Backend/prisma/migrations.diverged.$(date +%Y%m%d%H%M%S)"
+            fi
+
+            git reset --hard origin/main
+            git clean -ffd Backend/prisma/migrations
 
             export BACKEND_IMAGE=ghcr.io/${{ github.repository_owner }}/backend:${{ github.sha }}
             export FRONTEND_IMAGE=ghcr.io/${{ github.repository_owner }}/frontend:${{ github.sha }}
@@ -75,15 +82,9 @@ jobs:
 
             docker compose down
 
-            # Create a new migration (not recommended approach, too lazy to fix it)
-            cd Backend
-            npx prisma migrate dev --name auto-migration --create-only
-            cd .. 
-
             docker compose up -d
 
             docker rmi $old_backend_image
             docker rmi $old_frontend_image
 
             echo "Deployed successfully"
-
