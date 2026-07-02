@@ -1,4 +1,4 @@
-FROM node:23-alpine AS build 
+FROM node:26-alpine AS build 
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ ENV NEXT_PUBLIC_REVALIDATE=${REVALIDATE}
 
 RUN npm run build
 
-FROM node:23-alpine
+FROM node:26-alpine
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
