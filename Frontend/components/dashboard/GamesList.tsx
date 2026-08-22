@@ -63,7 +63,7 @@ const GamesList = () => {
           'Authorization': `Bearer ${Cookies.get('token')}`
         }
       });
-  
+
       if (!res.ok) {
         console.error('Failed to delete game');
         showToast('error', 'Pelin poistaminen epäonnistui', 'Yritä uudelleen');
@@ -75,7 +75,7 @@ const GamesList = () => {
 
     return;
     }
-  }; 
+  };
 
 
   return (
@@ -83,7 +83,7 @@ const GamesList = () => {
 
       <div className='flex justify-between items-center ml-3 mr-3'>
         <Button variant='outline' className='h-[fit-content]' onClick={() => setModify(!modify)}>{modify ? 'Peruuta' : 'Muokkaa'}</Button>
-        <SeasonSelector 
+        <SeasonSelector
           seasons={seasons}
           selectedSeason={selectedSeason}
           setSelectedSeason={setSelectedSeason}
@@ -101,7 +101,7 @@ const GamesList = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {games.filter((game) => game.seasonId === selectedSeason?.id).sort((a: Game, b: Game) => 
+          {games.filter((game) => game.seasonId === selectedSeason?.id).sort((a: Game, b: Game) =>
           new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime())
           .map((game) => (
             <TableRow key={game.id}>
@@ -118,6 +118,7 @@ const GamesList = () => {
               <TableCell>{game.homeTeam} -- {game.awayTeam}</TableCell>
               <TableCell>{parseGameTime(game.gameDate)}</TableCell>
               <TableCell>
+                {/* eslint-disable-next-line */}
                 {new Date(game.gameDate).getTime() < Date.now() ? (
                   game.homeScore === null && game.awayScore === null ? (
                     <AddScore game={game} setGames={setGames}/>

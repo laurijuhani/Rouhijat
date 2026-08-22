@@ -1,12 +1,12 @@
 "use client";
 import useSession from "@/hooks/useSession";
+import { redirect } from "next/navigation";
 
 const Signin = () => {
   const { user } = useSession();
 
   if (user) {
-    window.location.href = '/';
-    return null;
+    redirect("/");
   }
 
   return (
