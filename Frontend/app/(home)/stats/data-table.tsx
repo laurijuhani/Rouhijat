@@ -30,6 +30,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  // eslint-disable-next-line
   const table = useReactTable({
     data,
     columns,

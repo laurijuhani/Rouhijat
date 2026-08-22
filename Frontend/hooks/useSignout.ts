@@ -1,10 +1,11 @@
 import Cookies from "js-cookie";
+import { redirect } from "next/navigation";
 
 const useSignout = () => {
   const signout = () => {
-    Cookies.remove('token'); 
+    Cookies.remove('token');
 
-    window.location.href = '/';
+    redirect("/");
   };
 
   return signout;

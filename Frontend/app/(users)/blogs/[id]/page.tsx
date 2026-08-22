@@ -1,8 +1,8 @@
-"use client"; 
+"use client";
 
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import BackButton from "@/components/basics/BackButton";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { useToast } from "@/context/ToastContext";
 import Fetch from "@/utils/fetch";
 import Cookies from "js-cookie";
@@ -56,7 +56,7 @@ const Page = () => {
           Authorization: `Bearer ${Cookies.get('token')}`,
         }
       );
-      window.location.href = '/blogs';
+      redirect("/blogs");
       return true;
     } catch (error) {
       showToast('error', 'Blogin päivittäminen epäonnistui', 'Yritä uudelleen');
@@ -64,17 +64,17 @@ const Page = () => {
       return false;
     }
   };
-  
 
-  return (    
+
+  return (
     <div className="p-4">
       <BackButton />
 
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <Tiptap 
-          handleSubmit={handleSubmit} 
+        <Tiptap
+          handleSubmit={handleSubmit}
           content={content}
           titleInput={title}
         />

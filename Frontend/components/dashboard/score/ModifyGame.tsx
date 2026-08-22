@@ -28,7 +28,7 @@ import GoalieSelector from "./forms/GoalieSelector";
 import Cookies from "js-cookie";
 
 interface ModifyGameProps {
-  game: Game; 
+  game: Game;
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
   seasons: Season[];
 }
@@ -46,24 +46,24 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
   const [originalPoints, setOriginalPoints] = useState<PlayerPointsData[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(seasons.find((season) => season.id === game.seasonId) || null);
   const [played, setPlayed] = useState(false);
-  const [selectedGoalie, setSelectedGoalie] = useState<Goalie | null>(null); 
+  const [selectedGoalie, setSelectedGoalie] = useState<Goalie | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const { showToast } = useToast();
   const visibleSelectedGoalie = selectedGoalie?.deleted ? null : selectedGoalie;
 
-  useEffect(() => {  
-      setPlayed(Date.now() > (date?.getTime() || Infinity));
-      if (played) {
-        fetchPlayers();
-      }
+  useEffect(() => {
+    setPlayed(Date.now() > (date?.getTime() || Infinity));
+    if (played) {
+      fetchPlayers();
+    }
   }, [date, fetchPlayers, played]);
 
-  useEffect(() => {    
+  useEffect(() => {
     const fetchPlayerPoints = async () => {
       setIsFetching(true);
-      try {        
+      try {
         const data = await Fetch.get<PlayerPointsData[]>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/points/${game.id}`, {
           'Authorization': `Bearer ${Cookies.get('token')}`
         });
@@ -76,8 +76,8 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
             point.pm
           ];
         });
-        setPlayerPoints(points);     
-        setOriginalPoints(data);   
+        setPlayerPoints(points);
+        setOriginalPoints(data);
         setSelectedGoalie(goalies.find((goalie) => goalie.id === game.goalieId) || null);
       } catch (error) {
         console.error('Error fetching player points:', error);
@@ -85,7 +85,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
         setIsFetching(false);
       }
     };
-  
+
     if (isDialogOpen) {
       fetchPlayerPoints();
     }
@@ -106,7 +106,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
     if (!combinedDateTime) {
       newErrors.date = 'Päivämäärä ja aika on pakollinen';
     }
-  
+
     if (!homeTeam) {
       newErrors.homeTeam = 'Kotijoukkue on pakollinen';
     }
@@ -131,7 +131,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
       goalieId: selectedGoalie?.id || null,
     };
 
-    if (!checkGamesEqual(game, newGame)) {      
+    if (!checkGamesEqual(game, newGame)) {
       try {
         await Fetch.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/games/${game.id}`, newGame, {
           'Authorization': `Bearer ${Cookies.get('token')}`
@@ -145,9 +145,9 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
         setIsDialogOpen(false);
         return;
       }
-    }     
+    }
 
-    const newPoints = modifiedPoints(originalPoints, playerPoints);    
+    const newPoints = modifiedPoints(originalPoints, playerPoints);
     if (newPoints.length > 0) {
       try {
         await Fetch.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/points/${game.id}`, { playerData: newPoints }, {
@@ -161,11 +161,11 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
         return;
       }
     }
-    
+
     setIsLoading(false);
     showToast('success', 'Peli päivitetty', 'Pelin tiedot on päivitetty onnistuneesti');
     setIsDialogOpen(false);
-  }; 
+  };
 
   const handleDateChange = (date: Date | undefined) => {
     setDate(date);
@@ -176,7 +176,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
       setInputDate('');
     }
 
-  }; 
+  };
 
   const handleDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -230,7 +230,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
                 selectedSeason={selectedSeason}
                 setSelectedSeason={setSelectedSeason}
               />
-              <GameDetails 
+              <GameDetails
                 game={game}
                 played={played}
                 inputDate={inputDate}
@@ -244,7 +244,7 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
               {played && (
                 <>
                   <div className="grid grid-cols-4 items-center gap-4">
-                    
+
                   {isFetching ? (
                     <div className="col-span-4 flex justify-center items-center">
                       <LoaderCircleIcon className="animate-spin" size={24} aria-hidden="true" />
@@ -257,11 +257,11 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
                     <Label className="col-span-1 text-center">+/-</Label>
                     {activePlayers.map((player) => (
                       <div key={player.id} className="col-span-4">
-                        <PlayerPoints 
-                        player={player} 
+                        <PlayerPoints
+                        player={player}
                         playerPoints={playerPoints}
                         setPlayerPoints={setPlayerPoints}
-                        /> 
+                        />
                       </div>
                     ))}
 
@@ -284,8 +284,8 @@ const ModifyGame = ({ game, setGames, seasons }: ModifyGameProps) => {
                   Sulje
                 </Button>
               </DialogClose>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={isLoading}
                 data-loading={isLoading}
                 variant="outline"

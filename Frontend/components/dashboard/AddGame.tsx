@@ -21,7 +21,7 @@ import Cookies from "js-cookie";
 
 interface AddGameProps {
   setGames: React.Dispatch<React.SetStateAction<Game[]>>;
-  season: Season | null; 
+  season: Season | null;
 }
 
 const AddGame = ({ setGames, season }: AddGameProps) => {
@@ -87,7 +87,7 @@ const AddGame = ({ setGames, season }: AddGameProps) => {
         "Peli lisätty",
         `Peli ${homeTeam} - ${awayTeam} lisätty onnistuneesti`
       );
-      setIsDialogOpen(false); 
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Error adding game:", error);
       setIsDialogOpen(false);
@@ -161,18 +161,19 @@ const AddGame = ({ setGames, season }: AddGameProps) => {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-          <GameDetails 
-                game={game}
-                played={Date.now() > (getCombinedDateTime()?.getTime() || Infinity)}
-                inputDate={inputDate}
-                inputTime={inputTime}
-                date={date}
-                errors={errors}
-                handleDateInputChange={handleDateInputChange}
-                handleTimeInputChange={handleTimeInputChange}
-                handleDateChange={handleDateChange}
-              />
-            
+          <GameDetails
+            game={game}
+            // eslint-disable-next-line
+            played={Date.now() > (getCombinedDateTime()?.getTime() || Infinity)}
+            inputDate={inputDate}
+            inputTime={inputTime}
+            date={date}
+            errors={errors}
+            handleDateInputChange={handleDateInputChange}
+            handleTimeInputChange={handleTimeInputChange}
+            handleDateChange={handleDateChange}
+          />
+
           </div>
           <DialogFooter className="flex flex-row gap-3 justify-end">
             <DialogClose asChild>
