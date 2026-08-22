@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ],
+    // The backend only listens on a Docker bridge network (e.g. 172.x.x.x),
+    // so Next.js's SSRF protection blocks image optimization unless allowed.
+    dangerouslyAllowLocalIP: true,
   },
   output: "standalone",
 };

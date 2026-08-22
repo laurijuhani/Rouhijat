@@ -1,34 +1,34 @@
-name: Tests 
+name: Tests
 
-on: 
+on:
   workflow_call:
   pull_request:
-    branches: 
+    branches:
       - main
     types:
       - opened
       - synchronize
       - reopened
-    
 
-jobs: 
-  lint: 
+
+jobs:
+  lint:
     name: ESLint
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
      - name: Checkout repo
-       uses: actions/checkout@v4
+       uses: actions/checkout@v7
 
      - name: Setup Node.js
-       uses: actions/setup-node@v4
+       uses: actions/setup-node@v7
        with:
         node-version: 20
 
      - name: Install dependencies for frontend
        run: |
         cd Frontend
-        npm ci --force 
+        npm ci --force
 
      - name: Install dependencies for backend
        run: |
@@ -53,12 +53,9 @@ jobs:
      - name: Run typecheck for backend
        run: |
         cd Backend
-        npm run type-check  
+        npm run type-check
 
      - name: Jest tests for backend
        run: |
         cd Backend
         npm run test
-
-
-# Make tests for the backend 
