@@ -23,13 +23,13 @@ services:
       - ./Frontend/.env
     networks:
       - internal
-      
+
 
   nginx:
     depends_on:
       - backend
       - frontend
-    image: nginx:alpine
+    image: nginx:stable-alpine
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     expose:
@@ -69,4 +69,4 @@ networks:
   internal:
     driver: bridge
   web:
-    external: true 
+    external: true
